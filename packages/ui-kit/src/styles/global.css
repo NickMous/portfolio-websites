@@ -1,0 +1,24 @@
+/*
+ * Stylesheet entry for every site, imported by BaseLayout.
+ * Tailwind scans the site's own files automatically; theme.css adds the ui-kit.
+ */
+@import 'tailwindcss';
+@import './theme.css';
+
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-ink);
+    outline-offset: 3px;
+  }
+}
