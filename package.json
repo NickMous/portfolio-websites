@@ -17,7 +17,8 @@
     "test:watch": "vitest",
     "dev:sanderdh": "npm run dev -w @portfolio/sanderdh",
     "build:sanderdh": "npm run build -w @portfolio/sanderdh",
-    "check": "npm run check --workspaces --if-present"
+    "check": "npm run check --workspaces --if-present",
+    "dev:playground": "npm run dev -w @portfolio/playground"
   },
   "devDependencies": {
     "prettier": "^3.10.1",

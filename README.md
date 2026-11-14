@@ -8,6 +8,7 @@ Monorepo for four sites sharing one "poster wall" design system:
 | `sites/webenjoyer`   | webenjoyer.com / .nl   | Client work, open source, school projects           |
 | `sites/imlostincode` | imlostincode.com / .nl | Public tools with versioned docs pulled from GitHub |
 | `sites/nickmous`     | nickmous.com / .nl     | Personal side: games, side projects, guestbook      |
+| `sites/playground`   | (not deployed)         | Preview of every ui-kit component                   |
 
 - `packages/ui-kit`: shared tokens (Tailwind preset), fonts, layout and components
 - `api/`: Symfony API for nickmous (guestbook, Steam proxy, Nintendo backoffice)
@@ -23,6 +24,7 @@ Requires Node 24+ (see `.nvmrc`).
 ```sh
 npm install
 npm run dev:sanderdh     # dev server for one site
+npm run dev:playground   # preview every ui-kit component
 LOCALE=nl npm run dev:sanderdh  # same, in Dutch
 npm run build            # astro check + build every site, both locales
 npm run build:sanderdh   # build one site

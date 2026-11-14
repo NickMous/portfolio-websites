@@ -1,0 +1,184 @@
+---
+import Badge from '@portfolio/ui-kit/components/Badge.astro';
+import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
+import Poster from '@portfolio/ui-kit/components/Poster.astro';
+import RepoCard from '@portfolio/ui-kit/components/RepoCard.astro';
+import SiteFooter from '@portfolio/ui-kit/components/SiteFooter.astro';
+import Stub from '@portfolio/ui-kit/components/Stub.astro';
+import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
+
+const nav = [
+  { href: '#heroes', label: 'Heroes' },
+  { href: '#posters', label: 'Posters' },
+  { href: '#cards', label: 'Cards' },
+  { href: '#footers', label: 'Footers' },
+];
+---
+
+<BaseLayout site="webenjoyer" title="ui-kit playground" description="Every ui-kit component." {nav}>
+  <SiteFooter site="webenjoyer" slot="footer">
+    <a slot="cta" href="mailto:[YOUR EMAIL]">
+      Say hi →
+    </a>
+    <span slot="note">WebEnjoyer · Woerden · KVK [NUMBER]</span>
+  </SiteFooter>
+
+  <section id="heroes" class="container-page flex flex-col gap-16 py-12">
+    <p class="type-label">HeroHeadline (webenjoyer, nickmous, imlostincode, sanderdh)</p>
+    <HeroHeadline
+      lines={[
+        { text: 'Surfing' },
+        { text: 'the web,', color: 'red' },
+        { text: 'creating', block: 'yellow' },
+        { text: 'the web.' },
+      ]}
+    />
+    <HeroHeadline
+      as="h2"
+      lines={[
+        { text: "Hi, I'm" },
+        { text: 'nickmous.', block: 'blue', tilt: 'right' },
+        { text: 'Also known', color: 'green' },
+        { text: 'as Sander.' },
+      ]}
+    />
+    <HeroHeadline
+      as="h2"
+      lines={[
+        { text: 'I fix my own' },
+        { text: 'problems.', color: 'blue' },
+        { text: 'You can have', block: 'red' },
+        { text: 'the fixes.' },
+      ]}
+    />
+    <HeroHeadline
+      as="h2"
+      lines={[{ text: "Hi, I'm" }, { text: 'Sander', block: 'green' }, { text: 'den Hollander.' }]}
+    />
+  </section>
+
+  <section id="posters" class="bg-blue pt-18 pb-22 text-white">
+    <div class="container-page flex flex-col gap-10">
+      <h2 class="type-h2">Posters</h2>
+      <div class="flex flex-wrap gap-7">
+        <Poster
+          class="flex-[1_1_320px]"
+          title={'Oktoberfest\nWoerden'}
+          color="yellow"
+          href="#"
+          status="live"
+          facts={['Event site · Astro', 'oktoberfestwoerden.nl']}
+        />
+        <Poster
+          class="flex-[1_1_320px]"
+          title={'Club van\nOoit'}
+          color="white"
+          href="#"
+          status="live"
+          facts={['Local stories, every week', 'clubvanooitwoerden.nl']}
+        />
+        <Poster
+          class="flex-[1_1_320px]"
+          title={'Zalencentrum\nDe Brug'}
+          color="red"
+          href="#"
+          status="live"
+          facts={['Event venue · Reeuwijk', 'zalencentrumdebrug.nl']}
+        />
+      </div>
+    </div>
+  </section>
+  <section class="bg-yellow py-16">
+    <div class="container-page flex flex-wrap gap-7">
+      <Poster
+        class="flex-[1_1_320px]"
+        title="Blue poster"
+        color="blue"
+        href="#"
+        status="inTesting"
+        tilt="right"
+        facts={['Tilts right on hover', 'nickmous']}
+      />
+      <Poster
+        class="flex-[1_1_320px]"
+        title="Green poster"
+        color="green"
+        status="inProgress"
+        facts={['Not a link']}
+      />
+    </div>
+  </section>
+
+  <section class="container-page flex flex-col gap-6 py-12">
+    <h2 class="type-h2">Badges</h2>
+    <div class="flex flex-wrap items-center gap-3">
+      <Badge status="live" />
+      <Badge status="live" tone="ink-yellow" />
+      <Badge status="inProgress" tone="yellow" />
+      <Badge status="inTesting" tone="yellow" />
+      <Badge status="unreleased" tone="ink-yellow" />
+      <Badge status="stillLost" />
+      <Badge status="beingFoundAgain" tone="green" />
+      <span class="bg-blue p-2">
+        <Badge tone="white">Steam</Badge>
+      </span>
+      <Badge status="live" size="sm" />
+      <Badge status="live" size="lg" tone="ink-yellow" />
+    </div>
+  </section>
+
+  <section id="cards" class="container-page flex flex-col gap-10 py-12">
+    <h2 class="type-h2">Repo cards</h2>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+      <RepoCard name="astro-i18n" href="#" tag="npm package">
+        Type-safe translations for Astro. A typo in a key fails the build, not the live site.
+      </RepoCard>
+      <RepoCard name="astro-k8s-deployment-kit" href="#" tag="deployment kit" tagColor="blue">
+        [ONE-LINER]
+      </RepoCard>
+      <RepoCard name="symfony-k8s-deployment-kit" href="#" tag="deployment kit" tagColor="blue">
+        [ONE-LINER]
+      </RepoCard>
+    </div>
+    <h2 class="type-h2">Stubs</h2>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6">
+      <Stub title="Bean Stash" color="green" label="School">
+        [ONE-LINER]
+      </Stub>
+      <Stub title="Gamemerch" color="red" label="School">
+        [ONE-LINER]
+      </Stub>
+      <Stub title="SpaceX" color="blue" label="Group">
+        [ONE-LINER]
+      </Stub>
+      <Stub title="astro-i18n" color="green" href="#" keepCase>
+        My own translation package, because I wanted typos in keys to break the build.
+      </Stub>
+      <Stub title="[Project]" color="yellow">
+        [ONE-LINER]
+      </Stub>
+    </div>
+  </section>
+
+  <section id="footers" class="flex flex-col gap-8 py-12">
+    <h2 class="container-page type-h2">Footers</h2>
+    <SiteFooter site="nickmous">
+      <span slot="note">There's a secret somewhere on this page.</span>
+    </SiteFooter>
+    <SiteFooter site="imlostincode">
+      <span slot="note">
+        Got stuck using one of these? <a href="mailto:[YOUR EMAIL]">Tell me</a>
+      </span>
+    </SiteFooter>
+    <SiteFooter site="sanderdh">
+      <span slot="note">
+        Want to reach me directly? <a href="mailto:[YOUR EMAIL]">[YOUR EMAIL]</a>
+      </span>
+      <li slot="links">
+        <a href="https://github.com/NickMous" class="inline-block py-[10px] font-bold underline">
+          GitHub ↗
+        </a>
+      </li>
+    </SiteFooter>
+  </section>
+</BaseLayout>
