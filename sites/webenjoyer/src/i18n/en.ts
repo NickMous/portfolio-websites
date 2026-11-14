@@ -22,6 +22,15 @@ export default {
   sections: {
     nowShowing: 'Now showing',
     comingSoon: 'Coming soon',
+    openSource: 'Open source',
+    openSourceIntro:
+      'Things I made for my own projects, cleaned up so anyone can use them. Notes and gotchas live on',
+    earlyWork: 'Early work',
+    earlyWorkIntro: 'School projects. Rough around the edges, but this is where it started.',
+  },
+  repoTags: {
+    package: 'npm package',
+    kit: 'deployment kit',
   },
   stubs: {
     school: 'School',

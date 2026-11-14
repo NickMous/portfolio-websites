@@ -24,6 +24,15 @@ export default {
   sections: {
     nowShowing: 'Nu te zien',
     comingSoon: 'Binnenkort',
+    openSource: 'Open source',
+    openSourceIntro:
+      'Dingen die ik voor mijn eigen projecten maakte, opgeschoond zodat iedereen ze kan gebruiken. Aantekeningen en valkuilen staan op',
+    earlyWork: 'Vroeg werk',
+    earlyWorkIntro: 'Schoolprojecten. Nog wat ruw, maar hier begon het.',
+  },
+  repoTags: {
+    package: 'npm-pakket',
+    kit: 'deployment kit',
   },
   stubs: {
     school: 'School',
