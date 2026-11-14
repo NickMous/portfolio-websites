@@ -23,8 +23,17 @@ Requires Node 24+ (see `.nvmrc`).
 ```sh
 npm install
 npm run dev:sanderdh     # dev server for one site
-npm run build            # astro check + build every site
+LOCALE=nl npm run dev:sanderdh  # same, in Dutch
+npm run build            # astro check + build every site, both locales
 npm run build:sanderdh   # build one site
 npm test                 # Vitest across all workspaces
 npm run format           # Prettier
 ```
+
+### Languages
+
+Each site is built once per locale: `LOCALE=en` (served on `.com`) and
+`LOCALE=nl` (served on `.nl`), into `dist/en` and `dist/nl`. Paths are the
+same on both domains. Strings live in `src/i18n/{en,nl}.ts` per site, with
+shared strings in `packages/ui-kit/src/i18n`. A typo in a key is a type
+error, and a key missing in Dutch fails the build.
