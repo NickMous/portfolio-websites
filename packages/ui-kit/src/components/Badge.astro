@@ -1,0 +1,41 @@
+---
+import { sharedT } from '../i18n';
+
+export type BadgeStatus =
+  'live' | 'inProgress' | 'inTesting' | 'unreleased' | 'stillLost' | 'beingFoundAgain';
+
+export type BadgeTone = 'ink' | 'ink-yellow' | 'white' | 'yellow' | 'green';
+
+interface Props {
+  /** Translated status label. Or pass your own text in the slot (e.g. a platform). */
+  status?: BadgeStatus;
+  tone?: BadgeTone;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const { status, tone = 'ink', size = 'md' } = Astro.props;
+const label = status ? sharedT('badges')(status) : undefined;
+
+const tones: Record<BadgeTone, string> = {
+  ink: 'bg-ink text-white',
+  'ink-yellow': 'bg-ink text-yellow',
+  white: 'bg-white text-ink',
+  yellow: 'bg-yellow text-ink',
+  green: 'bg-green text-white',
+};
+const sizes = {
+  sm: 'px-2 py-[5px] text-[12px]',
+  md: 'px-[9px] py-1.5 text-[13px]',
+  lg: 'px-3.5 py-2 text-[16px]',
+};
+---
+
+<span
+  class:list={[
+    'inline-block leading-none font-bold whitespace-nowrap uppercase',
+    tones[tone],
+    sizes[size],
+  ]}
+>
+  {label ?? <slot />}
+</span>
