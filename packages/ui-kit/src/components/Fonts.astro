@@ -1,0 +1,14 @@
+---
+import { Font } from 'astro:assets';
+
+interface Props {
+  /** Also load Fira Code. Only for pages with code (imlostincode docs). */
+  code?: boolean;
+}
+
+const { code = false } = Astro.props;
+---
+
+<Font cssVariable="--font-big-shoulders" preload={[{ weight: 900 }]} />
+<Font cssVariable="--font-libre-franklin" />
+{code && <Font cssVariable="--font-fira-code" />}

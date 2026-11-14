@@ -33,9 +33,10 @@
   --color-callout-red-text: #a3281a;
 
   --font-*: initial;
-  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
-  --font-body: 'Libre Franklin', system-ui, sans-serif;
-  --font-mono: 'Fira Code', ui-monospace, monospace;
+  /* Variables come from Astro's Fonts API (see ../fonts.ts, Fonts.astro). */
+  --font-display: var(--font-big-shoulders);
+  --font-body: var(--font-libre-franklin);
+  --font-mono: var(--font-fira-code);
 
   /* No border radius. The EN/NL pill uses the built-in rounded-full;
      the phone screenshot frame sets its own radius. */
