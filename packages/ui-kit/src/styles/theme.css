@@ -92,7 +92,8 @@
   line-height: 0.86;
   letter-spacing: -1px;
   @media (width < 40rem) {
-    font-size: 84px;
+    /* ~84px, but shrink on narrow phones so long words like "HOLLANDER." fit. */
+    font-size: min(84px, 20vw);
     letter-spacing: -0.5px;
   }
 }
