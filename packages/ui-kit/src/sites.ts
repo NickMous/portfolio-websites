@@ -5,6 +5,8 @@ export interface SiteInfo {
   /** Lowercase wordmark, also the domain name. */
   name: string;
   lead: PosterColor;
+  /** Background color of the site footer. */
+  footer: PosterColor;
   domains: Record<Locale, string>;
 }
 
@@ -12,19 +14,27 @@ export const sites = {
   webenjoyer: {
     name: 'webenjoyer',
     lead: 'blue',
+    footer: 'yellow',
     domains: { en: 'webenjoyer.com', nl: 'webenjoyer.nl' },
   },
   nickmous: {
     name: 'nickmous',
     lead: 'yellow',
+    footer: 'blue',
     domains: { en: 'nickmous.com', nl: 'nickmous.nl' },
   },
   imlostincode: {
     name: 'imlostincode',
     lead: 'red',
+    footer: 'green',
     domains: { en: 'imlostincode.com', nl: 'imlostincode.nl' },
   },
-  sanderdh: { name: 'sanderdh', lead: 'green', domains: { en: 'sanderdh.com', nl: 'sanderdh.nl' } },
+  sanderdh: {
+    name: 'sanderdh',
+    lead: 'green',
+    footer: 'green',
+    domains: { en: 'sanderdh.com', nl: 'sanderdh.nl' },
+  },
 } as const satisfies Record<string, SiteInfo>;
 
 export type SiteKey = keyof typeof sites;
