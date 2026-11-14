@@ -1,5 +1,8 @@
 ---
+import { contactEmail } from '@portfolio/ui-kit';
+import SiteFooter from '@portfolio/ui-kit/components/SiteFooter.astro';
 import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
+import { kvkNumber } from '../data/business';
 import { t } from '../i18n';
 
 interface Props {
@@ -10,6 +13,7 @@ interface Props {
 
 const meta = t('meta');
 const nav = t('nav');
+const footer = t('footer');
 const { title = meta('title'), description = meta('description'), ogImage } = Astro.props;
 
 // Section anchors live on the homepage; from other pages they lead back there.
@@ -24,4 +28,10 @@ const links = [
 
 <BaseLayout site="webenjoyer" {title} {description} {...(ogImage ? { ogImage } : {})} nav={links}>
   <slot />
+  <SiteFooter site="webenjoyer" id="hi" slot="footer">
+    <a slot="cta" href={`mailto:${contactEmail}`}>
+      {footer('sayHi')}
+    </a>
+    <span slot="note">WebEnjoyer · Woerden · KVK {kvkNumber}</span>
+  </SiteFooter>
 </BaseLayout>

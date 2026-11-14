@@ -5,9 +5,11 @@ import { otherSites, siteUrl, sites, type SiteKey } from '../sites';
 
 interface Props {
   site: SiteKey;
+  /** Anchor target, e.g. "hi" for a "Say hi" nav link. */
+  id?: string;
 }
 
-const { site } = Astro.props;
+const { site, id } = Astro.props;
 const locale = getLocale();
 const ui = sharedT('ui');
 const color = sites[site].footer;
@@ -17,6 +19,7 @@ const hasCta = Astro.slots.has('cta');
 ---
 
 <footer
+  {id}
   class:list={[bg, onDark ? 'text-white' : 'text-ink', hasCta ? 'pt-18 pb-10' : 'pt-12 pb-8']}
 >
   <div class="container-page flex flex-col gap-10 max-sm:gap-8">

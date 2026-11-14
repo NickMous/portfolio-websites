@@ -32,6 +32,9 @@ export default {
     package: 'npm package',
     kit: 'deployment kit',
   },
+  footer: {
+    sayHi: 'Say hi →',
+  },
   stubs: {
     school: 'School',
     group: 'Group',

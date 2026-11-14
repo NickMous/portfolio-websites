@@ -34,6 +34,9 @@ export default {
     package: 'npm-pakket',
     kit: 'deployment kit',
   },
+  footer: {
+    sayHi: 'Zeg hoi →',
+  },
   stubs: {
     school: 'School',
     group: 'Groep',
