@@ -16,6 +16,10 @@ export default {
     intro:
       'Things I built because something got in my way, cleaned up so anyone can use them. Open source, free, and made with more fun than strictly necessary.',
   },
+  getLost: {
+    button: 'Get me lost →',
+    nowLostIn: "You're now lost in",
+  },
   sections: {
     fixes: 'The fixes',
     fixesIntro: 'Each one has its own docs, straight from the repo, for every version.',

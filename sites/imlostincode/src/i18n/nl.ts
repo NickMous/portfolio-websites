@@ -18,6 +18,10 @@ export default {
     intro:
       'Dingen die ik bouwde omdat iets me in de weg zat, opgeschoond zodat iedereen ze kan gebruiken. Open source, gratis, en gemaakt met meer plezier dan strikt nodig.',
   },
+  getLost: {
+    button: 'Laat me verdwalen →',
+    nowLostIn: 'Je bent nu verdwaald in',
+  },
   sections: {
     fixes: 'De fixes',
     fixesIntro: 'Elk heeft eigen docs, rechtstreeks uit de repo, voor elke versie.',

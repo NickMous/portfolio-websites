@@ -2,6 +2,7 @@
 import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
 import { getCollection } from 'astro:content';
 import FixCard from '../components/FixCard.astro';
+import GetMeLost from '../components/GetMeLost.astro';
 import LostCard from '../components/LostCard.astro';
 import SectionHead from '../components/SectionHead.astro';
 import { stillLost } from '../data/stillLost';
@@ -11,8 +12,6 @@ import { t } from '../i18n';
 const hero = t('hero');
 const sections = t('sections');
 const fixes = (await getCollection('fixes')).sort((a, b) => a.id.localeCompare(b.id));
-
-// The Get me lost button (#27) follows.
 ---
 
 <SiteLayout>
@@ -29,6 +28,7 @@ const fixes = (await getCollection('fixes')).sort((a, b) => a.id.localeCompare(b
       <p class="max-w-[560px] flex-[1_1_380px] type-intro max-sm:text-[17px] max-sm:leading-[1.55]">
         {hero('intro')}
       </p>
+      <GetMeLost names={fixes.map((f) => f.id)} />
     </div>
   </section>
 

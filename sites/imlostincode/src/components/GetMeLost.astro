@@ -1,0 +1,61 @@
+---
+import { t } from '../i18n';
+
+interface Props {
+  /** Names of the fixes; each has a card with that id on the homepage. */
+  names: string[];
+}
+
+const { names } = Astro.props;
+const lost = t('getLost');
+// Without JavaScript the button is a plain link to a fix picked at build time.
+const buildPick = names[Math.floor(Math.random() * names.length)];
+---
+
+{buildPick && (
+  <div class="flex flex-[0_1_300px] flex-col gap-3" data-get-lost={JSON.stringify(names)}>
+    <a
+      href={`#${buildPick}`}
+      class="block min-h-11 border-3 border-ink bg-yellow px-6 py-3 font-display text-[30px] leading-tight font-black text-ink uppercase no-underline hover:bg-ink hover:text-yellow"
+      data-get-lost-button
+    >
+      {lost('button')}
+    </a>
+    <div aria-live="polite">
+      <a
+        href="#"
+        hidden
+        class="flex rotate-[0.8deg] flex-col gap-1 border-3 border-ink px-4 py-3.5 no-underline hover:bg-yellow-tint"
+        data-get-lost-result
+      >
+        <span class="type-label">{lost('nowLostIn')}</span>
+        <span
+          class="font-display text-[28px] leading-none font-black [overflow-wrap:anywhere]"
+          data-get-lost-name
+        />
+      </a>
+    </div>
+  </div>
+)}
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-get-lost]');
+  const button = root?.querySelector<HTMLAnchorElement>('[data-get-lost-button]');
+  const result = root?.querySelector<HTMLAnchorElement>('[data-get-lost-result]');
+  const name = root?.querySelector<HTMLElement>('[data-get-lost-name]');
+
+  if (root && button && result && name) {
+    const names = JSON.parse(root.dataset.getLost ?? '[]') as string[];
+    let last = -1;
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      let pick = Math.floor(Math.random() * names.length);
+      // Never the same fix twice in a row, so every click changes something.
+      if (pick === last && names.length > 1) pick = (pick + 1) % names.length;
+      last = pick;
+      name.textContent = names[pick] ?? '';
+      result.href = `#${names[pick]}`;
+      result.hidden = false;
+    });
+  }
+</script>
