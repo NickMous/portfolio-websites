@@ -5,7 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
-    "./theme.css": "./src/styles/theme.css"
+    "./theme.css": "./src/styles/theme.css",
+    "./fonts": "./src/fonts.ts",
+    "./components/*": "./src/components/*"
   },
   "peerDependencies": {
     "astro": "^7.0.0"
