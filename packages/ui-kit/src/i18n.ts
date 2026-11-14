@@ -52,3 +52,14 @@ export function createSiteI18n<Strings extends DomainMap>(options: SiteI18nOptio
       i18n.getTranslationData(locale, domain),
   };
 }
+
+const sharedI18n = createI18n({
+  languages: { en: uiEn, nl: uiNl },
+  defaultLanguage: 'en',
+  onMissing: 'throw',
+});
+
+/** Translator for the shared ui-kit domains, used inside ui-kit components. */
+export function sharedT<D extends Extract<keyof Shared, string>>(domain: D) {
+  return sharedI18n.useTranslations(getLocale(), domain);
+}
