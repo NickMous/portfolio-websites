@@ -1,0 +1,108 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Badge, { type BadgeStatus, type BadgeTone } from './Badge.astro';
+
+export type PosterVariant = 'yellow' | 'white' | 'red' | 'blue' | 'green';
+
+interface Props {
+  /** Use "\n" for a deliberate line break. */
+  title: string;
+  color: PosterVariant;
+  href?: string;
+  status?: BadgeStatus;
+  image?: ImageMetadata;
+  imageAlt?: string;
+  /** Shown in the screenshot area while there is no image. */
+  placeholder?: string;
+  /** Two short facts for the ticket strip, left and right. */
+  facts?: [string, string] | [string];
+  /** Hover tilt direction; nickmous tilts right. */
+  tilt?: 'left' | 'right';
+  as?: 'h2' | 'h3';
+  /** Layout classes from the page (e.g. flex/grid sizing). */
+  class?: string;
+}
+
+const {
+  title,
+  color,
+  href,
+  status,
+  image,
+  imageAlt = '',
+  placeholder = `[SCREENSHOT: ${title.replace(/\n/g, ' ')}]`,
+  facts,
+  tilt = 'left',
+  as: Heading = 'h3',
+  class: className,
+} = Astro.props;
+
+const dark = color === 'red' || color === 'blue' || color === 'green';
+
+const surface: Record<PosterVariant, string> = {
+  yellow: 'bg-yellow text-ink',
+  white: 'bg-white text-ink',
+  red: 'bg-red text-white',
+  blue: 'bg-blue text-white',
+  green: 'bg-green text-white',
+};
+const placeholderBg: Record<PosterVariant, string> = {
+  yellow: 'bg-white',
+  white: 'bg-grey-tint',
+  red: 'bg-red-tint-2',
+  blue: 'bg-blue-tint',
+  green: 'bg-green-tint',
+};
+const badgeTone: BadgeTone =
+  status === 'inTesting' ? 'yellow' : dark ? 'white' : color === 'yellow' ? 'ink-yellow' : 'ink';
+
+const Tag = href ? 'a' : 'div';
+const titleLines = title.split('\n');
+---
+
+<Tag
+  href={href}
+  class:list={[
+    'flex min-w-0 flex-col no-underline',
+    surface[color],
+    href && 'poster-hover',
+    tilt === 'right' && '[--poster-tilt:1deg]',
+    className,
+  ]}
+>
+  <div class="flex flex-wrap items-start justify-between gap-3 px-6 pt-6">
+    <Heading class="type-poster">
+      {titleLines.map((line, i) => (i > 0 ? [<br />, line] : line))}
+    </Heading>
+    {status && <Badge status={status} tone={badgeTone} />}
+  </div>
+
+  {image ? (
+    <Image
+      src={image}
+      alt={imageAlt}
+      widths={[400, 800]}
+      sizes="(max-width: 640px) 100vw, 380px"
+      class="mx-6 my-5 h-[220px] w-[calc(100%-3rem)] object-cover"
+    />
+  ) : (
+    <div
+      class:list={[
+        'mx-6 my-5 flex h-[220px] items-center justify-center border-2 border-dashed p-4 text-center text-[14px] font-medium text-ink',
+        placeholderBg[color],
+        dark ? 'border-white' : 'border-ink',
+      ]}
+    >
+      {placeholder}
+    </div>
+  )}
+
+  {facts && (
+    <div class="mt-auto ticket-line flex flex-wrap justify-between gap-2 px-6 py-3.5 text-[14px] font-medium">
+      {facts.map((fact) => (
+        <span>{fact}</span>
+      ))}
+    </div>
+  )}
+</Tag>
