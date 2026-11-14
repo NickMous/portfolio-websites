@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 import { docFile, docTitle, renderCodeFile, renderMarkdown, type RenderContext } from './content';
 
 const ctx = (filePath: string): RenderContext => ({
@@ -11,6 +11,9 @@ const ctx = (filePath: string): RenderContext => ({
     example: (path) => `/netstation/examples/0.2/${path}`,
   },
 });
+
+// The first render starts Shiki, which takes seconds on a cold CI runner.
+beforeAll(() => renderMarkdown('```js\n1\n```', ctx('README.md')), 30_000);
 
 const hrefs = (html: string) => [...html.matchAll(/href="([^"]*)"/g)].map((m) => m[1]);
 const srcs = (html: string) => [...html.matchAll(/src="([^"]*)"/g)].map((m) => m[1]);
