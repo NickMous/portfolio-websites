@@ -128,3 +128,13 @@ describe('renderCodeFile', () => {
     expect(html).toContain('<span>yml</span>');
   });
 });
+
+describe('renderMarkdown headings', () => {
+  it('moves headings down a level under the page title, with GitHub-style ids', async () => {
+    const html = await renderMarkdown('# Getting started\n\n## Step 1: install', ctx('README.md'));
+
+    expect(html).toContain('<h2 id="getting-started">Getting started</h2>');
+    expect(html).toContain('<h3 id="step-1-install">Step 1: install</h3>');
+    expect(html).not.toContain('<h1');
+  });
+});

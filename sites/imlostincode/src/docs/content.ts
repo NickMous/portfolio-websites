@@ -3,6 +3,7 @@ import type { Element, ElementContent, Root as HastRoot } from 'hast';
 import type { Blockquote, Paragraph, Root as MdastRoot } from 'mdast';
 import path from 'node:path';
 import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
@@ -124,6 +125,16 @@ function rehypeRepoUrls(ctx: RenderContext) {
   };
 }
 
+/** The page title is the h1, so markdown headings move down one level (h6 stays). */
+function rehypeDemoteHeadings() {
+  return (tree: HastRoot) => {
+    visit(tree, 'element', (node: Element) => {
+      const level = /^h([1-5])$/.exec(node.tagName)?.[1];
+      if (level) node.tagName = `h${Number(level) + 1}`;
+    });
+  };
+}
+
 /** Wraps fenced code in a frame with its language and a copy button. */
 function rehypeCodeFrame() {
   return (tree: HastRoot) => {
@@ -175,6 +186,8 @@ export async function renderMarkdown(markdown: string, ctx: RenderContext): Prom
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(rehypeRepoUrls, ctx)
+    .use(rehypeSlug)
+    .use(rehypeDemoteHeadings)
     .use(rehypeCodeFrame)
     .use(rehypeShiki, {
       theme: 'github-light',
