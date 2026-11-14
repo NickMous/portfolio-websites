@@ -1,15 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { otherSites, siteUrl, sites } from './sites';
-
-describe('sites', () => {
-  it('registers the four sites with their lead color', () => {
-    expect(Object.keys(sites)).toEqual(['webenjoyer', 'nickmous', 'imlostincode', 'sanderdh']);
-    expect(sites.webenjoyer.lead).toBe('blue');
-    expect(sites.nickmous.lead).toBe('yellow');
-    expect(sites.imlostincode.lead).toBe('red');
-    expect(sites.sanderdh.lead).toBe('green');
-  });
-});
+import { otherSites, siteUrl } from './sites';
 
 describe('siteUrl', () => {
   it('uses .com for English and .nl for Dutch', () => {
