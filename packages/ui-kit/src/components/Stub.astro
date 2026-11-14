@@ -1,0 +1,61 @@
+---
+import type { PosterColor } from '../sites';
+
+interface Props {
+  title: string;
+  /** Edge strip color. */
+  color: PosterColor;
+  /** Vertical label in a wide strip (e.g. "School"). Without it the strip is thin. */
+  label?: string;
+  href?: string;
+  /** Keep the title's case, for repo names like "astro-i18n". */
+  keepCase?: boolean;
+  as?: 'h2' | 'h3';
+  class?: string;
+}
+
+const {
+  title,
+  color,
+  label,
+  href,
+  keepCase = false,
+  as: Heading = 'h3',
+  class: className,
+} = Astro.props;
+
+const strip: Record<PosterColor, string> = {
+  yellow: 'bg-yellow text-ink',
+  blue: 'bg-blue text-white',
+  red: 'bg-red text-white',
+  green: 'bg-green text-white',
+};
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag href={href} class:list={['group flex frame no-underline', className]}>
+  <div
+    class:list={[
+      'flex shrink-0 items-center justify-center',
+      strip[color],
+      label ? 'w-14' : 'w-3.5',
+    ]}
+  >
+    {label && <span class="-rotate-90 type-label tracking-normal whitespace-nowrap">{label}</span>}
+  </div>
+  <div class="flex min-w-0 flex-col gap-2 p-5">
+    <Heading
+      class:list={[
+        'type-stub [overflow-wrap:anywhere]',
+        keepCase && 'normal-case',
+        href && 'group-hover:underline',
+      ]}
+    >
+      {title}
+      {href && ' ↗'}
+    </Heading>
+    <p class="text-[15px]">
+      <slot />
+    </p>
+  </div>
+</Tag>
