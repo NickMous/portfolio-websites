@@ -74,16 +74,19 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
   const readme = blobs.find((e) => /^readme\.md$/i.test(e.path));
   if (readme) {
     pages.push(
-      read(readme.path).then(async (md) =>
-        page({
+      read(readme.path).then(async (raw) => {
+        // The header already shows the project name; drop a README title that repeats it.
+        const name = repo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const md = raw.replace(new RegExp(`^\\s*# +${name}\\s*\\n`, 'i'), '');
+        return page({
           section: 'overview',
           slug: '',
           title: fix.name,
           order: 0,
           path: readme.path,
           html: await renderMarkdown(md, ctx(readme.path)),
-        }),
-      ),
+        });
+      }),
     );
   }
 

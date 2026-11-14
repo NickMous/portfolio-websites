@@ -1,0 +1,48 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Sidebar from '../../../../components/docs/Sidebar.astro';
+import { docsSite } from '../../../../docs/site';
+import { docsUrls } from '../../../../docs/urls';
+import { t } from '../../../../i18n';
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+export const getStaticPaths = (async () =>
+  (await docsSite()).flatMap(({ fix, pages }) =>
+    fix.versions.flatMap((v) => {
+      const examples = pages
+        .filter((p) => p.version === v.id && p.section === 'example')
+        .sort((a, b) => a.slug.localeCompare(b.slug));
+      return examples.length
+        ? [{ params: { repo: fix.name, version: v.id }, props: { fix, pages, examples } }]
+        : [];
+    }),
+  )) satisfies GetStaticPaths;
+
+const { fix, pages, examples } = Astro.props;
+const s = t('docs');
+---
+
+<DocsLayout {fix} {pages} current={examples[0]!} title={`${s('examples')} · ${fix.name}`}>
+  <Sidebar
+    slot="sidebar"
+    label={`${s('examples')} · ${examples[0]!.version}`}
+    items={examples.map((e) => ({
+      href: `#${docsUrls.exampleAnchor(e.slug)}`,
+      title: e.slug,
+      current: false,
+    }))}
+  />
+  {examples.map((e) => (
+    <section id={docsUrls.exampleAnchor(e.slug)} class="flex scroll-mt-6 flex-col gap-3">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <h2 class="font-display text-[30px] leading-tight font-black [overflow-wrap:anywhere]">
+          {e.slug}
+        </h2>
+        <a href={`${fix.url}/blob/${e.ref}/${e.path}`} class="text-[14px] font-medium underline">
+          {s('viewOnGitHub')}
+        </a>
+      </div>
+      <div class="prose-docs" set:html={e.html} />
+    </section>
+  ))}
+</DocsLayout>

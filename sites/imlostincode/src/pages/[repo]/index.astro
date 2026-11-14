@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Overview from '../../components/docs/Overview.astro';
+import { docsSite } from '../../docs/site';
+
+export const getStaticPaths = (async () =>
+  (await docsSite()).map(({ fix, pages }) => ({
+    params: { repo: fix.name },
+    props: { fix, pages },
+  }))) satisfies GetStaticPaths;
+
+const { fix, pages } = Astro.props;
+---
+
+<Overview {fix} {pages} version={fix.defaultVersion} />

@@ -24,7 +24,7 @@ describe('docFile', () => {
   });
 
   it('puts unnumbered files after the numbered ones', () => {
-    expect(docFile('faq.md')).toEqual({ order: Number.POSITIVE_INFINITY, slug: 'faq' });
+    expect(docFile('faq.md')).toEqual({ order: Number.MAX_SAFE_INTEGER, slug: 'faq' });
   });
 });
 
@@ -126,5 +126,15 @@ describe('renderCodeFile', () => {
     );
 
     expect(html).toContain('<span>yml</span>');
+  });
+});
+
+describe('renderMarkdown headings', () => {
+  it('moves headings down a level under the page title, with GitHub-style ids', async () => {
+    const html = await renderMarkdown('# Getting started\n\n## Step 1: install', ctx('README.md'));
+
+    expect(html).toContain('<h2 id="getting-started">Getting started</h2>');
+    expect(html).toContain('<h3 id="step-1-install">Step 1: install</h3>');
+    expect(html).not.toContain('<h1');
   });
 });

@@ -3,6 +3,7 @@ import type { Element, ElementContent, Root as HastRoot } from 'hast';
 import type { Blockquote, Paragraph, Root as MdastRoot } from 'mdast';
 import path from 'node:path';
 import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
@@ -13,13 +14,16 @@ import { OWNER } from './owner';
 
 // --- Files --------------------------------------------------------------
 
-/** "02-getting-started.md" → order 2, slug "getting-started". Unnumbered files go last. */
+/**
+ * "02-getting-started.md" → order 2, slug "getting-started". Unnumbered files go
+ * last (a finite number, since the collection schema rejects Infinity).
+ */
 export function docFile(filename: string): { order: number; slug: string } {
   const base = filename.replace(/\.md$/i, '');
   const match = /^(\d+)[-_](.+)$/.exec(base);
   return match
     ? { order: Number(match[1]), slug: match[2]! }
-    : { order: Number.POSITIVE_INFINITY, slug: base };
+    : { order: Number.MAX_SAFE_INTEGER, slug: base };
 }
 
 /** Sidebar title: the first "# " heading outside code blocks, else from the filename. */
@@ -124,6 +128,16 @@ function rehypeRepoUrls(ctx: RenderContext) {
   };
 }
 
+/** The page title is the h1, so markdown headings move down one level (h6 stays). */
+function rehypeDemoteHeadings() {
+  return (tree: HastRoot) => {
+    visit(tree, 'element', (node: Element) => {
+      const level = /^h([1-5])$/.exec(node.tagName)?.[1];
+      if (level) node.tagName = `h${Number(level) + 1}`;
+    });
+  };
+}
+
 /** Wraps fenced code in a frame with its language and a copy button. */
 function rehypeCodeFrame() {
   return (tree: HastRoot) => {
@@ -175,6 +189,8 @@ export async function renderMarkdown(markdown: string, ctx: RenderContext): Prom
     .use(remarkRehype, { allowDangerousHtml: true })
     .use(rehypeRaw)
     .use(rehypeRepoUrls, ctx)
+    .use(rehypeSlug)
+    .use(rehypeDemoteHeadings)
     .use(rehypeCodeFrame)
     .use(rehypeShiki, {
       theme: 'github-light',

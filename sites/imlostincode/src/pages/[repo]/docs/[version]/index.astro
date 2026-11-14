@@ -1,0 +1,26 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Redirect from '../../../../components/Redirect.astro';
+import { docsOf } from '../../../../docs/nav';
+import { docsSite } from '../../../../docs/site';
+import { docsUrls } from '../../../../docs/urls';
+
+// /<repo>/docs/<version>/ (and /latest/) open the first doc page of that version.
+export const getStaticPaths = (async () =>
+  (await docsSite()).flatMap(({ fix, pages }) =>
+    [...fix.versions.map((v) => v.id), 'latest'].flatMap((id) => {
+      const version = id === 'latest' ? fix.defaultVersion : id;
+      const first = docsOf(pages, version)[0];
+      return first
+        ? [
+            {
+              params: { repo: fix.name, version: id },
+              props: { to: docsUrls.doc(fix.name, version, first.slug) },
+            },
+          ]
+        : [];
+    }),
+  )) satisfies GetStaticPaths;
+---
+
+<Redirect to={Astro.props.to} />
