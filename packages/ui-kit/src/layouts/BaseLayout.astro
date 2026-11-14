@@ -1,0 +1,63 @@
+---
+import AlternateLinks from '../components/AlternateLinks.astro';
+import Fonts from '../components/Fonts.astro';
+import { sharedT } from '../i18n';
+import { getLocale } from '../locale';
+import { siteUrl, type SiteKey } from '../sites';
+import '../styles/global.css';
+
+interface Props {
+  /** Which site this page belongs to. */
+  site: SiteKey;
+  /** Full page title, as shown in the browser tab. */
+  title: string;
+  description: string;
+  /** Social preview image; a path on this site or an absolute URL. */
+  ogImage?: string;
+  /** Load Fira Code (docs pages). */
+  code?: boolean;
+}
+
+const { site, title, description, ogImage, code = false } = Astro.props;
+const locale = getLocale();
+const ui = sharedT('ui');
+const pageUrl = siteUrl(site, locale, Astro.url.pathname);
+const ogImageUrl = ogImage ? new URL(ogImage, pageUrl).href : undefined;
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={pageUrl} />
+    <AlternateLinks site={site} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={pageUrl} />
+    <meta property="og:locale" content={locale === 'nl' ? 'nl_NL' : 'en_US'} />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+
+    <Fonts code={code} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only type-label focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:frame focus:bg-yellow focus:px-4 focus:py-3"
+    >
+      {ui('skipToContent')}
+    </a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>
