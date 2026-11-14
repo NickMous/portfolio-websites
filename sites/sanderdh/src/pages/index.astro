@@ -1,14 +1,17 @@
 ---
+import { contactEmail, githubUrl } from '@portfolio/ui-kit';
 import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
+import SiteFooter from '@portfolio/ui-kit/components/SiteFooter.astro';
 import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
-import { t } from '../i18n';
+import Door from '../components/Door.astro';
+import { locale, t } from '../i18n';
 
-// Placeholder shell proving the workspace wiring; the real hub is #16.
 const hub = t('hub');
+const doors = t('doors');
 ---
 
-<BaseLayout site="sanderdh" title="Sander den Hollander" description={hub('description')}>
-  <div class="container-page py-16">
+<BaseLayout site="sanderdh" title={hub('title')} description={hub('description')}>
+  <section class="container-page pt-6 pb-16">
     <HeroHeadline
       lines={[
         { text: hub('greeting') },
@@ -16,5 +19,43 @@ const hub = t('hub');
         { text: 'den Hollander.' },
       ]}
     />
-  </div>
+    <p class="mt-10 max-w-[560px] type-intro">{hub('description')}</p>
+  </section>
+
+  <section class="container-page pb-24">
+    <div class="flex flex-wrap gap-7">
+      <Door
+        site="webenjoyer"
+        {locale}
+        kicker={doors('webenjoyer')}
+        line={doors('webenjoyerLine')}
+        tilt={-1.5}
+      />
+      <Door
+        site="nickmous"
+        {locale}
+        kicker={doors('nickmous')}
+        line={doors('nickmousLine')}
+        tilt={1}
+      />
+      <Door
+        site="imlostincode"
+        {locale}
+        kicker={doors('imlostincode')}
+        line={doors('imlostincodeLine')}
+        tilt={-0.5}
+      />
+    </div>
+  </section>
+
+  <SiteFooter site="sanderdh" slot="footer">
+    <span slot="note">
+      {hub('reachMe')} <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+    </span>
+    <li slot="links">
+      <a href={githubUrl} class="inline-block py-[10px] font-bold underline">
+        GitHub ↗
+      </a>
+    </li>
+  </SiteFooter>
 </BaseLayout>

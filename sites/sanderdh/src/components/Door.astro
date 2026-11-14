@@ -1,0 +1,76 @@
+---
+import { siteUrl, sites, type Locale } from '@portfolio/ui-kit';
+
+type DoorSite = 'webenjoyer' | 'nickmous' | 'imlostincode';
+
+interface Props {
+  site: DoorSite;
+  locale: Locale;
+  kicker: string;
+  line: string;
+  /** Resting tilt in degrees; the door straightens on hover. */
+  tilt: number;
+}
+
+const { site, locale, kicker, line, tilt } = Astro.props;
+
+// The wordmark split over two lines, as on the posters in the design.
+const titleLines: Record<DoorSite, [string, string]> = {
+  webenjoyer: ['web', 'enjoyer'],
+  nickmous: ['nick', 'mous'],
+  imlostincode: ['imlost', 'incode'],
+};
+const surface: Record<DoorSite, string> = {
+  webenjoyer: 'bg-blue text-white',
+  nickmous: 'bg-yellow text-ink',
+  imlostincode: 'bg-red text-white',
+};
+const [first, second] = titleLines[site];
+---
+
+<a
+  href={siteUrl(site, locale)}
+  class:list={[
+    'door group flex min-h-[420px] min-w-0 flex-[1_1_320px] flex-col gap-3.5 p-7 no-underline',
+    surface[site],
+  ]}
+  style={`--door-tilt: ${tilt}deg`}
+>
+  <span class="type-label">{kicker}</span>
+  <span class="font-display text-[64px] leading-[0.9] font-black uppercase">
+    {first}
+    <br />
+    {second}
+  </span>
+  <span class="text-[17px]">{line}</span>
+  <span class="mt-auto ticket-line flex items-center justify-between pt-3.5 text-[15px] font-bold">
+    {sites[site].domains[locale]}
+    <span class="door-arrow text-[32px] leading-none" aria-hidden="true">
+      →
+    </span>
+  </span>
+</a>
+
+<style>
+  .door {
+    transform: rotate(var(--door-tilt));
+    transition: transform 0.2s ease;
+  }
+  .door:hover,
+  .door:focus-visible {
+    transform: rotate(0deg) translateY(-8px);
+  }
+  .door-arrow {
+    transition: transform 0.2s ease;
+  }
+  .door:hover .door-arrow,
+  .door:focus-visible .door-arrow {
+    transform: translateX(8px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .door,
+    .door-arrow {
+      transition: none;
+    }
+  }
+</style>
