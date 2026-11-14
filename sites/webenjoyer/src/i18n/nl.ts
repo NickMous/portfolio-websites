@@ -12,6 +12,15 @@ export default {
     schoolStuff: 'Schoolwerk',
     sayHi: 'Zeg hoi',
   },
+  hero: {
+    surfing: 'Surfen',
+    theWebComma: 'op het web,',
+    creating: 'bouwen',
+    theWebPeriod: 'aan het web.',
+    intro:
+      'WebEnjoyer, dat ben ik, Sander. In mijn vrije tijd bouw ik websites, en oplossingen voor problemen waar ik tegenaan loop. Allerlei sites voor allerlei doelen, gemaakt in Astro en Symfony, op hosting die ik zelf beheer.',
+    note: 'Voorlopig volgeboekt. Hoi zeggen mag altijd.',
+  },
   stubs: {
     school: 'School',
     group: 'Groep',
