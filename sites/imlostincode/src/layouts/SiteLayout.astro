@@ -1,0 +1,47 @@
+---
+import { contactEmail } from '@portfolio/ui-kit';
+import SiteFooter from '@portfolio/ui-kit/components/SiteFooter.astro';
+import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
+import { t } from '../i18n';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  /** Load the code font (docs pages). */
+  code?: boolean;
+}
+
+const meta = t('meta');
+const nav = t('nav');
+const footer = t('footer');
+const {
+  title = meta('title'),
+  description = meta('description'),
+  ogImage,
+  code = false,
+} = Astro.props;
+
+// Section anchors live on the homepage; from other pages they lead back there.
+const home = Astro.url.pathname === '/' ? '' : '/';
+const links = [
+  { href: `${home}#fixes`, label: nav('fixes') },
+  { href: `${home}#graveyard`, label: nav('stillLost') },
+];
+---
+
+<BaseLayout
+  site="imlostincode"
+  {title}
+  {description}
+  {...(ogImage ? { ogImage } : {})}
+  {code}
+  nav={links}
+>
+  <slot />
+  <SiteFooter site="imlostincode" slot="footer">
+    <span slot="note">
+      {footer('stuck')} <a href={`mailto:${contactEmail}`}>{footer('tellMe')}</a>
+    </span>
+  </SiteFooter>
+</BaseLayout>

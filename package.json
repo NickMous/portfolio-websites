@@ -20,7 +20,9 @@
     "check": "npm run check --workspaces --if-present",
     "dev:playground": "npm run dev -w @portfolio/playground",
     "dev:webenjoyer": "npm run dev -w @portfolio/webenjoyer",
-    "build:webenjoyer": "npm run build -w @portfolio/webenjoyer"
+    "build:webenjoyer": "npm run build -w @portfolio/webenjoyer",
+    "dev:imlostincode": "npm run dev -w @portfolio/imlostincode",
+    "build:imlostincode": "npm run build -w @portfolio/imlostincode"
   },
   "devDependencies": {
     "prettier": "^3.10.1",
