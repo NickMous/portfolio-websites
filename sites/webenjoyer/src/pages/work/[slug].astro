@@ -1,0 +1,206 @@
+---
+import Badge, { type BadgeTone } from '@portfolio/ui-kit/components/Badge.astro';
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { getCollection, type CollectionEntry } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { locale, t } from '../../i18n';
+import { badgeStatus, displayHost, groupProjects, nextProject } from '../../lib/projects';
+
+export const getStaticPaths = (async () => {
+  const { nowShowing } = groupProjects(await getCollection('projects'));
+  return nowShowing.map((project) => ({
+    params: { slug: project.id },
+    props: { project, next: nextProject(nowShowing, project.id) },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+  next: CollectionEntry<'projects'> | undefined;
+}
+
+const { project, next } = Astro.props;
+const p = project.data;
+const s = t('project');
+const status = badgeStatus(p.status);
+const nextStatus = next && badgeStatus(next.data.status);
+
+// The header takes the poster color; a white poster gets the grey tint so the
+// header still stands apart from the white page.
+const headers: Record<
+  CollectionEntry<'projects'>['data']['posterColor'],
+  { bg: string; hex: string; badge: BadgeTone }
+> = {
+  yellow: { bg: 'bg-yellow text-ink', hex: 'var(--color-yellow)', badge: 'ink-yellow' },
+  white: { bg: 'bg-grey-tint text-ink', hex: 'var(--color-grey-tint)', badge: 'ink' },
+  red: { bg: 'bg-red text-white', hex: 'var(--color-red)', badge: 'white' },
+  blue: { bg: 'bg-blue text-white', hex: 'var(--color-blue)', badge: 'white' },
+  green: { bg: 'bg-green text-white', hex: 'var(--color-green)', badge: 'white' },
+};
+const header = headers[p.posterColor];
+
+const facts = [
+  { label: s('year'), value: p.year ? String(p.year) : '[YEAR]' },
+  { label: s('type'), value: p.type?.[locale] ?? '[TYPE]' },
+  { label: s('builtWith'), value: p.stack.length ? p.stack.join(', ') : '[STACK]' },
+];
+const [mainShot, detailShot] = p.screenshots;
+const titleLines = (p.posterTitle ?? p.title).split('\n');
+const shotPlaceholder =
+  'flex items-center justify-center border-3 border-ink bg-grey-tint p-4 text-center text-[15px] font-medium';
+---
+
+<SiteLayout title={`${p.title} · WebEnjoyer`} description={p.intro?.[locale] ?? p.oneLiner[locale]}>
+  <section class={header.bg}>
+    <div class="container-page pt-14 max-sm:pt-8">
+      <a
+        href="/#work"
+        class="inline-block py-[10px] text-[15px] font-bold no-underline hover:underline"
+      >
+        {s('allPosters')}
+      </a>
+      <div class="mt-6 flex flex-wrap items-end justify-between gap-6 max-sm:mt-4 max-sm:gap-4">
+        <h1 class="min-w-0 font-display text-[clamp(72px,12vw,176px)] leading-[0.84] font-black tracking-[-1px] [overflow-wrap:anywhere] uppercase max-sm:text-[min(64px,17vw)]">
+          {titleLines.map((line, i) => (i > 0 ? [<br />, line] : line))}
+        </h1>
+        {status && (
+          <span class="mb-3 max-sm:mb-0">
+            <Badge status={status} tone={header.badge} size="lg" />
+          </span>
+        )}
+      </div>
+      <p class="mt-8 max-w-[640px] text-[22px] leading-[1.45] font-medium max-sm:mt-6 max-sm:text-[18px]">
+        {p.intro?.[locale] ?? '[INTRO]'}
+      </p>
+      <dl class="mt-12 grid grid-cols-[auto_auto_auto_1fr] ticket-line max-lg:grid-cols-2 max-sm:mt-8">
+        {[...facts, null].map((fact, i) => (
+          <div
+            class:list={[
+              'flex flex-col gap-1 border-dashed border-current pt-[18px] pb-[22px]',
+              // Desktop: one row sized to the values, dashed lines between the columns.
+              'lg:pr-10',
+              i > 0 && 'lg:border-l-3 lg:pl-5',
+              // Phones and tablets: Year | Built with share a row; the longer Type
+              // and Visit values each get a full row.
+              i === 2 && 'max-lg:order-1 max-lg:border-l-3 max-lg:pl-5',
+              i === 1 && 'max-lg:order-2',
+              i === 3 && 'max-lg:order-3',
+              i % 2 === 1 && 'max-lg:col-span-2 max-lg:border-t-3',
+            ]}
+          >
+            <dt class="type-label">{fact ? fact.label : s('visit')}</dt>
+            <dd class="font-display text-[32px] leading-tight font-black [overflow-wrap:anywhere] max-sm:text-[26px]">
+              {fact ? fact.value : p.url ? <a href={p.url}>{displayHost(p.url)} ↗</a> : '[URL]'}
+            </dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </section>
+
+  <section style={`background: linear-gradient(${header.hex} 0 50%, var(--color-white) 50% 100%)`}>
+    <div class="container-page">
+      {mainShot ? (
+        <Image
+          src={mainShot}
+          alt={p.title}
+          widths={[640, 1200, 2272]}
+          sizes="(max-width: 1264px) 100vw, 1136px"
+          class="h-[560px] w-full border-3 border-ink object-cover object-top max-sm:h-[240px]"
+        />
+      ) : (
+        <div class:list={[shotPlaceholder, 'h-[560px] max-sm:h-[240px]']}>
+          [SCREENSHOT: homepage, desktop, full width]
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="container-page flex flex-wrap gap-x-20 gap-y-12 pt-24 max-sm:gap-y-10 max-sm:pt-14">
+    <div class="flex flex-[1_1_340px] flex-col gap-4">
+      <h2 class="font-display text-[48px] leading-none font-black uppercase max-sm:text-[40px]">
+        {s('whatItIs')}
+      </h2>
+      <p class="text-[18px] leading-[1.6] max-sm:text-[17px]">
+        {p.whatItIs?.[locale] ?? '[WHAT IT IS]'}
+      </p>
+    </div>
+    <div class="flex flex-[1_1_340px] flex-col gap-4">
+      <h2 class="font-display text-[48px] leading-none font-black uppercase max-sm:text-[40px]">
+        {s('whatIBuilt')}
+      </h2>
+      <ul class="text-[18px] leading-normal max-sm:text-[17px]">
+        {(p.whatIBuilt.length
+          ? p.whatIBuilt
+          : [{ en: '[WHAT I BUILT]', nl: '[WHAT I BUILT]' }]
+        ).map((item) => (
+          <li class="border-t-2 border-ink py-3 last:border-b-2">{item[locale]}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="container-page flex flex-wrap items-end gap-8 pt-20 max-sm:pt-12">
+    {detailShot ? (
+      <Image
+        src={detailShot}
+        alt=""
+        widths={[640, 1200]}
+        sizes="(max-width: 640px) 100vw, 860px"
+        class="h-[400px] flex-[2_1_480px] border-3 border-ink object-cover object-top max-sm:h-[240px]"
+      />
+    ) : (
+      <div class:list={[shotPlaceholder, 'h-[400px] flex-[2_1_480px] max-sm:h-[240px]']}>
+        [SCREENSHOT: a detail page]
+      </div>
+    )}
+    {p.phoneScreenshot ? (
+      <Image
+        src={p.phoneScreenshot}
+        alt=""
+        widths={[240, 480]}
+        sizes="240px"
+        class="h-[480px] w-[240px] rounded-[28px] border-3 border-ink object-cover object-top max-sm:mx-auto"
+      />
+    ) : (
+      <div
+        class:list={[
+          shotPlaceholder,
+          'h-[480px] flex-[0_1_240px] rounded-[28px] max-sm:mx-auto max-sm:w-[220px] max-sm:flex-none',
+        ]}
+      >
+        [SCREENSHOT: phone view]
+      </div>
+    )}
+  </section>
+
+  {p.behindTheScenes ? (
+    <section class="container-page pt-20 max-sm:pt-12">
+      <div class="flex rotate-[-0.6deg] flex-wrap items-baseline gap-x-8 gap-y-3 bg-red px-9 py-8 text-white max-sm:px-5 max-sm:py-6">
+        <h2 class="font-display text-[32px] font-black whitespace-nowrap uppercase">
+          {s('behindTheScenes')}
+        </h2>
+        <p class="flex-[1_1_400px] text-[19px] leading-normal max-sm:flex-none max-sm:text-[17px]">
+          {p.behindTheScenes[locale]}
+        </p>
+      </div>
+    </section>
+  ) : null}
+
+  <div class="pt-24 max-sm:pt-14"></div>
+
+  {next && (
+    <a href={`/work/${next.id}/`} class="group block bg-blue text-white no-underline">
+      <div class="container-page flex flex-wrap items-end justify-between gap-4 py-14 max-sm:py-10">
+        <div class="flex flex-col gap-2">
+          <span class="text-[15px] font-bold tracking-[1px] uppercase">{s('nextPoster')}</span>
+          <span class="font-display text-[clamp(56px,8vw,104px)] leading-[0.9] font-black uppercase group-hover:underline max-sm:text-[48px]">
+            {next.data.title} →
+          </span>
+        </div>
+        {nextStatus && <Badge status={nextStatus} tone="white" />}
+      </div>
+    </a>
+  )}
+</SiteLayout>

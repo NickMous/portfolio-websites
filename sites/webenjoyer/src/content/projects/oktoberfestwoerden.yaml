@@ -13,3 +13,19 @@ tagline:
 oneLiner:
   en: '[ONE-LINER]'
   nl: '[ONE-LINER]'
+type:
+  en: Event site
+  nl: Evenementensite
+intro:
+  en: '[One sentence: what the site is for, in your own words]'
+  nl: '[One sentence: what the site is for, in your own words]'
+whatItIs:
+  en: '[2–3 sentences: the event, who visits the site, what they come for]'
+  nl: '[2–3 sentences: the event, who visits the site, what they come for]'
+whatIBuilt:
+  - en: Rebuilt the whole site in Astro
+    nl: De hele site opnieuw gebouwd in Astro
+  - en: '[Feature or detail]'
+    nl: '[Feature or detail]'
+  - en: '[Feature or detail]'
+    nl: '[Feature or detail]'

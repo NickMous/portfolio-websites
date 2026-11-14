@@ -51,3 +51,10 @@ export function badgeStatus(
 export function displayHost(url: string): string {
   return new URL(url).hostname.replace(/^www\./, '');
 }
+
+/** The project after `id` for the "Next poster" band, wrapping to the first. */
+export function nextProject<P extends { id: string }>(list: P[], id: string): P | undefined {
+  if (list.length < 2) return undefined;
+  const index = list.findIndex((p) => p.id === id);
+  return list[(index + 1) % list.length];
+}

@@ -35,6 +35,17 @@ export default {
   footer: {
     sayHi: 'Say hi →',
   },
+  project: {
+    allPosters: '← All posters',
+    year: 'Year',
+    type: 'Type',
+    builtWith: 'Built with',
+    visit: 'Visit',
+    whatItIs: 'What it is',
+    whatIBuilt: 'What I built',
+    behindTheScenes: 'Behind the scenes',
+    nextPoster: 'Next poster',
+  },
   stubs: {
     school: 'School',
     group: 'Group',

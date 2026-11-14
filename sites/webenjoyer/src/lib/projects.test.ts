@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { badgeStatus, displayHost, groupProjects, type ProjectLike } from './projects';
+import { badgeStatus, displayHost, groupProjects, nextProject, type ProjectLike } from './projects';
 
 const project = (id: string, data: Partial<ProjectLike['data']>): ProjectLike => ({
   id,
@@ -47,5 +47,18 @@ describe('badgeStatus', () => {
 describe('displayHost', () => {
   it('drops the protocol, www and path', () => {
     expect(displayHost('https://www.example.nl/agenda/')).toBe('example.nl');
+  });
+});
+
+describe('nextProject', () => {
+  const list = [project('a', {}), project('b', {}), project('c', {})];
+
+  it('returns the following project and wraps around after the last', () => {
+    expect(nextProject(list, 'a')?.id).toBe('b');
+    expect(nextProject(list, 'c')?.id).toBe('a');
+  });
+
+  it('has no next poster when the project is the only one', () => {
+    expect(nextProject([project('a', {})], 'a')).toBeUndefined();
   });
 });

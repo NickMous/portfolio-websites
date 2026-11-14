@@ -37,6 +37,17 @@ export default {
   footer: {
     sayHi: 'Zeg hoi →',
   },
+  project: {
+    allPosters: '← Alle posters',
+    year: 'Jaar',
+    type: 'Type',
+    builtWith: 'Gebouwd met',
+    visit: 'Bezoek',
+    whatItIs: 'Wat het is',
+    whatIBuilt: 'Wat ik bouwde',
+    behindTheScenes: 'Achter de schermen',
+    nextPoster: 'Volgende poster',
+  },
   stubs: {
     school: 'School',
     group: 'Groep',
