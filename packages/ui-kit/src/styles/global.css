@@ -15,6 +15,8 @@
     font-family: var(--font-body);
     font-size: 16px;
     line-height: 1.5;
+    /* Tilted blocks may poke past the edge; never scroll sideways. */
+    overflow-x: clip;
   }
 
   :focus-visible {

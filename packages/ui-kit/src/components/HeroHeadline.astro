@@ -1,0 +1,55 @@
+---
+import type { PosterColor } from '../sites';
+
+export interface HeroLine {
+  text: string;
+  /** Text color for this line. */
+  color?: PosterColor;
+  /** Turns the line into a tilted highlight block in this color. */
+  block?: PosterColor;
+  /** Tilt direction of a highlight block. Defaults to left (-1.5deg). */
+  tilt?: 'left' | 'right';
+}
+
+interface Props {
+  lines: HeroLine[];
+  /** Heading level; the homepage hero is the page's h1. */
+  as?: 'h1' | 'h2';
+}
+
+const { lines, as: Tag = 'h1' } = Astro.props;
+
+const textColor: Record<PosterColor, string> = {
+  yellow: 'text-yellow',
+  blue: 'text-blue',
+  red: 'text-red',
+  green: 'text-green',
+};
+const blockColor: Record<PosterColor, string> = {
+  yellow: 'bg-yellow text-ink',
+  blue: 'bg-blue text-white',
+  red: 'bg-red text-white',
+  green: 'bg-green text-white',
+};
+---
+
+<Tag class="type-hero">
+  {lines.map((line, i) => (
+    <>
+      {i > 0 && ' '}
+      <span
+        class:list={[
+          'block',
+          line.color && !line.block && textColor[line.color],
+          line.block && [
+            'w-fit px-4 max-sm:px-2.5',
+            blockColor[line.block],
+            line.tilt === 'right' ? 'rotate-[1.5deg]' : 'rotate-[-1.5deg]',
+          ],
+        ]}
+      >
+        {line.text}
+      </span>
+    </>
+  ))}
+</Tag>

@@ -89,8 +89,10 @@
   text-transform: uppercase;
   font-size: clamp(64px, 11vw, 168px);
   line-height: 0.86;
+  letter-spacing: -1px;
   @media (width < 40rem) {
     font-size: 84px;
+    letter-spacing: -0.5px;
   }
 }
 
