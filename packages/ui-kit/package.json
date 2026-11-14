@@ -8,5 +8,8 @@
   },
   "peerDependencies": {
     "astro": "^7.0.0"
+  },
+  "scripts": {
+    "check": "tsc --noEmit -p ."
   }
 }
