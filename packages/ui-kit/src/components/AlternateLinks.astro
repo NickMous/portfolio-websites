@@ -1,0 +1,17 @@
+---
+import { locales } from '../locale';
+import { siteUrl, type SiteKey } from '../sites';
+
+interface Props {
+  site: SiteKey;
+}
+
+// Same path on both domains; English is the x-default.
+const { site } = Astro.props;
+const path = Astro.url.pathname;
+---
+
+{locales.map((l) => (
+  <link rel="alternate" hreflang={l} href={siteUrl(site, l, path)} />
+))}
+<link rel="alternate" hreflang="x-default" href={siteUrl(site, 'en', path)} />
