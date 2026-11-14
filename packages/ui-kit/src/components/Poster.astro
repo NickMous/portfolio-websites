@@ -72,7 +72,7 @@ const titleLines = title.split('\n');
   ]}
 >
   <div class="flex flex-wrap items-start justify-between gap-3 px-6 pt-6">
-    <Heading class="type-poster">
+    <Heading class="min-w-0 type-poster wrap-break-word">
       {titleLines.map((line, i) => (i > 0 ? [<br />, line] : line))}
     </Heading>
     {status && <Badge status={status} tone={badgeTone} />}
