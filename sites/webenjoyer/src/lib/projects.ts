@@ -37,3 +37,17 @@ export function groupProjects<P extends ProjectLike>(projects: P[]): ProjectGrou
     earlyWork: earlyWork.sort(byOrder),
   };
 }
+
+/** Badge status for a project, or none for archived work. */
+export function badgeStatus(
+  status: ProjectStatus,
+): 'live' | 'inProgress' | 'inTesting' | undefined {
+  return ({ live: 'live', 'in-progress': 'inProgress', 'in-testing': 'inTesting' } as const)[
+    status as 'live'
+  ];
+}
+
+/** "https://www.example.nl/" → "example.nl", for the poster's ticket strip. */
+export function displayHost(url: string): string {
+  return new URL(url).hostname.replace(/^www\./, '');
+}

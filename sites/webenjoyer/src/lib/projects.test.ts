@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { groupProjects, type ProjectLike } from './projects';
+import { badgeStatus, displayHost, groupProjects, type ProjectLike } from './projects';
 
 const project = (id: string, data: Partial<ProjectLike['data']>): ProjectLike => ({
   id,
@@ -35,5 +35,17 @@ describe('groupProjects', () => {
     ]);
 
     expect(groups.nowShowing.map((p) => p.id)).toEqual(['oktoberfest', 'clubvanooit', 'debrug']);
+  });
+});
+
+describe('badgeStatus', () => {
+  it('shows no badge for archived work', () => {
+    expect(badgeStatus('archived')).toBeUndefined();
+  });
+});
+
+describe('displayHost', () => {
+  it('drops the protocol, www and path', () => {
+    expect(displayHost('https://www.example.nl/agenda/')).toBe('example.nl');
   });
 });

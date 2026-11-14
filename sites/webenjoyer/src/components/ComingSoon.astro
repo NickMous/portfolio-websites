@@ -1,0 +1,40 @@
+---
+import Badge from '@portfolio/ui-kit/components/Badge.astro';
+import type { CollectionEntry } from 'astro:content';
+import { locale, t } from '../i18n';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { title, repo, url, oneLiner } = project.data;
+const label = t('sections')('comingSoon');
+const href = repo ?? url;
+const Tag = href ? 'a' : 'div';
+---
+
+<Tag
+  href={href}
+  class="flex flex-wrap items-stretch border-3 border-dashed border-white text-white no-underline max-sm:flex-col"
+>
+  <div class="flex items-center bg-white px-7 py-5 text-blue max-sm:justify-between max-sm:gap-2 max-sm:px-4 max-sm:py-2.5">
+    <span class="font-display text-[40px] leading-[0.9] font-black uppercase max-sm:text-[26px] sm:max-w-[4.5ch]">
+      {label}
+    </span>
+    <span class="hidden max-sm:inline-block">
+      <Badge status="inTesting" tone="yellow" />
+    </span>
+  </div>
+  <div class="flex flex-[1_1_480px] flex-wrap items-center gap-x-8 gap-y-3 px-7 py-5 max-sm:flex-col max-sm:items-start max-sm:gap-2 max-sm:p-4">
+    <h3 class="font-display text-[48px] leading-none font-black uppercase max-sm:text-[40px]">
+      {title}
+    </h3>
+    <p class="flex-[1_1_300px] text-[16px] leading-normal max-sm:flex-none max-sm:text-[15px]">
+      {oneLiner[locale]}
+    </p>
+    <span class="max-sm:hidden">
+      <Badge status="inTesting" tone="yellow" />
+    </span>
+  </div>
+</Tag>

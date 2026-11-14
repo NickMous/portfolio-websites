@@ -19,6 +19,10 @@ export default {
       'WebEnjoyer is me, Sander. In my spare time I build websites, and solutions to problems I run into. All sorts of sites for all sorts of goals, made in Astro and Symfony, on hosting I manage myself.',
     note: 'Fully booked for now. Saying hi is always fine.',
   },
+  sections: {
+    nowShowing: 'Now showing',
+    comingSoon: 'Coming soon',
+  },
   stubs: {
     school: 'School',
     group: 'Group',

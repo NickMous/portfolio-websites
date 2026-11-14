@@ -21,6 +21,10 @@ export default {
       'WebEnjoyer, dat ben ik, Sander. In mijn vrije tijd bouw ik websites, en oplossingen voor problemen waar ik tegenaan loop. Allerlei sites voor allerlei doelen, gemaakt in Astro en Symfony, op hosting die ik zelf beheer.',
     note: 'Voorlopig volgeboekt. Hoi zeggen mag altijd.',
   },
+  sections: {
+    nowShowing: 'Nu te zien',
+    comingSoon: 'Binnenkort',
+  },
   stubs: {
     school: 'School',
     group: 'Groep',
