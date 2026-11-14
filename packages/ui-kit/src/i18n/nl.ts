@@ -12,6 +12,7 @@ export default {
   },
   badges: {
     live: '● Live',
+    available: 'Beschikbaar',
     inProgress: 'Bezig',
     inTesting: 'In testfase',
     unreleased: 'Nog niet uitgebracht',

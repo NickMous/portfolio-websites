@@ -1,0 +1,29 @@
+---
+import Badge from '@portfolio/ui-kit/components/Badge.astro';
+import { locale } from '../i18n';
+import type { LostProject } from '../data/stillLost';
+
+interface Props {
+  project: LostProject;
+  /** Alternates the tilt so the graveyard looks scattered. */
+  index: number;
+}
+
+const { project, index } = Astro.props;
+---
+
+<div
+  class:list={[
+    'flex min-w-0 flex-col gap-3 frame bg-white p-6 max-sm:p-5',
+    index % 2 === 0 ? 'rotate-[-0.6deg]' : 'rotate-[0.8deg]',
+  ]}
+>
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <span class="text-[14px] font-bold">{project.dates}</span>
+    <Badge status={project.status} tone={project.status === 'stillLost' ? 'ink' : 'green'} />
+  </div>
+  <h3 class="font-display text-[40px] leading-none font-black [overflow-wrap:anywhere] max-sm:text-[34px]">
+    {project.name}
+  </h3>
+  <p class="text-[15px] leading-normal">{project.oneLiner[locale]}</p>
+</div>
