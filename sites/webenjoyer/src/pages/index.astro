@@ -50,7 +50,7 @@ const facts = (p: (typeof nowShowing)[number]) =>
   <section id="work" class="bg-blue py-[72px] pb-[88px] text-white max-sm:pt-12 max-sm:pb-14">
     <div class="container-page">
       <h2 class="mb-10 type-h2 max-sm:mb-7">{sections('nowShowing')}</h2>
-      <div class="flex flex-wrap gap-7 max-sm:flex-col max-sm:gap-6">
+      <div class="flex flex-wrap gap-7 max-sm:flex-col max-sm:flex-nowrap max-sm:gap-6">
         {nowShowing.map((p) => {
           const status = badgeStatus(p.data.status);
           const image = p.data.screenshots[0];
