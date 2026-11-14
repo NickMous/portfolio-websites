@@ -1,5 +1,6 @@
 ---
 import { sites } from '@portfolio/ui-kit';
+import '../styles/global.css';
 
 // Placeholder shell proving the workspace wiring; the real hub is #16.
 const site = sites.sanderdh;
@@ -12,7 +13,13 @@ const site = sites.sanderdh;
     <meta name="color-scheme" content="light" />
     <title>{site.name}</title>
   </head>
-  <body>
-    <h1>{site.name}</h1>
+  <body class="bg-paper font-body text-ink">
+    <main class="container-page py-16">
+      <h1 class="type-hero">
+        Hi, I'm
+        <br />
+        <span class="inline-block -rotate-2 bg-green px-3 text-white">Sander</span>
+      </h1>
+    </main>
   </body>
 </html>
