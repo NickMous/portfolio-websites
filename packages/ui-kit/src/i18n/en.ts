@@ -1,6 +1,9 @@
 // Shared strings used by ui-kit components. Sites add their own domains.
 export default {
   ui: {
+    language: 'Language',
+    closeMenu: 'Close menu',
+    mainNav: 'Main',
     skipToContent: 'Skip to content',
     menu: 'Menu',
     switchLanguage: 'Nederlands',

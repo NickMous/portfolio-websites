@@ -1,0 +1,138 @@
+---
+import { sharedT } from '../i18n';
+import { alternateUrl, getLocale, locales } from '../locale';
+import { sites, type SiteKey } from '../sites';
+
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+interface Props {
+  site: SiteKey;
+  /** Main navigation. Leave empty for a header with only the wordmark and EN/NL. */
+  nav?: NavLink[];
+}
+
+const { site, nav = [] } = Astro.props;
+const locale = getLocale();
+const ui = sharedT('ui');
+const path = Astro.url.pathname;
+---
+
+<header class="relative container-page flex flex-wrap items-center justify-between gap-4 py-6 max-sm:py-4">
+  <a
+    href="/"
+    class="font-display text-[34px] leading-none font-black tracking-[0.5px] max-sm:text-[28px]"
+  >
+    {sites[site].name}
+  </a>
+
+  <div class="flex items-center gap-6 max-sm:gap-2">
+    {nav.length > 0 && (
+      <nav
+        id="site-nav"
+        aria-label={ui('mainNav')}
+        class="max-sm:absolute max-sm:inset-x-0 max-sm:top-full max-sm:z-40 max-sm:hidden max-sm:border-y-3 max-sm:border-ink max-sm:bg-paper max-sm:data-open:block"
+      >
+        <ul class="flex flex-wrap items-center gap-x-6 max-sm:flex-col max-sm:items-stretch max-sm:px-5 max-sm:py-2">
+          {nav.map((link) => (
+            <li class="max-sm:border-b-2 max-sm:border-dashed max-sm:border-ink max-sm:last:border-b-0">
+              <a
+                href={link.href}
+                class="block py-[10px] font-medium hover:underline max-sm:py-4 max-sm:font-display max-sm:text-[32px] max-sm:leading-none max-sm:font-black max-sm:uppercase"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )}
+
+    <div
+      role="group"
+      aria-label={ui('language')}
+      class="flex text-[14px] font-bold max-sm:text-[13px]"
+    >
+      {locales.map((l, i) => {
+        const edge = i === 0 ? 'rounded-l-full border-r-0' : 'rounded-r-full';
+        const label = l.toUpperCase();
+        return l === locale ? (
+          <span class={`border-2 border-ink bg-ink px-3 py-1.5 text-white max-sm:py-2.5 ${edge}`}>
+            {label}
+          </span>
+        ) : (
+          <a
+            href={alternateUrl(site, locale, path)}
+            hreflang={l}
+            lang={l}
+            aria-label={ui('switchLanguage')}
+            class={`relative border-2 border-ink px-3 py-1.5 after:absolute after:-inset-y-[6px] after:inset-x-0 hover:bg-yellow-tint max-sm:py-2.5 ${edge}`}
+          >
+            {label}
+          </a>
+        );
+      })}
+    </div>
+
+    {nav.length > 0 && (
+      <button
+        type="button"
+        class="hidden size-11 items-center justify-center border-2 border-ink bg-yellow max-sm:flex"
+        aria-controls="site-nav"
+        aria-expanded="false"
+        aria-label={ui('menu')}
+        data-label-open={ui('menu')}
+        data-label-close={ui('closeMenu')}
+        data-menu-button
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          aria-hidden="true"
+        >
+          <line x1="2" y1="5" x2="18" y2="5" />
+          <line x1="2" y1="10" x2="18" y2="10" />
+          <line x1="2" y1="15" x2="18" y2="15" />
+        </svg>
+      </button>
+    )}
+  </div>
+</header>
+
+<script>
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const nav = document.getElementById('site-nav');
+
+  if (button && nav) {
+    const setOpen = (open: boolean) => {
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute(
+        'aria-label',
+        (open ? button.dataset.labelClose : button.dataset.labelOpen) ?? '',
+      );
+      nav.toggleAttribute('data-open', open);
+    };
+
+    button.addEventListener('click', () => {
+      setOpen(button.getAttribute('aria-expanded') !== 'true');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') {
+        setOpen(false);
+        button.focus();
+      }
+    });
+
+    // Following an in-page link closes the menu.
+    nav.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).closest('a')) setOpen(false);
+    });
+  }
+</script>

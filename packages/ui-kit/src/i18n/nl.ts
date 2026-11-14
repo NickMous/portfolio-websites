@@ -2,6 +2,9 @@ import type en from './en';
 
 export default {
   ui: {
+    language: 'Taal',
+    closeMenu: 'Menu sluiten',
+    mainNav: 'Hoofdmenu',
     skipToContent: 'Naar de inhoud',
     menu: 'Menu',
     switchLanguage: 'English',

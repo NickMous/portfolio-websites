@@ -1,6 +1,7 @@
 ---
 import AlternateLinks from '../components/AlternateLinks.astro';
 import Fonts from '../components/Fonts.astro';
+import SiteHeader, { type NavLink } from '../components/SiteHeader.astro';
 import { sharedT } from '../i18n';
 import { getLocale } from '../locale';
 import { siteUrl, type SiteKey } from '../sites';
@@ -16,9 +17,11 @@ interface Props {
   ogImage?: string;
   /** Load Fira Code (docs pages). */
   code?: boolean;
+  /** Main navigation for the default SiteHeader. */
+  nav?: NavLink[];
 }
 
-const { site, title, description, ogImage, code = false } = Astro.props;
+const { site, title, description, ogImage, code = false, nav = [] } = Astro.props;
 const locale = getLocale();
 const ui = sharedT('ui');
 const pageUrl = siteUrl(site, locale, Astro.url.pathname);
@@ -54,7 +57,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, pageUrl).href : undefined;
     >
       {ui('skipToContent')}
     </a>
-    <slot name="header" />
+    {Astro.slots.has('header') ? <slot name="header" /> : <SiteHeader site={site} nav={nav} />}
     <main id="main">
       <slot />
     </main>
