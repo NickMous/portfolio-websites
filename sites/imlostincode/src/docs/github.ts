@@ -1,6 +1,5 @@
+import { OWNER } from './owner';
 import { parseRepoConfig, selectDocsRepos, type GitHubRepo, type RepoConfig } from './repos';
-
-export const OWNER = 'NickMous';
 
 /**
  * Optional token for API rate limits (60 requests/hour without one). CI passes
