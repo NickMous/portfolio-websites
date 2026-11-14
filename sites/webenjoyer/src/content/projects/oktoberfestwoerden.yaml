@@ -1,0 +1,14 @@
+title: Oktoberfest Woerden
+kind: client
+status: live
+featured: true
+order: 1
+url: https://oktoberfestwoerden.nl
+stack: [Astro]
+posterColor: yellow
+tagline:
+  en: Event site · Astro
+  nl: Evenementensite · Astro
+oneLiner:
+  en: '[ONE-LINER]'
+  nl: '[ONE-LINER]'

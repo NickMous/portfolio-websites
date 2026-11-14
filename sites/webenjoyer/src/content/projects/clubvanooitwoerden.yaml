@@ -1,0 +1,13 @@
+title: Club van Ooit
+kind: client
+status: live
+featured: true
+order: 2
+url: https://clubvanooitwoerden.nl
+posterColor: white
+tagline:
+  en: Local stories, every week
+  nl: Lokale verhalen, elke week
+oneLiner:
+  en: '[ONE-LINER]'
+  nl: '[ONE-LINER]'
