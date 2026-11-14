@@ -1,0 +1,9 @@
+title: Gamemerch
+kind: school
+status: archived
+order: 2
+group: false
+posterColor: red
+oneLiner:
+  en: '[ONE-LINER]'
+  nl: '[ONE-LINER]'

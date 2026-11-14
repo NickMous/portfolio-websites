@@ -1,0 +1,9 @@
+title: SpaceX
+kind: school
+status: archived
+order: 3
+group: true
+posterColor: blue
+oneLiner:
+  en: '[ONE-LINER]'
+  nl: '[ONE-LINER]'

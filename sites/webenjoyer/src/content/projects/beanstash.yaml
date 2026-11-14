@@ -1,0 +1,9 @@
+title: Bean Stash
+kind: school
+status: archived
+order: 1
+group: false
+posterColor: green
+oneLiner:
+  en: '[ONE-LINER]'
+  nl: '[ONE-LINER]'
