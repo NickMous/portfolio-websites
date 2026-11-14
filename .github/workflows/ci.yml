@@ -39,6 +39,10 @@ jobs:
       # build on missing or mistyped translation keys (wired up in #7).
       - name: Build all sites
         run: npm run build
+        env:
+          # imlostincode's docs loader reads public repos from the GitHub API;
+          # the token only lifts the rate limit (60 requests/hour without it).
+          GITHUB_TOKEN: ${{ github.token }}
 
       # Flux applies these; catching a broken overlay here beats a red
       # Kustomization in the cluster.
