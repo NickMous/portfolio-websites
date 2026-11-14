@@ -1,24 +1,28 @@
 ---
 import { sites } from '@portfolio/ui-kit';
+import AlternateLinks from '@portfolio/ui-kit/components/AlternateLinks.astro';
 import Fonts from '@portfolio/ui-kit/components/Fonts.astro';
+import { locale, t } from '../i18n';
 import '../styles/global.css';
 
 // Placeholder shell proving the workspace wiring; the real hub is #16.
 const site = sites.sanderdh;
+const hub = t('hub');
 ---
 
-<html lang="en">
+<html lang={locale}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
     <title>{site.name}</title>
     <Fonts />
+    <AlternateLinks site="sanderdh" />
   </head>
   <body class="bg-paper font-body text-ink">
     <main class="container-page py-16">
       <h1 class="type-hero">
-        Hi, I'm
+        {hub('greeting')}
         <br />
         <span class="inline-block -rotate-2 bg-green px-3 text-white">Sander</span>
       </h1>
