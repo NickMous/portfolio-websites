@@ -1,4 +1,5 @@
 ---
+import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
 import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
 import { t } from '../i18n';
 
@@ -8,10 +9,12 @@ const hub = t('hub');
 
 <BaseLayout site="sanderdh" title="Sander den Hollander" description={hub('description')}>
   <div class="container-page py-16">
-    <h1 class="type-hero">
-      {hub('greeting')}
-      <br />
-      <span class="inline-block -rotate-2 bg-green px-3 text-white">Sander</span>
-    </h1>
+    <HeroHeadline
+      lines={[
+        { text: hub('greeting') },
+        { text: 'Sander', block: 'green' },
+        { text: 'den Hollander.' },
+      ]}
+    />
   </div>
 </BaseLayout>
