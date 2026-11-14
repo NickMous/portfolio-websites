@@ -1,0 +1,50 @@
+---
+interface Props {
+  name: string;
+  href: string;
+  /** Small tag above the name, e.g. "npm package". */
+  tag: string;
+  tagColor?: 'yellow' | 'blue' | 'green' | 'red';
+  as?: 'h2' | 'h3';
+  class?: string;
+}
+
+const { name, href, tag, tagColor = 'yellow', as: Heading = 'h3', class: className } = Astro.props;
+
+const tagBg = {
+  yellow: 'bg-yellow',
+  blue: 'bg-blue-tint-2',
+  green: 'bg-green-tint-2',
+  red: 'bg-red-tint',
+};
+---
+
+<a
+  href={href}
+  class:list={['group flex flex-col gap-3 frame bg-white p-6 no-underline', className]}
+>
+  <div class="flex items-center justify-between gap-3">
+    <span class:list={['px-2 py-1 text-[13px] font-bold', tagBg[tagColor]]}>{tag}</span>
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+      class="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
+    >
+      <path d="M7 17L17 7"></path>
+      <path d="M8 7h9v9"></path>
+    </svg>
+  </div>
+  <Heading class="font-display text-[34px] leading-none font-black [overflow-wrap:anywhere] group-hover:underline">
+    {name}
+  </Heading>
+  <p class="text-[15px]">
+    <slot />
+  </p>
+</a>
