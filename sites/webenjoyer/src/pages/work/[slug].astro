@@ -61,7 +61,7 @@ const shotPlaceholder =
         {s('allPosters')}
       </a>
       <div class="mt-6 flex flex-wrap items-end justify-between gap-6 max-sm:mt-4 max-sm:gap-4">
-        <h1 class="min-w-0 font-display text-[clamp(72px,12vw,176px)] leading-[0.84] font-black tracking-[-1px] [overflow-wrap:anywhere] uppercase max-sm:text-[min(64px,17vw)]">
+        <h1 class="min-w-0 font-display text-[clamp(72px,12vw,176px)] leading-[0.84] font-black tracking-[-1px] wrap-break-word uppercase max-sm:text-[min(64px,14vw)]">
           {titleLines.map((line, i) => (i > 0 ? [<br />, line] : line))}
         </h1>
         {status && (
@@ -193,9 +193,9 @@ const shotPlaceholder =
   {next && (
     <a href={`/work/${next.id}/`} class="group block bg-blue text-white no-underline">
       <div class="container-page flex flex-wrap items-end justify-between gap-4 py-14 max-sm:py-10">
-        <div class="flex flex-col gap-2">
+        <div class="flex min-w-0 flex-col gap-2">
           <span class="text-[15px] font-bold tracking-[1px] uppercase">{s('nextPoster')}</span>
-          <span class="font-display text-[clamp(56px,8vw,104px)] leading-[0.9] font-black uppercase group-hover:underline max-sm:text-[48px]">
+          <span class="font-display text-[clamp(56px,8vw,104px)] leading-[0.9] font-black wrap-break-word uppercase group-hover:underline max-sm:text-[48px]">
             {next.data.title} →
           </span>
         </div>
