@@ -1,0 +1,152 @@
+/*
+ * Poster-wall design tokens, shared by all four sites.
+ *
+ * Use in a site's global stylesheet:
+ *   @import 'tailwindcss';
+ *   @import '@portfolio/ui-kit/theme.css';
+ *
+ * Tailwind's default palette, radii, shadows and blurs are removed on purpose:
+ * only the tokens below exist, so off-system styles cannot sneak in.
+ */
+
+/* Scan the ui-kit's own components for class names. */
+@source '../';
+
+@theme {
+  --color-*: initial;
+  --color-ink: #141414;
+  --color-paper: #ffffff;
+  --color-white: #ffffff;
+  --color-yellow: #f2b705;
+  --color-blue: #1f4fd8;
+  --color-red: #c8321c;
+  --color-green: #0b7a4d;
+  --color-grey-tint: #edede8;
+  --color-red-tint: #fbe3de;
+  --color-red-tint-2: #f7dcd6;
+  --color-blue-tint: #dce5fb;
+  --color-blue-tint-2: #c8d6fa;
+  --color-green-tint: #ddf1e6;
+  --color-green-tint-2: #bfe6d3;
+  --color-yellow-tint: #fcefc2;
+  --color-muted: #555555;
+  --color-callout-red-text: #a3281a;
+
+  --font-*: initial;
+  --font-display: 'Big Shoulders Display', 'Arial Narrow', sans-serif;
+  --font-body: 'Libre Franklin', system-ui, sans-serif;
+  --font-mono: 'Fira Code', ui-monospace, monospace;
+
+  /* No border radius. The EN/NL pill uses the built-in rounded-full;
+     the phone screenshot frame sets its own radius. */
+  --radius-*: initial;
+
+  /* No shadows, no blur. */
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+  --blur-*: initial;
+}
+
+@utility container-page {
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 32px;
+  @media (width < 40rem) {
+    padding-inline: 20px;
+  }
+}
+
+@utility frame {
+  border: 3px solid var(--color-ink);
+}
+
+/* Ticket-stub line; currentColor makes it white on dark posters. */
+@utility ticket-line {
+  border-top: 3px dashed currentColor;
+}
+
+@utility poster-hover {
+  transition: transform 0.2s;
+  &:hover {
+    transform: rotate(-1deg) translateY(-4px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+/* Type scale. Phones are below 40rem (640px). */
+
+@utility type-hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(64px, 11vw, 168px);
+  line-height: 0.86;
+  @media (width < 40rem) {
+    font-size: 84px;
+  }
+}
+
+@utility type-cta {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: clamp(56px, 9vw, 128px);
+  line-height: 0.9;
+  @media (width < 40rem) {
+    font-size: 72px;
+  }
+}
+
+@utility type-h2 {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 64px;
+  line-height: 0.9;
+  @media (width < 40rem) {
+    font-size: 48px;
+  }
+}
+
+@utility type-poster {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 52px;
+  line-height: 0.9;
+  @media (width < 40rem) {
+    font-size: 44px;
+  }
+}
+
+@utility type-stub {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+  font-size: 34px;
+  line-height: 1;
+  @media (width < 40rem) {
+    font-size: 30px;
+  }
+}
+
+@utility type-intro {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+@utility type-label {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
