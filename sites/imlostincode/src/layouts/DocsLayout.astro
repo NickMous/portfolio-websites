@@ -1,0 +1,176 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { docsOf, versionTarget, type PageRef } from '../docs/nav';
+import { docsUrls } from '../docs/urls';
+import { t } from '../i18n';
+import SiteLayout from './SiteLayout.astro';
+import '../styles/docs.css';
+
+interface Props {
+  fix: CollectionEntry<'fixes'>['data'];
+  /** Every docs page of this repo, all versions. */
+  pages: CollectionEntry<'docs'>['data'][];
+  /** The page being shown (an examples page passes its first file). */
+  current: PageRef;
+  title: string;
+}
+
+const { fix, pages, current, title } = Astro.props;
+const s = t('docs');
+const { name, versions, defaultVersion } = fix;
+const version = versions.find((v) => v.id === current.version)!;
+
+/** URL of a docs page; examples share one page per version. */
+const urlOf = (p: PageRef) =>
+  p.section === 'overview'
+    ? docsUrls.overview(name, p.version, defaultVersion)
+    : p.section === 'doc'
+      ? docsUrls.doc(name, p.version, p.slug)
+      : docsUrls.examples(name, p.version);
+
+const options = versions.map((v) => {
+  const target = versionTarget(pages, current, v.id);
+  const suffix = v.unreleased ? s('unreleased') : v.id === defaultVersion ? s('latest') : '';
+  return {
+    id: v.id,
+    label: suffix ? `${v.id} · ${suffix}` : v.id,
+    url: target ? urlOf(target) : docsUrls.overview(name, v.id, defaultVersion),
+  };
+});
+const latestUrl = options.find((o) => o.id === defaultVersion)!.url;
+
+const inVersion = pages.filter((p) => p.version === current.version);
+const firstDoc = docsOf(pages, current.version)[0];
+const firstExample = inVersion.find((p) => p.section === 'example');
+const tabs = [
+  {
+    section: 'overview',
+    label: s('overview'),
+    url: docsUrls.overview(name, current.version, defaultVersion),
+  },
+  firstDoc && { section: 'doc', label: s('docs'), url: urlOf(firstDoc) },
+  firstExample && { section: 'example', label: s('examples'), url: urlOf(firstExample) },
+].filter((tab) => !!tab);
+
+const header = {
+  yellow: 'bg-yellow text-ink',
+  white: 'bg-grey-tint text-ink',
+  blue: 'bg-blue text-white',
+  green: 'bg-green text-white',
+}[fix.color];
+---
+
+<SiteLayout title={`${title} · imlostincode`} description={fix.oneLiner.en} code>
+  <section class={header}>
+    <div class="container-page pt-10 max-sm:pt-6">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div class="flex min-w-0 flex-col gap-2.5">
+          <span class="type-label">{fix.kind}</span>
+          <h1 class="font-display text-[clamp(64px,9vw,120px)] leading-[0.85] font-black wrap-break-word uppercase max-sm:text-[min(56px,13vw)]">
+            {name}
+          </h1>
+          <p class="mt-1.5 max-w-[560px] text-[18px] leading-normal max-sm:text-[16px]" lang="en">
+            {fix.oneLiner.en}
+          </p>
+        </div>
+        <div class="flex min-w-[220px] flex-col gap-2 max-sm:w-full">
+          <label for="version" class="type-label">
+            {s('version')}
+          </label>
+          <select
+            id="version"
+            class="min-h-12 cursor-pointer border-3 border-ink bg-yellow px-3 py-2 font-display text-[26px] font-black text-ink"
+            data-version-picker
+          >
+            {options.map((o) => (
+              <option value={o.url} selected={o.id === current.version}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+          <noscript>
+            <ul class="flex flex-wrap gap-x-3 text-[14px] font-bold">
+              {options.map((o) => (
+                <li>
+                  <a href={o.url} class="inline-block py-2 underline">
+                    {o.id}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </noscript>
+        </div>
+      </div>
+      <nav aria-label={s('projectNav')} class="mt-8 flex flex-wrap gap-1 max-sm:mt-6">
+        {tabs.map((tab) => {
+          const active = tab.section === current.section;
+          return (
+            <a
+              href={tab.url}
+              aria-current={active ? 'page' : undefined}
+              class:list={[
+                'px-5 py-3 text-[16px] font-bold no-underline max-sm:px-3.5',
+                active ? 'bg-white text-ink' : 'hover:underline',
+              ]}
+            >
+              {tab.label}
+            </a>
+          );
+        })}
+        <a
+          href={`${fix.url}/tree/${version.ref}`}
+          class="ml-auto px-5 py-3 text-[16px] font-bold no-underline hover:underline max-sm:ml-0 max-sm:px-3.5"
+        >
+          GitHub ↗
+        </a>
+      </nav>
+    </div>
+  </section>
+
+  {version.unreleased && (
+    <div class="border-b-3 border-ink bg-yellow">
+      <div class="container-page flex flex-wrap items-center gap-x-4 gap-y-2 py-3.5 text-[16px] max-sm:text-[15px]">
+        <span class="bg-ink px-[9px] py-1 text-[13px] font-bold text-yellow uppercase">
+          {s('unreleasedBadge')}
+        </span>
+        <span>
+          {s('readingMain')} <strong>main</strong>. {s('canChange')}
+        </span>
+        {defaultVersion !== 'main' && (
+          <a href={latestUrl} class="inline-block py-2 font-bold underline">
+            {s('backToLatest')}
+          </a>
+        )}
+      </div>
+    </div>
+  )}
+
+  <div class="container-page flex flex-wrap items-start gap-12 pt-10 pb-24 max-sm:flex-col max-sm:flex-nowrap max-sm:items-stretch max-sm:gap-8 max-sm:pt-8 max-sm:pb-16">
+    <slot name="sidebar" />
+    <article class="flex max-w-[760px] min-w-0 flex-[999_1_560px] flex-col gap-5" lang="en">
+      <slot />
+    </article>
+  </div>
+</SiteLayout>
+
+<script>
+  const picker = document.querySelector<HTMLSelectElement>('[data-version-picker]');
+  picker?.addEventListener('change', () => {
+    window.location.href = picker.value;
+  });
+
+  // Copy buttons in code blocks only work with JS, so they start hidden.
+  for (const button of document.querySelectorAll<HTMLButtonElement>('[data-copy]')) {
+    button.hidden = false;
+    button.addEventListener('click', async () => {
+      const code = button.closest('.code-block')?.querySelector('pre')?.innerText ?? '';
+      try {
+        await navigator.clipboard.writeText(code);
+        button.textContent = 'Copied';
+      } catch {
+        button.textContent = 'Copy failed';
+      }
+      setTimeout(() => (button.textContent = 'Copy'), 2000);
+    });
+  }
+</script>

@@ -1,0 +1,27 @@
+---
+import DocsLayout from '../../layouts/DocsLayout.astro';
+import type { Fix, Page } from '../../docs/site';
+import { t } from '../../i18n';
+
+interface Props {
+  fix: Fix;
+  pages: Page[];
+  version: string;
+}
+
+const { fix, pages, version } = Astro.props;
+const page = pages.find((p) => p.version === version && p.section === 'overview');
+---
+
+<DocsLayout
+  {fix}
+  {pages}
+  current={{ version, section: 'overview', slug: '', order: 0 }}
+  title={fix.name}
+>
+  {page ? (
+    <div class="prose-docs" set:html={page.html} />
+  ) : (
+    <p class="text-[18px] font-bold">{t('docs')('noOverview')}</p>
+  )}
+</DocsLayout>

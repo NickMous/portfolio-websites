@@ -1,0 +1,80 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Redirect from '../../../../../components/Redirect.astro';
+import Sidebar from '../../../../../components/docs/Sidebar.astro';
+import { docsOf, prevNext } from '../../../../../docs/nav';
+import { docsSite } from '../../../../../docs/site';
+import { docsUrls } from '../../../../../docs/urls';
+import { t } from '../../../../../i18n';
+import DocsLayout from '../../../../../layouts/DocsLayout.astro';
+
+export const getStaticPaths = (async () =>
+  (await docsSite()).flatMap(({ fix, pages }) => {
+    const docs = pages.filter((p) => p.section === 'doc');
+    return [
+      ...docs.map((page) => ({
+        params: { repo: fix.name, version: page.version, slug: page.slug },
+        props: { fix, pages, page, redirect: undefined },
+      })),
+      // /<repo>/docs/latest/<slug> always points at the newest release.
+      ...docsOf(pages, fix.defaultVersion).map((page) => ({
+        params: { repo: fix.name, version: 'latest', slug: page.slug },
+        props: { fix, pages, page, redirect: docsUrls.doc(fix.name, page.version, page.slug) },
+      })),
+    ];
+  })) satisfies GetStaticPaths;
+
+const { fix, pages, page, redirect } = Astro.props;
+const s = t('docs');
+const docs = docsOf(pages, page.version);
+const { prev, next } = prevNext(docs, page.slug);
+const url = (slug: string) => docsUrls.doc(fix.name, page.version, slug);
+const mainBranch = fix.versions[0]!.ref;
+---
+
+{redirect ? (
+  <Redirect to={redirect} />
+) : (
+  <DocsLayout {fix} {pages} current={page} title={`${page.title} · ${fix.name}`}>
+    <Sidebar
+      slot="sidebar"
+      label={`${s('docs')} · ${page.version}`}
+      items={docs.map((d) => ({
+        href: url(d.slug),
+        title: d.title,
+        current: d.slug === page.slug,
+      }))}
+    />
+    <span class="text-[14px] font-medium text-muted">
+      docs / {page.version} / {page.slug}
+    </span>
+    <div class="prose-docs" set:html={page.html} />
+    <div class="mt-8 flex flex-wrap justify-between gap-4 border-t-3 border-ink pt-5">
+      {prev && (
+        <a href={url(prev.slug)} class="flex flex-col gap-1 no-underline hover:underline">
+          <span class="type-label">{s('previous')}</span>
+          <span class="font-display text-[26px] leading-tight font-black uppercase">
+            {prev.title}
+          </span>
+        </a>
+      )}
+      {next && (
+        <a
+          href={url(next.slug)}
+          class="ml-auto flex flex-col gap-1 text-right no-underline hover:underline"
+        >
+          <span class="type-label">{s('next')}</span>
+          <span class="font-display text-[26px] leading-tight font-black uppercase">
+            {next.title}
+          </span>
+        </a>
+      )}
+    </div>
+    <a
+      href={`${fix.url}/edit/${mainBranch}/${page.path}`}
+      class="text-[15px] font-medium underline"
+    >
+      {s('editOnGitHub')}
+    </a>
+  </DocsLayout>
+)}

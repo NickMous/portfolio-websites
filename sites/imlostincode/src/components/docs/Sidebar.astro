@@ -1,0 +1,31 @@
+---
+interface Props {
+  label: string;
+  items: { href: string; title: string; current: boolean }[];
+}
+
+const { label, items } = Astro.props;
+---
+
+<aside
+  aria-label={label}
+  class="flex max-w-[280px] min-w-0 flex-[1_1_240px] flex-col border-3 border-ink max-sm:max-w-none max-sm:flex-none"
+>
+  <span class="border-b-3 border-ink px-4 py-3.5 type-label">{label}</span>
+  <ul>
+    {items.map((item) => (
+      <li class="border-b-2 border-ink last:border-b-0">
+        <a
+          href={item.href}
+          aria-current={item.current ? 'page' : undefined}
+          class:list={[
+            'block min-h-11 px-4 py-3 text-[16px] no-underline [overflow-wrap:anywhere]',
+            item.current ? 'bg-red font-bold text-white' : 'font-medium hover:bg-red-tint',
+          ]}
+        >
+          {item.title}
+        </a>
+      </li>
+    ))}
+  </ul>
+</aside>

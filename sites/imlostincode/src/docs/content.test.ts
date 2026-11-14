@@ -24,7 +24,7 @@ describe('docFile', () => {
   });
 
   it('puts unnumbered files after the numbered ones', () => {
-    expect(docFile('faq.md')).toEqual({ order: Number.POSITIVE_INFINITY, slug: 'faq' });
+    expect(docFile('faq.md')).toEqual({ order: Number.MAX_SAFE_INTEGER, slug: 'faq' });
   });
 });
 

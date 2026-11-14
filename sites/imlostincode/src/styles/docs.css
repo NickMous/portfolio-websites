@@ -1,0 +1,159 @@
+/*
+ * Rendered markdown from the docs repos (README, docs/*.md, examples). The
+ * HTML comes from the loader, so it is styled by element rather than with
+ * utility classes.
+ */
+.prose-docs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  font-size: 18px;
+  line-height: 1.65;
+  overflow-wrap: break-word;
+
+  & h2,
+  & h3,
+  & h4,
+  & h5,
+  & h6 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    text-transform: uppercase;
+    line-height: 0.95;
+    scroll-margin-top: 24px;
+  }
+  & h2 {
+    font-size: 64px;
+  }
+  & h3 {
+    margin-top: 12px;
+    font-size: 36px;
+  }
+  & h4 {
+    margin-top: 8px;
+    font-size: 26px;
+  }
+  & h5,
+  & h6 {
+    font-size: 20px;
+  }
+  @media (max-width: 639px) {
+    & h2 {
+      font-size: 44px;
+    }
+    & h3 {
+      font-size: 30px;
+    }
+    font-size: 17px;
+  }
+
+  & a {
+    font-weight: 500;
+    text-decoration: underline;
+  }
+  & ul,
+  & ol {
+    padding-left: 1.5em;
+  }
+  & ul {
+    list-style: square;
+  }
+  & ol {
+    list-style: decimal;
+  }
+  & li + li {
+    margin-top: 6px;
+  }
+  & li > * + * {
+    margin-top: 12px;
+  }
+  & img {
+    max-width: 100%;
+    height: auto;
+  }
+  & hr {
+    border-top: 3px solid var(--color-ink);
+  }
+  & blockquote {
+    border-left: 4px solid var(--color-ink);
+    padding-left: 16px;
+  }
+
+  & :not(pre) > code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--color-grey-tint);
+    padding: 2px 6px;
+  }
+
+  & table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: 16px;
+  }
+  & th,
+  & td {
+    border: 2px solid var(--color-ink);
+    padding: 8px 12px;
+    text-align: left;
+    vertical-align: top;
+  }
+  & th {
+    background: var(--color-grey-tint);
+  }
+
+  & .code-block {
+    border: 3px solid var(--color-ink);
+    min-width: 0;
+  }
+  & .code-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 14px;
+    border-bottom: 3px solid var(--color-ink);
+    background: var(--color-grey-tint);
+    font-size: 13px;
+    font-weight: 700;
+  }
+  & .code-head button {
+    min-height: 32px;
+    padding: 6px 12px;
+    border: 2px solid var(--color-ink);
+    background: var(--color-white);
+    font: inherit;
+    cursor: pointer;
+  }
+  & .code-head button:hover {
+    background: var(--color-yellow);
+  }
+  & pre {
+    margin: 0;
+    padding: 18px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  & .callout {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border-left: 8px solid var(--color-red);
+    background: var(--color-red-tint);
+    padding: 16px 20px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  & .callout-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-callout-red-text);
+  }
+}

@@ -14,13 +14,16 @@ import { OWNER } from './owner';
 
 // --- Files --------------------------------------------------------------
 
-/** "02-getting-started.md" → order 2, slug "getting-started". Unnumbered files go last. */
+/**
+ * "02-getting-started.md" → order 2, slug "getting-started". Unnumbered files go
+ * last (a finite number, since the collection schema rejects Infinity).
+ */
 export function docFile(filename: string): { order: number; slug: string } {
   const base = filename.replace(/\.md$/i, '');
   const match = /^(\d+)[-_](.+)$/.exec(base);
   return match
     ? { order: Number(match[1]), slug: match[2]! }
-    : { order: Number.POSITIVE_INFINITY, slug: base };
+    : { order: Number.MAX_SAFE_INTEGER, slug: base };
 }
 
 /** Sidebar title: the first "# " heading outside code blocks, else from the filename. */

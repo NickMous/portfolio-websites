@@ -1,0 +1,17 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Overview from '../../../../components/docs/Overview.astro';
+import { docsSite } from '../../../../docs/site';
+
+// The default version's overview lives at /<repo>/; the others get their own URL.
+export const getStaticPaths = (async () =>
+  (await docsSite()).flatMap(({ fix, pages }) =>
+    fix.versions
+      .filter((v) => v.id !== fix.defaultVersion)
+      .map((v) => ({ params: { repo: fix.name, version: v.id }, props: { fix, pages } })),
+  )) satisfies GetStaticPaths;
+
+const { fix, pages } = Astro.props;
+---
+
+<Overview {fix} {pages} version={Astro.params.version} />
