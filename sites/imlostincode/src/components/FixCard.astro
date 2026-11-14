@@ -1,0 +1,46 @@
+---
+import Badge, { type BadgeTone } from '@portfolio/ui-kit/components/Badge.astro';
+import type { CollectionEntry } from 'astro:content';
+import { locale, t } from '../i18n';
+import { docsUrls } from '../docs/urls';
+
+interface Props {
+  fix: CollectionEntry<'fixes'>;
+}
+
+const { fix } = Astro.props;
+const { name, url, kind, color, status, oneLiner } = fix.data;
+const cards = t('cards');
+
+const look: Record<typeof color, { card: string; line: string; badge: BadgeTone }> = {
+  yellow: { card: 'bg-yellow text-ink', line: 'border-ink', badge: 'ink-yellow' },
+  white: { card: 'bg-white text-ink', line: 'border-ink', badge: 'ink' },
+  blue: { card: 'bg-blue text-white', line: 'border-white', badge: 'white' },
+  green: { card: 'bg-green text-white', line: 'border-white', badge: 'white' },
+};
+const l = look[color];
+---
+
+<article id={name} class:list={['flex min-w-0 flex-col gap-3.5 p-7 max-sm:p-5', l.card]}>
+  <div class="flex items-start justify-between gap-3">
+    <span class="type-label">{kind}</span>
+    <Badge status={status === 'in-testing' ? 'inTesting' : 'available'} tone={l.badge} />
+  </div>
+  <h3 class="font-display text-[44px] leading-[0.95] font-black [overflow-wrap:anywhere] max-sm:text-[38px]">
+    {name}
+  </h3>
+  <p class="text-[17px] leading-normal max-sm:text-[16px]">{oneLiner[locale]}</p>
+  <div
+    class:list={[
+      'mt-auto flex flex-wrap gap-5 border-t-3 border-dashed pt-3.5 text-[15px] font-bold',
+      l.line,
+    ]}
+  >
+    <a href={docsUrls.repo(name)} class="inline-block py-[10px] underline">
+      {cards('docs')}
+    </a>
+    <a href={url} class="inline-block py-[10px] underline">
+      GitHub ↗
+    </a>
+  </div>
+</article>

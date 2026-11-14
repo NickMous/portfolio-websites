@@ -1,11 +1,18 @@
 ---
 import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
+import { getCollection } from 'astro:content';
+import FixCard from '../components/FixCard.astro';
+import LostCard from '../components/LostCard.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { stillLost } from '../data/stillLost';
 import SiteLayout from '../layouts/SiteLayout.astro';
 import { t } from '../i18n';
 
 const hero = t('hero');
+const sections = t('sections');
+const fixes = (await getCollection('fixes')).sort((a, b) => a.id.localeCompare(b.id));
 
-// The fixes, Still lost (#33) and the Get me lost button (#27) follow.
+// The Get me lost button (#27) follows.
 ---
 
 <SiteLayout>
@@ -22,6 +29,34 @@ const hero = t('hero');
       <p class="max-w-[560px] flex-[1_1_380px] type-intro max-sm:text-[17px] max-sm:leading-[1.55]">
         {hero('intro')}
       </p>
+    </div>
+  </section>
+
+  <section id="fixes" class="bg-red pt-[72px] pb-[88px] max-sm:pt-12 max-sm:pb-14">
+    <div class="container-page">
+      <div class="text-white">
+        <SectionHead title={sections('fixes')}>{sections('fixesIntro')}</SectionHead>
+      </div>
+      {fixes.length > 0 ? (
+        <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-7 max-sm:grid-cols-1 max-sm:gap-5">
+          {fixes.map((fix) => (
+            <FixCard {fix} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-[17px] font-bold text-white">{sections('noFixes')}</p>
+      )}
+    </div>
+  </section>
+
+  <section id="graveyard" class="bg-grey-tint pt-20 pb-24 max-sm:pt-14 max-sm:pb-16">
+    <div class="container-page">
+      <SectionHead title={sections('stillLost')}>{sections('stillLostIntro')}</SectionHead>
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6 max-sm:grid-cols-1 max-sm:gap-6">
+        {stillLost.map((project, index) => (
+          <LostCard {project} {index} />
+        ))}
+      </div>
     </div>
   </section>
 </SiteLayout>

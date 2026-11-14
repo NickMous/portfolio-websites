@@ -16,6 +16,17 @@ export default {
     intro:
       'Things I built because something got in my way, cleaned up so anyone can use them. Open source, free, and made with more fun than strictly necessary.',
   },
+  sections: {
+    fixes: 'The fixes',
+    fixesIntro: 'Each one has its own docs, straight from the repo, for every version.',
+    noFixes: '[NO FIXES PUBLISHED YET]',
+    stillLost: 'Still lost',
+    stillLostIntro:
+      'The project graveyard. Things I started and stopped. Some of them get found again.',
+  },
+  cards: {
+    docs: 'Docs',
+  },
   footer: {
     stuck: 'Got stuck using one of these?',
     tellMe: 'Tell me',
