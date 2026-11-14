@@ -1,0 +1,7 @@
+# Owned here rather than in en/ or nl/, so the two locale overlays never both
+# claim it. namePrefix does not apply to a Namespace's own name, so this must
+# match the `namespace:` value in en/ and nl/ exactly.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sanderdh-production
