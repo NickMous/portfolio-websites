@@ -11,6 +11,7 @@ export default {
   },
   badges: {
     live: '● Live',
+    available: 'Available',
     inProgress: 'In progress',
     inTesting: 'In testing',
     unreleased: 'Unreleased',

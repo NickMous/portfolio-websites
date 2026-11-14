@@ -2,7 +2,13 @@
 import { sharedT } from '../i18n';
 
 export type BadgeStatus =
-  'live' | 'inProgress' | 'inTesting' | 'unreleased' | 'stillLost' | 'beingFoundAgain';
+  | 'live'
+  | 'available'
+  | 'inProgress'
+  | 'inTesting'
+  | 'unreleased'
+  | 'stillLost'
+  | 'beingFoundAgain';
 
 export type BadgeTone = 'ink' | 'ink-yellow' | 'white' | 'yellow' | 'green';
 
