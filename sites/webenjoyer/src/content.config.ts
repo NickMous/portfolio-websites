@@ -29,7 +29,20 @@ const projects = defineCollection({
       tagline: localized.optional(),
       oneLiner: localized,
       posterColor: z.enum(['yellow', 'white', 'red', 'blue', 'green']),
+      /** Desktop screenshots: the first is the big one on the project page, the second a detail. */
       screenshots: z.array(image()).default([]),
+      /** Shown in the rounded phone frame on the project page. */
+      phoneScreenshot: image().optional(),
+
+      // Project page (client work). Placeholders stay visible until the real copy exists.
+      /** Ticket strip "Type", e.g. "Event site". */
+      type: localized.optional(),
+      /** One sentence under the title: what the site is for. */
+      intro: localized.optional(),
+      whatItIs: localized.optional(),
+      whatIBuilt: z.array(localized).default([]),
+      /** Optional red block; left out of the page when empty. */
+      behindTheScenes: localized.optional(),
     }),
 });
 
