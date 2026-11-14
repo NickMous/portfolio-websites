@@ -11,6 +11,8 @@ const projects = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      /** Poster title with deliberate "\n" line breaks; defaults to the title. */
+      posterTitle: z.string().optional(),
       kind: z.enum(['client', 'school', 'personal']),
       status: z.enum(['live', 'in-progress', 'in-testing', 'archived']),
       /** Featured client work becomes a big poster in "Now showing". */
