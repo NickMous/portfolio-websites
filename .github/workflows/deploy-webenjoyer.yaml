@@ -1,0 +1,87 @@
+# Production deploy for webenjoyer.com (en) and webenjoyer.nl (nl).
+#
+# Triggered by publishing a GitHub release whose tag starts with `webenjoyer-v`
+# (e.g. webenjoyer-v1.0.0). Other sites in this monorepo have their own workflow
+# and tag prefix, so one site's release never rebuilds another.
+#
+# This only builds and publishes the images, via the reusable workflow in
+# astro-k8s-deployment-kit. Flux image automation notices the new tags and
+# rolls the cluster (see k8s/webenjoyer/production and fleet-infra).
+
+name: Deploy webenjoyer
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release being deployed (e.g. webenjoyer-v1.0.0)'
+        required: true
+        default: 'webenjoyer-v0.0.0-manual'
+
+concurrency:
+  group: deploy-webenjoyer
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.release.tag_name, 'webenjoyer-v')
+    runs-on: ubuntu-latest
+    outputs:
+      en: ${{ steps.v.outputs.en }}
+      nl: ${{ steps.v.outputs.nl }}
+    steps:
+      # The ImagePolicies sort tags alphabetically on an embedded timestamp, so
+      # every tag starts with <site>-<locale>-<YYYYMMDD>-<HHMM>; semver would
+      # sort v1.0.10 below v1.0.9. The release name stays as a suffix. All
+      # sites share one GHCR package, so the anchored prefix is what keeps
+      # each ImagePolicy on its own site and locale.
+      - id: v
+        env:
+          REF: ${{ github.event.inputs.version || github.ref_name }}
+        run: |
+          slug=$(printf '%s' "$REF" | sed 's/[^A-Za-z0-9._-]/-/g')
+          stamp=$(date -u +%Y%m%d-%H%M)
+          echo "en=webenjoyer-en-$stamp-$slug" >> "$GITHUB_OUTPUT"
+          echo "nl=webenjoyer-nl-$stamp-$slug" >> "$GITHUB_OUTPUT"
+
+  # One reusable-workflow call publishes exactly one image, so each locale is
+  # its own job. Each has its own latest-tag (rolling tag + build cache key)
+  # and environment, so the two builds run in parallel without clobbering
+  # each other.
+  en:
+    needs: tag
+    # A reusable workflow can only restrict the caller's permissions. Without
+    # packages: write the run fails at startup with no logs.
+    permissions:
+      contents: read
+      packages: write
+    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.0
+    with:
+      version: ${{ needs.tag.outputs.en }}
+      prod-url: https://webenjoyer.com
+      dockerfile: docker/site.Dockerfile
+      build-args: |
+        SITE=webenjoyer
+        LOCALE=en
+      latest-tag: webenjoyer-en-latest
+      environment: webenjoyer-en
+    secrets: inherit
+
+  nl:
+    needs: tag
+    permissions:
+      contents: read
+      packages: write
+    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.0
+    with:
+      version: ${{ needs.tag.outputs.nl }}
+      prod-url: https://webenjoyer.nl
+      dockerfile: docker/site.Dockerfile
+      build-args: |
+        SITE=webenjoyer
+        LOCALE=nl
+      latest-tag: webenjoyer-nl-latest
+      environment: webenjoyer-nl
+    secrets: inherit
