@@ -1,0 +1,28 @@
+{
+  "name": "portfolio-websites",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "workspaces": [
+    "packages/*",
+    "sites/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "dev:sanderdh": "npm run dev -w @portfolio/sanderdh",
+    "build:sanderdh": "npm run build -w @portfolio/sanderdh",
+    "check": "npm run check --workspaces --if-present"
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1",
+    "prettier-plugin-astro": "^1.1.2",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.0"
+  }
+}
