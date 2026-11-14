@@ -9,14 +9,13 @@ spec:
   # it; it has to match the IngressRoute's tls.secretName literally. Distinct
   # per locale because both live in one namespace.
   secretName: sanderdh-en-tls
+  # letsencrypt-prod (fleet-infra) solves DNS-01 through the Cloudflare API,
+  # so issuance works behind the Cloudflare proxy and needs no HTTP route.
   issuerRef:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
     - sanderdh.com
-    # www needs a DNS record pointing at the cluster before the HTTP-01
-    # challenge for it can succeed. Until then the whole certificate stays
-    # unissued, apex included.
     - www.sanderdh.com
   usages:
     - digital signature
