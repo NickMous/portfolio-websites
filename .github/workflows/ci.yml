@@ -39,3 +39,13 @@ jobs:
       # build on missing or mistyped translation keys (wired up in #7).
       - name: Build all sites
         run: npm run build
+
+      # Flux applies these; catching a broken overlay here beats a red
+      # Kustomization in the cluster.
+      - name: Render Kubernetes overlays
+        run: |
+          for dir in k8s/*/production; do
+            echo "::group::$dir"
+            kubectl kustomize "$dir" > /dev/null
+            echo "::endgroup::"
+          done

@@ -1,0 +1,19 @@
+# Version control / editor tooling
+.git
+.github
+.idea
+.vscode
+.DS_Store
+
+# Rebuilt inside the image
+**/node_modules
+**/dist
+**/.astro
+
+# Not part of any site build
+k8s
+docker
+api
+sites-handoff
+sites-handoff.zip
+*.md

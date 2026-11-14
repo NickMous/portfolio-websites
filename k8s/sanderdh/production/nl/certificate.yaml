@@ -1,0 +1,23 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-tls
+  labels:
+    app.kubernetes.io/component: certificate
+spec:
+  # cert-manager creates this Secret at runtime, so namePrefix never touches
+  # it; it has to match the IngressRoute's tls.secretName literally. Distinct
+  # per locale because both live in one namespace.
+  secretName: sanderdh-nl-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - sanderdh.nl
+    # www needs a DNS record pointing at the cluster before the HTTP-01
+    # challenge for it can succeed. Until then the whole certificate stays
+    # unissued, apex included.
+    - www.sanderdh.nl
+  usages:
+    - digital signature
+    - key encipherment
