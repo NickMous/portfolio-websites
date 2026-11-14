@@ -1,5 +1,6 @@
 ---
 import { sites } from '@portfolio/ui-kit';
+import Fonts from '@portfolio/ui-kit/components/Fonts.astro';
 import '../styles/global.css';
 
 // Placeholder shell proving the workspace wiring; the real hub is #16.
@@ -12,6 +13,7 @@ const site = sites.sanderdh;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="color-scheme" content="light" />
     <title>{site.name}</title>
+    <Fonts />
   </head>
   <body class="bg-paper font-body text-ink">
     <main class="container-page py-16">
