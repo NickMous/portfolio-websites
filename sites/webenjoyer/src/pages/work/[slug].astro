@@ -51,7 +51,11 @@ const shotPlaceholder =
   'flex items-center justify-center border-3 border-ink bg-grey-tint p-4 text-center text-[15px] font-medium';
 ---
 
-<SiteLayout title={`${p.title} · WebEnjoyer`} description={p.intro?.[locale] ?? p.oneLiner[locale]}>
+<SiteLayout
+  title={`${p.title} · WebEnjoyer`}
+  description={p.intro?.[locale] ?? p.oneLiner[locale]}
+  ogImage={`/og/work/${project.id}.png`}
+>
   <section class={header.bg}>
     <div class="container-page pt-14 max-sm:pt-8">
       <a

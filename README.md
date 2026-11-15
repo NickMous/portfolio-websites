@@ -57,6 +57,15 @@ imlostincode reads its docs from GitHub at build time (public repos with the
 its `imlostincode.json` and the rebuild-on-release workflow:
 [docs/imlostincode-docs-repo.md](docs/imlostincode-docs-repo.md).
 
+### Meta, sitemap and social previews
+
+`portfolioSite()` from `@portfolio/ui-kit/integration` (in every
+`astro.config.mjs`) adds `/og.png`, the site's poster-style social preview, and
+writes `sitemap.xml` and `robots.txt` for the domain after the build. Pages
+marked `noindex` stay out of the sitemap. A page can pass its own `ogImage`;
+webenjoyer renders one per case page with `renderOgImage()` from
+`@portfolio/ui-kit/og`.
+
 ### Analytics
 
 Every page loads Umami (analytics.nickmous.nl) through the shared

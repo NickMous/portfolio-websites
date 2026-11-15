@@ -11,25 +11,19 @@ import { createRequire } from 'node:module';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import opentype from 'opentype.js';
+import { svgPathData } from '../src/glyphs.ts';
 import { encodeIco, FAVICON_BOX, faviconSvg } from '../src/favicon.ts';
+import { onColor, palette } from '../src/palette.ts';
 import { sites, type SiteKey } from '../src/sites.ts';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '../../..');
-const theme = readFileSync(join(root, 'packages/ui-kit/src/styles/theme.css'), 'utf8');
-const color = (name: string) => {
-  const match = new RegExp(`--color-${name}:\\s*(#[0-9a-f]{6})`, 'i').exec(theme);
-  if (!match?.[1]) throw new Error(`--color-${name} not found in theme.css`);
-  return match[1];
-};
 
-// Same pairs as the posters: ink on yellow (white on yellow fails contrast), white otherwise.
 const letters: Record<SiteKey, string> = {
   webenjoyer: 'w',
   nickmous: 'n',
   imlostincode: 'i',
   sanderdh: 's',
 };
-const ink = (site: SiteKey) => (sites[site].lead === 'yellow' ? color('ink') : color('white'));
 
 const require = createRequire(import.meta.url);
 const fontFile =
@@ -48,7 +42,7 @@ function letterPath(letter: string): string {
   const size = 100 * scale;
   const x = (box - (probe.x2 - probe.x1) * scale) / 2 - probe.x1 * scale;
   const y = (box - (probe.y2 - probe.y1) * scale) / 2 - probe.y1 * scale;
-  return font.getPath(letter, x, y, size).toPathData(2);
+  return svgPathData(font.getPath(letter, x, y, size));
 }
 
 const png = (svg: string, size: number) =>
@@ -57,8 +51,8 @@ const png = (svg: string, size: number) =>
 for (const site of Object.keys(letters) as SiteKey[]) {
   const svg = faviconSvg({
     path: letterPath(letters[site]),
-    background: color(sites[site].lead),
-    color: ink(site),
+    background: palette[sites[site].lead],
+    color: onColor(sites[site].lead),
   });
   const out = join(root, 'sites', site, 'public');
   mkdirSync(out, { recursive: true });
