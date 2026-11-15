@@ -50,7 +50,10 @@ const doors = t('doors');
 
   <SiteFooter site="sanderdh" slot="footer">
     <span slot="note">
-      {hub('reachMe')} <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      {hub('reachMe')}{' '}
+      <a href={`mailto:${contactEmail}`} data-umami-event="contact-email">
+        {contactEmail}
+      </a>
     </span>
     <li slot="links">
       <a href={githubUrl} class="inline-block py-[10px] font-bold underline">

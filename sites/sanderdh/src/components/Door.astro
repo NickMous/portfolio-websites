@@ -30,6 +30,8 @@ const [first, second] = titleLines[site];
 
 <a
   href={siteUrl(site, locale)}
+  data-umami-event="door"
+  data-umami-event-site={site}
   class:list={[
     'door group flex min-h-[420px] min-w-0 flex-[1_1_320px] flex-col gap-3.5 p-7 no-underline',
     surface[site],

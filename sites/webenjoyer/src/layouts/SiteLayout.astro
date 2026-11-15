@@ -29,7 +29,7 @@ const links = [
 <BaseLayout site="webenjoyer" {title} {description} {...(ogImage ? { ogImage } : {})} nav={links}>
   <slot />
   <SiteFooter site="webenjoyer" id="hi" slot="footer">
-    <a slot="cta" href={`mailto:${contactEmail}`}>
+    <a slot="cta" href={`mailto:${contactEmail}`} data-umami-event="contact-email">
       {footer('sayHi')}
     </a>
     <span slot="note">WebEnjoyer · Woerden · KVK {kvkNumber}</span>

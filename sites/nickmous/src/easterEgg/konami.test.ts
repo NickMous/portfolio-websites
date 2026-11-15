@@ -44,7 +44,7 @@ describe('listenForKonami', () => {
 
     press(CODE);
 
-    expect(found).toHaveBeenCalledOnce();
+    expect(found).toHaveBeenCalledExactlyOnceWith('keys');
   });
 
   it('accepts a capital B and A', () => {
@@ -105,7 +105,7 @@ describe('listenForKonami', () => {
       swipe(dx, dy);
     }
 
-    expect(found).toHaveBeenCalledOnce();
+    expect(found).toHaveBeenCalledExactlyOnceWith('touch');
   });
 
   it('stops listening when asked', () => {

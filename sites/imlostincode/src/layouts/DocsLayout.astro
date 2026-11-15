@@ -81,9 +81,10 @@ const header = {
             id="version"
             class="min-h-12 cursor-pointer border-3 border-ink bg-yellow px-3 py-2 font-display text-[26px] font-black text-ink"
             data-version-picker
+            data-repo={name}
           >
             {options.map((o) => (
-              <option value={o.url} selected={o.id === current.version}>
+              <option value={o.url} data-version={o.id} selected={o.id === current.version}>
                 {o.label}
               </option>
             ))}
@@ -154,8 +155,14 @@ const header = {
 </SiteLayout>
 
 <script>
+  import { track } from '@portfolio/ui-kit/analytics';
+
   const picker = document.querySelector<HTMLSelectElement>('[data-version-picker]');
   picker?.addEventListener('change', () => {
+    track('docs-version', {
+      repo: picker.dataset['repo'] ?? '',
+      version: picker.selectedOptions[0]?.dataset['version'] ?? '',
+    });
     window.location.href = picker.value;
   });
 

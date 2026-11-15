@@ -26,9 +26,12 @@ const strings: GuestbookStrings = {
 };
 
 const posted: unknown[] = [];
+const tracked: unknown[][] = [];
 
 beforeEach(() => {
   posted.length = 0;
+  tracked.length = 0;
+  vi.stubGlobal('umami', { track: (...args: unknown[]) => void tracked.push(args) });
   vi.stubGlobal(
     'fetch',
     vi.fn(async (_url: string, init?: RequestInit) => {
@@ -59,6 +62,7 @@ it('points out missing fields, linked to the inputs, and focuses the first one',
   expect(screen.getByText('Write a message.')).toBeTruthy();
   expect(document.activeElement).toBe(name);
   expect(posted).toEqual([]);
+  expect(tracked).toEqual([['guestbook-submit', { result: 'invalid' }]]);
 });
 
 it('can be filled in and sent with the keyboard alone, and announces the result', async () => {
@@ -75,6 +79,8 @@ it('can be filled in and sent with the keyboard alone, and announces the result'
 
   await waitFor(() => expect(screen.getByRole('status').textContent).toBe('Thanks!'));
   expect(posted).toEqual([{ name: 'Ada', message: 'Nice site!', website: '' }]);
+  // Only the outcome: never the name or the message.
+  expect(tracked).toEqual([['guestbook-submit', { result: 'sent' }]]);
   expect((screen.getByRole('textbox', { name: 'Name' }) as HTMLInputElement).value).toBe('');
 });
 

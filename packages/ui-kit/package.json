@@ -7,6 +7,7 @@
     ".": "./src/index.ts",
     "./theme.css": "./src/styles/theme.css",
     "./fonts": "./src/fonts.ts",
+    "./analytics": "./src/analytics.ts",
     "./components/*": "./src/components/*",
     "./global.css": "./src/styles/global.css",
     "./layouts/*": "./src/layouts/*"

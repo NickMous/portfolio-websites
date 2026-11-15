@@ -1,3 +1,4 @@
+import { track } from '@portfolio/ui-kit/analytics';
 import type { ComponentChildren } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 import {
@@ -67,6 +68,7 @@ export default function Guestbook({ initial, apiBase, strings, children }: Props
     const found = validate({ name, message });
     setErrors(found);
     if (found.name || found.message) {
+      track('guestbook-submit', { result: 'invalid' });
       (found.name ? nameField : messageField).current?.focus();
       return;
     }
@@ -77,6 +79,8 @@ export default function Guestbook({ initial, apiBase, strings, children }: Props
       message: message.trim(),
       website,
     });
+    // Only the outcome, never what was written.
+    track('guestbook-submit', { result: result.kind });
     if (result.kind === 'invalid') {
       setStatus('idle');
       setErrors(result.errors);
