@@ -93,13 +93,15 @@ class SteamStats
         return new SteamSnapshot(
             gameCount: $response['game_count'],
             hoursLastTwoWeeks: self::hours($minutesTwoWeeks),
+            gamesLastTwoWeeks: \count(array_filter($games, static fn (array $g): bool => ($g['playtime_2weeks'] ?? 0) > 0)),
             recentGames: array_map(static fn (array $g): array => [
                 'appId' => $g['appid'],
                 'name' => $g['name'] ?? '',
                 'hoursPlayed' => self::hours($g['playtime_forever'] ?? 0),
                 'hoursLastTwoWeeks' => self::hours($g['playtime_2weeks'] ?? 0),
                 'lastPlayed' => (new \DateTimeImmutable('@'.$g['rtime_last_played']))->format(\DATE_ATOM),
-                'art' => \sprintf('https://shared.steamstatic.com/store_item_assets/steam/apps/%d/library_600x900.jpg', $g['appid']),
+                // Landscape store header: fits the poster's art slot.
+                'art' => \sprintf('https://shared.steamstatic.com/store_item_assets/steam/apps/%d/header.jpg', $g['appid']),
             ], \array_slice($played, 0, self::RECENT_GAMES)),
             fetchedAt: $now,
         );
