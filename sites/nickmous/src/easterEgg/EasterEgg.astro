@@ -1,0 +1,82 @@
+---
+import { t } from '../i18n';
+
+const egg = t('easterEgg');
+---
+
+{/* Nothing visible until the Konami code: just the strings for the overlay. */}
+<div id="easter-egg" hidden data-label={egg('label')} data-close={egg('close')}></div>
+
+<script>
+  import { listenForKonami } from './konami';
+
+  listenForKonami(async () => {
+    const el = document.getElementById('easter-egg');
+    // Loaded only when someone finds the secret.
+    const { showDroids } = await import('./droids');
+    showDroids({ label: el?.dataset['label'] ?? '', close: el?.dataset['close'] ?? '' });
+  });
+</script>
+
+<style is:global>
+  .easter-sky {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    overflow: hidden;
+    background: var(--color-ink);
+  }
+  .easter-droid,
+  .easter-star {
+    position: absolute;
+    image-rendering: pixelated;
+    background-repeat: no-repeat;
+  }
+  .easter-droid {
+    left: 0;
+    aspect-ratio: 25 / 21;
+    background-image: url('/easter-egg/droids.png');
+    background-size: 1200% 100%;
+    animation: easter-frames 1s steps(12, jump-none) infinite;
+    transform: translateX(100vw);
+  }
+  .easter-star {
+    aspect-ratio: 1;
+    background-image: url('/easter-egg/stars.png');
+    background-size: 600% 100%;
+    animation: easter-frames 2s steps(6, jump-none) infinite;
+  }
+  .easter-still .easter-droid,
+  .easter-still .easter-star {
+    animation: none;
+    transform: none;
+  }
+  @keyframes easter-frames {
+    from {
+      background-position-x: 0%;
+    }
+    to {
+      background-position-x: 100%;
+    }
+  }
+  .easter-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 200;
+    min-height: 44px;
+    padding: 8px 18px;
+    border: 3px solid var(--color-ink);
+    background: var(--color-yellow);
+    color: var(--color-ink);
+    font-family: var(--font-display);
+    font-size: 24px;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .easter-close:focus-visible {
+    outline: 3px solid var(--color-white);
+    outline-offset: 3px;
+  }
+</style>

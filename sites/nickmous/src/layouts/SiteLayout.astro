@@ -1,6 +1,7 @@
 ---
 import SiteFooter from '@portfolio/ui-kit/components/SiteFooter.astro';
 import BaseLayout from '@portfolio/ui-kit/layouts/BaseLayout.astro';
+import EasterEgg from '../easterEgg/EasterEgg.astro';
 import { t } from '../i18n';
 
 interface Props {
@@ -26,6 +27,7 @@ const links = [
 
 <BaseLayout site="nickmous" {title} {description} {...(ogImage ? { ogImage } : {})} nav={links}>
   <slot />
+  <EasterEgg />
   <SiteFooter site="nickmous" slot="footer">
     <span slot="note">{footer('secret')}</span>
   </SiteFooter>
