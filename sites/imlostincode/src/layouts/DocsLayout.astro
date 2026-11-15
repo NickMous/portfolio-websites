@@ -10,7 +10,7 @@ interface Props {
   fix: CollectionEntry<'fixes'>['data'];
   /** Every docs page of this repo, all versions. */
   pages: CollectionEntry<'docs'>['data'][];
-  /** The page being shown (an examples page passes its first file). */
+  /** The page being shown; the examples index passes an example with slug "". */
   current: PageRef;
   title: string;
 }
@@ -20,16 +20,25 @@ const s = t('docs');
 const { name, versions, defaultVersion } = fix;
 const version = versions.find((v) => v.id === current.version)!;
 
-/** URL of a docs page; examples share one page per version. */
+/** URL of a docs page; an example with slug "" is the examples index. */
 const urlOf = (p: PageRef) =>
   p.section === 'overview'
     ? docsUrls.overview(name, p.version, defaultVersion)
     : p.section === 'doc'
       ? docsUrls.doc(name, p.version, p.slug)
-      : docsUrls.examples(name, p.version);
+      : p.slug
+        ? docsUrls.example(name, p.version, p.slug)
+        : docsUrls.examples(name, p.version);
+
+const hasExamples = (v: string) => pages.some((p) => p.version === v && p.section === 'example');
+const onIndex = current.section === 'example' && !current.slug;
 
 const options = versions.map((v) => {
-  const target = versionTarget(pages, current, v.id);
+  // From the examples index, the picker goes to the other version's index.
+  const target =
+    onIndex && hasExamples(v.id)
+      ? { ...current, version: v.id }
+      : versionTarget(pages, current, v.id);
   const suffix = v.unreleased ? s('unreleased') : v.id === defaultVersion ? s('latest') : '';
   return {
     id: v.id,
@@ -49,7 +58,11 @@ const tabs = [
     url: docsUrls.overview(name, current.version, defaultVersion),
   },
   firstDoc && { section: 'doc', label: s('docs'), url: urlOf(firstDoc) },
-  firstExample && { section: 'example', label: s('examples'), url: urlOf(firstExample) },
+  firstExample && {
+    section: 'example',
+    label: s('examples'),
+    url: docsUrls.examples(name, current.version),
+  },
 ].filter((tab) => !!tab);
 
 const header = {
@@ -73,13 +86,13 @@ const header = {
             {fix.oneLiner.en}
           </p>
         </div>
-        <div class="flex min-w-[220px] flex-col gap-2 max-sm:w-full">
+        <div class="flex flex-col gap-2 max-sm:w-full">
           <label for="version" class="type-label">
             {s('version')}
           </label>
           <select
             id="version"
-            class="min-h-12 cursor-pointer border-3 border-ink bg-yellow px-3 py-2 font-display text-[26px] font-black text-ink"
+            class="version-picker min-h-12 cursor-pointer border-3 border-ink bg-yellow px-3 py-2 font-display text-[26px] font-black text-ink"
             data-version-picker
             data-repo={name}
           >
@@ -120,9 +133,11 @@ const header = {
         })}
         <a
           href={`${fix.url}/tree/${version.ref}`}
+          target="_blank"
+          rel="noopener"
           class="ml-auto px-5 py-3 text-[16px] font-bold no-underline hover:underline max-sm:ml-0 max-sm:px-3.5"
         >
-          GitHub ↗
+          GitHub ↗<span class="sr-only"> {s('newTab')}</span>
         </a>
       </nav>
     </div>

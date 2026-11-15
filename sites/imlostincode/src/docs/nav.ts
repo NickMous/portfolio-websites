@@ -37,3 +37,49 @@ export function prevNext<P extends PageRef>(
   const i = docs.findIndex((p) => p.slug === slug);
   return { prev: i > 0 ? docs[i - 1] : undefined, next: i >= 0 ? docs[i + 1] : undefined };
 }
+
+export interface ExampleGroup<P> {
+  /** Folder path inside examples/, "" for files at its root. */
+  folder: string;
+  /** Last part of the folder path, shown in the tree. */
+  name: string;
+  /** Nesting depth: 0 for top-level folders. */
+  depth: number;
+  files: (P & { name: string })[];
+}
+
+/**
+ * Example files as a folder tree, in display order: loose files first, then
+ * folders by path. Folders that only hold folders get a group too.
+ */
+export function exampleGroups<P extends PageRef>(examples: P[]): ExampleGroup<P>[] {
+  const groups = new Map<string, ExampleGroup<P>>();
+  const group = (folder: string) => {
+    let g = groups.get(folder);
+    if (!g) {
+      const parts = folder.split('/');
+      g = { folder, name: folder ? parts.at(-1)! : '', depth: parts.length - 1, files: [] };
+      groups.set(folder, g);
+    }
+    return g;
+  };
+  for (const p of examples) {
+    const cut = p.slug.lastIndexOf('/');
+    const folder = cut === -1 ? '' : p.slug.slice(0, cut);
+    const parts = folder ? folder.split('/') : [];
+    parts.forEach((_, i) => group(parts.slice(0, i + 1).join('/')));
+    group(folder).files.push({ ...p, name: p.slug.slice(cut + 1) });
+  }
+  for (const g of groups.values()) g.files.sort((a, b) => a.name.localeCompare(b.name));
+  // Segment by segment, so "a/c" sorts right after "a" and before "a-b".
+  const byPath = (a: ExampleGroup<P>, b: ExampleGroup<P>) => {
+    const x = a.folder ? a.folder.split('/') : [];
+    const y = b.folder ? b.folder.split('/') : [];
+    for (let i = 0; i < Math.min(x.length, y.length); i++) {
+      const order = x[i]!.localeCompare(y[i]!);
+      if (order) return order;
+    }
+    return x.length - y.length;
+  };
+  return [...groups.values()].sort(byPath);
+}
