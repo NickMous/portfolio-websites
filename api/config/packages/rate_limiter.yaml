@@ -1,0 +1,13 @@
+framework:
+    cache:
+        pools:
+            cache.guestbook_limiter:
+                adapter: cache.app
+    rate_limiter:
+        # A visitor leaves a note once; a few tries covers typos and retries.
+        guestbook:
+            policy: sliding_window
+            limit: 3
+            interval: '1 hour'
+            cache_pool: cache.guestbook_limiter
+
