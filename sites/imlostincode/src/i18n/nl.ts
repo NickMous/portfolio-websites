@@ -25,7 +25,6 @@ export default {
   sections: {
     fixes: 'De fixes',
     fixesIntro: 'Elk heeft eigen docs, rechtstreeks uit de repo, voor elke versie.',
-    noFixes: '[NO FIXES PUBLISHED YET]',
     stillLost: 'Nog verdwaald',
     stillLostIntro:
       'Het projectkerkhof. Dingen die ik begon en weer stopte. Sommige worden teruggevonden.',
@@ -50,7 +49,7 @@ export default {
     next: 'Volgende →',
     editOnGitHub: 'Bewerk deze pagina op GitHub ↗',
     viewOnGitHub: 'Bekijk op GitHub ↗',
-    noOverview: '[THIS VERSION HAS NO README]',
+    noOverview: 'Geen README in deze versie. Die is ook verdwaald.',
     redirecting: 'Doorsturen naar',
   },
   footer: {
