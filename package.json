@@ -22,7 +22,9 @@
     "dev:webenjoyer": "npm run dev -w @portfolio/webenjoyer",
     "build:webenjoyer": "npm run build -w @portfolio/webenjoyer",
     "dev:imlostincode": "npm run dev -w @portfolio/imlostincode",
-    "build:imlostincode": "npm run build -w @portfolio/imlostincode"
+    "build:imlostincode": "npm run build -w @portfolio/imlostincode",
+    "dev:nickmous": "npm run dev -w @portfolio/nickmous",
+    "build:nickmous": "npm run build -w @portfolio/nickmous"
   },
   "devDependencies": {
     "prettier": "^3.10.1",

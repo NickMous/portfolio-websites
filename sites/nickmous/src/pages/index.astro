@@ -1,0 +1,90 @@
+---
+import { siteUrl } from '@portfolio/ui-kit';
+import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
+import Stub from '@portfolio/ui-kit/components/Stub.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { sideProjects } from '../data/sideProjects';
+import { locale, t } from '../i18n';
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const hero = t('hero');
+const sections = t('sections');
+const hobbies = t('hobbies');
+const webenjoyer = siteUrl('webenjoyer', locale);
+
+// Hobby labels, tilted like posters on a wall. No football, and no claim that
+// he produces music: he listens to it.
+const labels = [
+  { text: hobbies('orchestra'), color: 'bg-blue text-white', tilt: 'rotate-[-1.5deg]' },
+  { text: hobbies('electronic'), color: 'bg-yellow text-ink', tilt: 'rotate-[1deg]' },
+  { text: hobbies('cycling'), color: 'bg-green text-white', tilt: 'rotate-[-0.5deg]' },
+  { text: hobbies('volleyball'), color: 'bg-red text-white', tilt: 'rotate-[1.5deg]' },
+];
+
+// Now playing (#40) and the guestbook (#41) follow once the API exists.
+---
+
+<SiteLayout>
+  <section id="top" class="container-page pt-6 pb-16 max-sm:pt-5 max-sm:pb-12">
+    <HeroHeadline
+      lines={[
+        { text: hero('line1') },
+        { text: hero('line2'), block: 'blue', tilt: 'right' },
+        { text: hero('line3'), color: 'green' },
+        { text: hero('line4') },
+      ]}
+    />
+    <div class="mt-12 flex flex-wrap items-start gap-8 max-sm:mt-8 max-sm:gap-6">
+      <p class="max-w-[560px] flex-[1_1_380px] type-intro max-sm:text-[17px] max-sm:leading-[1.55]">
+        {hero('intro')}
+      </p>
+      <p class="flex-[0_1_280px] border-t-3 border-ink pt-3 text-[15px] leading-normal max-sm:pt-2.5 max-sm:text-[14px]">
+        {hero('workNote')}{' '}
+        <a href={webenjoyer} class="font-bold underline">
+          webenjoyer ↗
+        </a>
+      </p>
+    </div>
+  </section>
+
+  <section id="projects" class="container-page pt-20 max-sm:pt-14">
+    <SectionHead title={sections('sideProjects')}>
+      {sections('sideProjectsIntro')}{' '}
+      <a href={webenjoyer} class="font-bold underline">
+        webenjoyer ↗
+      </a>
+    </SectionHead>
+    <div class="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-6 max-sm:grid-cols-1 max-sm:gap-4">
+      {sideProjects.map((p) => (
+        <Stub
+          title={p.title}
+          color={p.color}
+          keepCase={!!p.keepCase}
+          {...(p.href ? { href: p.href } : {})}
+        >
+          {p.oneLiner[locale]}
+        </Stub>
+      ))}
+    </div>
+  </section>
+
+  <section id="about" class="container-page py-24 max-sm:py-16">
+    <h2 class="mb-8 type-h2 max-sm:mb-6">{sections('notCoding')}</h2>
+    <ul class="flex flex-wrap gap-4 max-sm:gap-3">
+      {labels.map((label) => (
+        <li
+          class:list={[
+            'px-5 py-2 font-display text-[40px] leading-tight font-black uppercase max-sm:px-3.5 max-sm:text-[28px]',
+            label.color,
+            label.tilt,
+          ]}
+        >
+          {label.text}
+        </li>
+      ))}
+    </ul>
+    <p class="mt-8 max-w-[640px] text-[19px] leading-[1.55] max-sm:text-[17px]">
+      {sections('notCodingText')}
+    </p>
+  </section>
+</SiteLayout>
