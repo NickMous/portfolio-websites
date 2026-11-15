@@ -1,0 +1,16 @@
+.git
+.env.local
+.env.*.local
+.env.dev
+.env.test
+.phpunit.cache
+compose.yaml
+compose.override.yaml
+Dockerfile
+.dockerignore
+phpstan.dist.neon
+phpunit.dist.xml
+tests
+var
+vendor
+AGENTS.md
