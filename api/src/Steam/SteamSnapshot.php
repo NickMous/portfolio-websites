@@ -15,17 +15,19 @@ final readonly class SteamSnapshot implements \JsonSerializable
     public function __construct(
         public int $gameCount,
         public float $hoursLastTwoWeeks,
+        public int $gamesLastTwoWeeks,
         public array $recentGames,
         public \DateTimeImmutable $fetchedAt,
     ) {
     }
 
-    /** @return array{gameCount: int, hoursLastTwoWeeks: float, recentGames: list<Game>, fetchedAt: string} */
+    /** @return array{gameCount: int, hoursLastTwoWeeks: float, gamesLastTwoWeeks: int, recentGames: list<Game>, fetchedAt: string} */
     public function jsonSerialize(): array
     {
         return [
             'gameCount' => $this->gameCount,
             'hoursLastTwoWeeks' => $this->hoursLastTwoWeeks,
+            'gamesLastTwoWeeks' => $this->gamesLastTwoWeeks,
             'recentGames' => $this->recentGames,
             'fetchedAt' => $this->fetchedAt->format(\DATE_ATOM),
         ];

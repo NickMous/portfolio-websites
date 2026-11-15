@@ -72,6 +72,7 @@ final class SteamStatsTest extends TestCase
 
         self::assertSame(42, $stats['gameCount']);
         self::assertSame(2.0, $stats['hoursLastTwoWeeks']);
+        self::assertSame(2, $stats['gamesLastTwoWeeks']);
         self::assertSame('2026-11-15T12:00:00+00:00', $stats['fetchedAt']);
         self::assertSame(['Current game', 'Also this week', 'Old favourite'], array_column($stats['recentGames'], 'name'));
         self::assertSame([
@@ -80,7 +81,7 @@ final class SteamStatsTest extends TestCase
             'hoursPlayed' => 12.6,
             'hoursLastTwoWeeks' => 1.5,
             'lastPlayed' => '2026-11-14T21:30:00+00:00',
-            'art' => 'https://shared.steamstatic.com/store_item_assets/steam/apps/20/library_600x900.jpg',
+            'art' => 'https://shared.steamstatic.com/store_item_assets/steam/apps/20/header.jpg',
         ], $stats['recentGames'][0]);
     }
 
