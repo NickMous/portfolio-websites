@@ -1,5 +1,5 @@
-import { locales, type Locale } from './locale';
-import { siteUrl, type SiteKey } from './sites';
+import { locales } from './locale';
+import { siteUrl, type Locale, type SiteKey } from './sites';
 
 const escape = (s: string) =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
