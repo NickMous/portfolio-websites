@@ -1,6 +1,7 @@
 // @ts-check
 import { getLocale, siteUrl } from '@portfolio/ui-kit';
 import { siteFonts } from '@portfolio/ui-kit/fonts';
+import preact from '@astrojs/preact';
 import tailwindcss from '@tailwindcss/vite';
 import { defineConfig } from 'astro/config';
 
@@ -12,6 +13,9 @@ export default defineConfig({
   outDir: `dist/${locale}`,
   output: 'static',
   fonts: siteFonts,
+  // Islands (Now playing, the guestbook) are Preact: one component renders
+  // at build time and hydrates in the browser.
+  integrations: [preact()],
   vite: {
     plugins: [tailwindcss()],
   },

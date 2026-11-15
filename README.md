@@ -41,6 +41,13 @@ same on both domains. Strings live in `src/i18n/{en,nl}.ts` per site, with
 shared strings in `packages/ui-kit/src/i18n`. A typo in a key is a type
 error, and a key missing in Dutch fails the build.
 
+### nickmous and the API
+
+nickmous's "Now playing" reads `https://api.nickmous.com` at build time and
+again in the browser. Point it elsewhere with `PUBLIC_API_URL`, e.g.
+`PUBLIC_API_URL=http://localhost:8000 npm run dev:nickmous`. When the API
+can't be reached the build still succeeds; the section fills in once it can.
+
 ### imlostincode docs
 
 imlostincode reads its docs from GitHub at build time (public repos with the

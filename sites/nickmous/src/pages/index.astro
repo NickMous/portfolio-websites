@@ -3,6 +3,8 @@ import { siteUrl } from '@portfolio/ui-kit';
 import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
 import Stub from '@portfolio/ui-kit/components/Stub.astro';
 import SectionHead from '../components/SectionHead.astro';
+import { apiBase, fetchNowPlaying } from '../nowPlaying/api';
+import NowPlaying, { type NowPlayingStrings } from '../nowPlaying/NowPlaying';
 import { sideProjects } from '../data/sideProjects';
 import { locale, t } from '../i18n';
 import SiteLayout from '../layouts/SiteLayout.astro';
@@ -21,7 +23,26 @@ const labels = [
   { text: hobbies('volleyball'), color: 'bg-red text-white', tilt: 'rotate-[1.5deg]' },
 ];
 
-// Now playing (#40) and the guestbook (#41) follow once the API exists.
+// Fetched once per build; the island refreshes it in the browser. An API that
+// can't be reached (e.g. in CI) just means the island fills it in later.
+const nowPlaying = await fetchNowPlaying();
+const builtAt = new Date().toISOString();
+const np = t('nowPlaying');
+const nowPlayingStrings: NowPlayingStrings = {
+  steam: np('steam'),
+  switch: np('switch'),
+  hoursPlayed: { one: np('hoursPlayedOne'), other: np('hoursPlayedOther') },
+  lastPlayed: np('lastPlayed'),
+  steamTile: np('steamTile'),
+  steamHours: { one: np('steamHoursOne'), other: np('steamHoursOther') },
+  steamGames: { one: np('steamGamesOne'), other: np('steamGamesOther') },
+  steamDown: np('steamDown'),
+  switchTile: np('switchTile'),
+  switchNote: np('switchNote'),
+  nothing: np('nothing'),
+};
+
+// The guestbook (#41) follows.
 ---
 
 <SiteLayout>
@@ -44,6 +65,26 @@ const labels = [
           webenjoyer ↗
         </a>
       </p>
+    </div>
+  </section>
+
+  <section id="games" class="bg-yellow py-[72px] pb-[88px] max-sm:py-14">
+    <div class="container-page">
+      <div class="mb-10 flex flex-wrap items-baseline justify-between gap-4 max-sm:mb-7">
+        <h2 class="type-h2">{np('title')}</h2>
+        <span class="bg-ink px-2.5 py-1.5 text-[14px] font-bold text-yellow">
+          <span aria-hidden="true">● </span>
+          {np('refreshes')}
+        </span>
+      </div>
+      <NowPlaying
+        client:visible
+        initial={nowPlaying}
+        builtAt={builtAt}
+        apiBase={apiBase}
+        locale={locale}
+        strings={nowPlayingStrings}
+      />
     </div>
   </section>
 
