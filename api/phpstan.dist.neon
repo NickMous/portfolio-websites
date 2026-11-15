@@ -1,0 +1,11 @@
+parameters:
+    level: max
+    # bin/ and public/ are Symfony's untouched front controllers.
+    paths:
+        - config/
+        - src/
+        - tests/
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    doctrine:
+        objectManagerLoader: tests/object-manager.php

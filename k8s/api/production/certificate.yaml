@@ -1,0 +1,20 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: app-tls
+  labels:
+    app.kubernetes.io/component: certificate
+spec:
+  # cert-manager creates this Secret at runtime, so namePrefix never touches
+  # it; it has to match the IngressRoute's tls.secretName literally.
+  secretName: nickmous-api-tls
+  # letsencrypt-prod (fleet-infra) solves DNS-01 through the Cloudflare API,
+  # so issuance works behind the Cloudflare proxy and needs no HTTP route.
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - api.nickmous.com
+  usages:
+    - digital signature
+    - key encipherment

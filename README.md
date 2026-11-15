@@ -55,3 +55,22 @@ Each site deploys when a GitHub release with its tag prefix is published
 (`sanderdh-v1.0.0`, `webenjoyer-v1.0.0`, `imlostincode-v1.0.0`). That builds one
 image per locale, and Flux image automation rolls `k8s/<site>/production`.
 imlostincode also redeploys when a docs repo publishes a release.
+
+The API deploys the same way from an `api-v1.0.0` release, to api.nickmous.com
+(`k8s/api/production`). Its secrets live in fleet-infra, not in this public repo.
+
+## API
+
+The Symfony app in `api/` needs PHP 8.5 (intl, pdo_pgsql) and Composer.
+`compose.yaml` in `api/` starts a Postgres for local use.
+
+```sh
+cd api
+composer install
+docker compose up -d                 # Postgres; put its port (`docker compose port database 5432`)
+                                     # in DATABASE_URL in .env.local
+php bin/console doctrine:database:create --env=test
+php bin/console doctrine:migrations:migrate --env=test -n
+php bin/phpunit                      # unit + functional
+vendor/bin/phpstan analyse
+```

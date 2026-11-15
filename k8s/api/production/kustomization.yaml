@@ -1,0 +1,81 @@
+# Production for the nickmous API (api.nickmous.com): the Symfony app from
+# api/ on symfony-k8s-deployment-kit, with the kit's postgres component.
+#
+# The namespace and the two secrets are NOT here: this repo is public, so they
+# live in fleet-infra (SOPS-encrypted), which also creates the namespace:
+#
+#   app-secret           APP_SECRET, DATABASE_URL (later: MAILER_DSN, STEAM_API_KEY)
+#   app-postgres-secret  username, password
+#
+# Because they are not part of this build, namePrefix leaves the references to
+# them alone: the pods look for exactly `app-secret` and `app-postgres-secret`
+# in this namespace. Keep the namespace for this app only.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: nickmous-api-production
+# Trailing dash is required: kustomize concatenates literally.
+namePrefix: nickmous-api-
+resources:
+  - github.com/NickMous/symfony-k8s-deployment-kit//base?ref=v0.1.6
+  - ingress.yaml
+  - certificate.yaml
+  - middlewares.yaml
+components:
+  - github.com/NickMous/symfony-k8s-deployment-kit//components/postgres?ref=v0.1.6
+# Traefik's CRDs are unknown to kustomize's built-in name references. Without
+# this, namePrefix renames the Service while the IngressRoute keeps pointing
+# at `app`, and the route 404s with everything looking correct.
+configurations:
+  - kustomizeconfig.yaml
+configMapGenerator:
+  - name: app-config
+    behavior: merge
+    literals:
+      - TZ=Europe/Amsterdam
+      - DEFAULT_URI=https://api.nickmous.com
+      - POSTGRES_DB=api
+      # Only the two nickmous sites may call the API from a browser.
+      - CORS_ALLOW_ORIGIN=^https://nickmous\.(com|nl)$
+images:
+  - name: app-image
+    # Same GHCR package as the sites, told apart by tag prefix
+    # (api-<YYYYMMDD>-<HHMM>-<release>), see .github/workflows/deploy-api.yaml.
+    newName: ghcr.io/nickmous/portfolio-websites
+    # Flux's ImageUpdateAutomation rewrites this line (it looks for the
+    # marker). The value below is only the bootstrap starting point until the
+    # first api release is published.
+    newTag: api-00000000-0000-bootstrap # {"$imagepolicy": "flux-system:nickmous-api:tag"}
+  - name: app-nginx-image
+    newName: ghcr.io/nickmous/symfony-k8s-deployment-kit
+    newTag: nginx-latest
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: nickmous
+      app.kubernetes.io/instance: production-api
+    includeSelectors: false
+# Wire the prefixed Service names into app-config. This has to happen here,
+# after namePrefix, see the kit's README.
+replacements:
+  - source:
+      kind: Service
+      name: app
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: ConfigMap
+          name: app-config
+        fieldPaths:
+          - data.APP_SERVICE_HOST
+  - source:
+      kind: Service
+      name: app-postgres
+      fieldPath: metadata.name
+    targets:
+      - select:
+          kind: ConfigMap
+          name: app-config
+        fieldPaths:
+          - data.POSTGRES_HOST
+          - data.DATABASE_HOST
+        options:
+          create: true

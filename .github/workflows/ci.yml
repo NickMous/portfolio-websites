@@ -54,3 +54,61 @@ jobs:
             kubectl kustomize "$dir" > /dev/null
             echo "::endgroup::"
           done
+
+  api:
+    name: API (lint, PHPStan, PHPUnit)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: api
+    env:
+      # Functional tests use a real database; doctrine adds the _test suffix.
+      DATABASE_URL: postgresql://app:app@127.0.0.1:5432/app?serverVersion=16&charset=utf8
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: app
+          POSTGRES_PASSWORD: app
+          POSTGRES_DB: app
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 5432:5432
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: intl, pdo_pgsql
+          coverage: none
+
+      - uses: actions/cache@v5
+        with:
+          path: ~/.cache/composer
+          key: composer-${{ hashFiles('api/composer.lock') }}
+
+      - run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Lint container and config
+        run: |
+          php bin/console lint:container
+          php bin/console lint:yaml config
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+      # Migrations, not schema:create: the tests run against exactly what
+      # production runs, and a mapping without a migration fails here.
+      - name: Test database
+        run: |
+          php bin/console doctrine:database:create --env=test
+          php bin/console doctrine:migrations:migrate --env=test --no-interaction --allow-no-migration
+          php bin/console doctrine:schema:validate --env=test
+
+      - name: PHPUnit
+        run: php bin/phpunit
