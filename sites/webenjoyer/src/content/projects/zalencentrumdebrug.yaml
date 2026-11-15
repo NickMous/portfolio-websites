@@ -4,27 +4,35 @@ kind: client
 status: live
 featured: true
 order: 3
+year: 2025
 url: https://zalencentrumdebrug.nl
+stack: [Symfony, Twig, TypeScript, Tailwind CSS]
 posterColor: red
+screenshots:
+  - ../../assets/work/zalencentrumdebrug-home.webp
+  - ../../assets/work/zalencentrumdebrug-detail.webp
+phoneScreenshot: ../../assets/work/zalencentrumdebrug-phone.webp
 tagline:
   en: Event venue · Reeuwijk
   nl: Evenementenlocatie · Reeuwijk
 oneLiner:
-  en: '[ONE-LINER]'
-  nl: '[ONE-LINER]'
+  en: Website and booking requests for a venue in Reeuwijk, with one app behind several domains.
+  nl: Website en zaalaanvragen voor een zalencentrum in Reeuwijk, met één app achter meerdere domeinen.
 type:
-  en: '[TYPE]'
-  nl: '[TYPE]'
+  en: Venue site with backoffice
+  nl: Locatiesite met backoffice
 intro:
-  en: '[One sentence: what the site is for, in your own words]'
-  nl: '[One sentence: what the site is for, in your own words]'
+  en: Show the rooms, and make asking for a date as easy as filling in one form.
+  nl: De zalen laten zien, en een datum aanvragen zo makkelijk maken als één formulier invullen.
 whatItIs:
-  en: '[2–3 sentences: what it is, who visits the site, what they come for]'
-  nl: '[2–3 sentences: what it is, who visits the site, what they come for]'
+  en: Zalencentrum De Brug is a venue in Reeuwijk for parties, weddings and meetings. Visitors come to look at the rooms and to ask whether their date is still free.
+  nl: Zalencentrum De Brug is een locatie in Reeuwijk voor feesten, bruiloften en vergaderingen. Bezoekers komen de zalen bekijken en vragen of hun datum nog vrij is.
 whatIBuilt:
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
+  - en: A contact form that asks for the room, date and times, and sends the customer a confirmation
+    nl: Een contactformulier dat vraagt naar zaal, datum en tijden, en de klant een bevestiging stuurt
+  - en: One app that also runs the wedding and meeting-room sites, each on its own domain
+    nl: Eén app die ook de trouw- en vergaderzaalsites draait, elk op een eigen domein
+  - en: A backoffice for the venue, plus a vacancies page and a holiday notice
+    nl: Een backoffice voor het zalencentrum, plus een vacaturepagina en een vakantiemelding
+  - en: Spam protection on the form, with a honeypot that bots fall for
+    nl: Spambescherming op het formulier, met een honeypot waar bots in trappen
