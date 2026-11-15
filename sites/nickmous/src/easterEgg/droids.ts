@@ -58,9 +58,11 @@ export function showDroids(strings: DroidStrings): void {
     droid.style.zIndex = String(Math.round(height));
     sky.append(droid);
     // Speed from the original: bigger droids are closer, so they fly faster.
+    // Left to right, as on the old site: its CSS reads the other way round,
+    // but the droid only moved when the next one removed its .start class.
     const seconds = (small ? 100 : 200) / height;
     droid
-      .animate([{ transform: 'translateX(100vw)' }, { transform: 'translateX(-150px)' }], {
+      .animate([{ transform: 'translateX(-150px)' }, { transform: 'translateX(100vw)' }], {
         duration: seconds * 1000,
         easing: 'linear',
       })

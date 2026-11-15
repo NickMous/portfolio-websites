@@ -120,12 +120,19 @@
     font-weight: 700;
   }
   & .code-head button {
+    position: relative;
     min-height: 32px;
     padding: 6px 12px;
     border: 2px solid var(--color-ink);
     background: var(--color-white);
     font: inherit;
     cursor: pointer;
+  }
+  /* 44px hit area without a taller bar. */
+  & .code-head button::after {
+    content: '';
+    position: absolute;
+    inset: -6px 0;
   }
   & .code-head button:hover {
     background: var(--color-yellow);

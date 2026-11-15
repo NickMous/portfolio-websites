@@ -137,4 +137,20 @@ describe('renderMarkdown headings', () => {
     expect(html).toContain('<h3 id="step-1-install">Step 1: install</h3>');
     expect(html).not.toContain('<h1');
   });
+
+  it('starts at h2 and never skips a level, whatever the README uses', async () => {
+    const html = await renderMarkdown('### Intro\n\n##### Detail\n\n### Next', ctx('README.md'));
+
+    expect(html).toContain('<h2 id="intro">Intro</h2>');
+    expect(html).toContain('<h3 id="detail">Detail</h3>');
+    expect(html).toContain('<h2 id="next">Next</h2>');
+  });
+});
+
+describe('renderMarkdown tables', () => {
+  it('makes tables focusable, so keyboard users can scroll wide ones', async () => {
+    const html = await renderMarkdown('| a | b |\n| - | - |\n| 1 | 2 |', ctx('README.md'));
+
+    expect(html).toContain('<table tabindex="0">');
+  });
 });

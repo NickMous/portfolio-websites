@@ -40,7 +40,8 @@ const egg = t('easterEgg');
     background-image: url('/easter-egg/droids.png');
     background-size: 1200% 100%;
     animation: easter-frames 1s steps(12, jump-none) infinite;
-    transform: translateX(100vw);
+    /* Off-screen left until its flight starts. */
+    transform: translateX(-150px);
   }
   .easter-star {
     aspect-ratio: 1;

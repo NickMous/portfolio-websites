@@ -13,7 +13,7 @@
  * Exits non-zero when anything fails, so CI can gate on it.
  */
 import AxeBuilder from '@axe-core/playwright';
-import { createReadStream, existsSync, readdirSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { createServer, type Server } from 'node:http';
 import { extname, join } from 'node:path';
 import { chromium, type Page } from 'playwright';
@@ -65,7 +65,11 @@ function pages(dir: string, base = '/'): string[] {
     const full = join(dir, name);
     if (statSync(full).isDirectory()) {
       if (!name.startsWith('_') && name !== 'og') out.push(...pages(full, `${base}${name}/`));
-    } else if (name === 'index.html') {
+    } else if (
+      name === 'index.html' &&
+      !readFileSync(full, 'utf8').includes('http-equiv="refresh"')
+    ) {
+      // Redirect pages navigate away mid-audit; their targets are audited anyway.
       out.push(base);
     }
   }
