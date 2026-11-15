@@ -37,8 +37,18 @@ RUN test -n "$SITE" || (echo "Build arg SITE is required" >&2 && exit 1)
 COPY . .
 RUN npm ci --no-audit --no-fund
 
+# Changing this re-runs the build below even when no file changed. imlostincode
+# passes the workflow run id, so a rebuild triggered by a docs release fetches
+# the docs again instead of reusing the cached layer. Other sites leave it empty.
+ARG CACHE_BUST=""
+
 # Fonts are downloaded from Fontsource during this build (Astro Fonts API).
-RUN LOCALE="$LOCALE" npm run "build:$LOCALE" -w "@portfolio/$SITE" \
+# imlostincode also reads its docs from the GitHub API; the optional
+# github_token secret lifts the rate limit. A BuildKit secret is never stored
+# in a layer or in the (public) build cache, unlike a build arg.
+RUN --mount=type=secret,id=github_token,env=GITHUB_TOKEN \
+    : "cache bust: ${CACHE_BUST}" \
+    && LOCALE="$LOCALE" npm run "build:$LOCALE" -w "@portfolio/$SITE" \
     && mv "sites/$SITE/dist/$LOCALE" /out
 
 # Pre-compress text assets. nginx serves the .br / .gz sibling directly via
