@@ -20,8 +20,14 @@ on:
         required: true
         default: 'api-v0.0.0-manual'
 
+# A release for another site also starts this workflow (its jobs then skip).
+# That run gets a group of its own: GitHub keeps one pending run per group
+# and cancels the older one, so a skipped run could otherwise cancel a real
+# deploy that is waiting its turn.
 concurrency:
-  group: deploy-api
+  group: >-
+    ${{ (github.event_name != 'release' || startsWith(github.event.release.tag_name, 'api-v'))
+    && 'deploy-api' || format('deploy-api-skip-{0}', github.run_id) }}
   cancel-in-progress: false
 
 permissions:
