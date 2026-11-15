@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "types": ["node"]
+    "types": ["node"],
+    // scripts/ run with plain `node`, which needs the .ts extension in imports.
+    "allowImportingTsExtensions": true
   },
-  "include": ["src"]
+  "include": ["src", "scripts"]
 }
