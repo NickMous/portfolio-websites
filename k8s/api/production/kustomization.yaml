@@ -5,7 +5,7 @@
 # live in fleet-infra (SOPS-encrypted), which also creates the namespace:
 #
 #   app-secret           APP_SECRET, DATABASE_URL, MAILER_DSN, MAILER_FROM,
-#                        GUESTBOOK_MODERATOR_EMAIL (later: STEAM_API_KEY)
+#                        GUESTBOOK_MODERATOR_EMAIL, STEAM_API_KEY, STEAM_ID
 #   app-postgres-secret  username, password
 #
 # Because they are not part of this build, namePrefix leaves the references to

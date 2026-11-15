@@ -80,3 +80,5 @@ Endpoints so far:
 - `POST /api/guestbook` (`name`, `message`): stored unapproved, and the
   moderator gets an email with signed approve/delete links (valid 30 days)
 - `GET /api/guestbook`: approved entries, newest first, 20 per page
+- `GET /api/steam`: game count, hours in the last two weeks and the six most
+  recently played games; Steam is asked at most every 20 minutes
