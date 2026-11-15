@@ -1,11 +1,42 @@
+import { execFileSync } from 'node:child_process';
 import { OWNER } from './owner';
 import { parseRepoConfig, selectDocsRepos, type GitHubRepo, type RepoConfig } from './repos';
 
 /**
- * Optional token for API rate limits (60 requests/hour without one). CI passes
- * GITHUB_TOKEN; locally `GITHUB_TOKEN=$(gh auth token)` works.
+ * Token for API rate limits (60 requests/hour without one, too few for a
+ * build). CI passes GITHUB_TOKEN; locally the gh CLI login is used.
  */
-const token = process.env.GITHUB_TOKEN;
+export function resolveToken(
+  env: Record<string, string | undefined>,
+  ghToken: () => string,
+): string | undefined {
+  if (env.GITHUB_TOKEN) return env.GITHUB_TOKEN;
+  try {
+    return ghToken().trim() || undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+const token = resolveToken(process.env, () =>
+  execFileSync('gh', ['auth', 'token'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }),
+);
+
+/** Error text for a failed API call; a rate limit says how to lift it. */
+export function apiError(
+  status: number,
+  url: string,
+  body: string,
+  remaining: string | null,
+): string {
+  if ((status === 403 || status === 429) && (remaining === '0' || /rate limit/i.test(body))) {
+    return (
+      `GitHub API rate limit hit for ${url}. Log in with \`gh auth login\` ` +
+      `or set GITHUB_TOKEN, then build again.`
+    );
+  }
+  return `GitHub API ${status} for ${url}: ${body}`;
+}
 
 // One build fetches each URL once, even when several loaders ask for it.
 const cache = new Map<string, Promise<Response>>();
@@ -30,7 +61,10 @@ export async function api<T>(path: string): Promise<T> {
   let url: string | undefined = `https://api.github.com${path}`;
   while (url) {
     const res = await get(url);
-    if (!res.ok) throw new Error(`GitHub API ${res.status} for ${url}: ${await res.text()}`);
+    if (!res.ok) {
+      const remaining = res.headers.get('x-ratelimit-remaining');
+      throw new Error(apiError(res.status, url, await res.text(), remaining));
+    }
     const body = (await res.json()) as unknown;
     if (!Array.isArray(body)) return body as T;
     results.push(...body);
