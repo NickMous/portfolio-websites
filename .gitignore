@@ -13,6 +13,7 @@ dist/
 # Symfony commits its defaults (no secrets); api/.gitignore still ignores
 # .env.local and .env.*.local.
 !api/.env
+!api/.env.dev
 !api/.env.test
 !.env.example
 

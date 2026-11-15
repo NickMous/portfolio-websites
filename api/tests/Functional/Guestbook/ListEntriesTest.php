@@ -6,16 +6,22 @@ namespace App\Tests\Functional\Guestbook;
 
 final class ListEntriesTest extends GuestbookTestCase
 {
+    /** @return array{totalItems: int, member: list<array<string, mixed>>, view: array<string, mixed>} */
+    private function fetchList(): array
+    {
+        /** @var array{totalItems: int, member: list<array<string, mixed>>, view: array<string, mixed>} */
+        return self::createClient()->request('GET', '/api/guestbook')->toArray();
+    }
+
     public function testOnlyApprovedEntriesAreListedNewestFirst(): void
     {
         $this->createEntry('Old', approved: true, createdAt: '2026-10-01 10:00');
         $this->createEntry('Pending', approved: false, createdAt: '2026-11-02 10:00');
         $this->createEntry('New', approved: true, createdAt: '2026-11-01 10:00');
 
-        $response = self::createClient()->request('GET', '/api/guestbook');
+        $data = $this->fetchList();
 
         self::assertResponseIsSuccessful();
-        $data = $response->toArray();
         self::assertSame(2, $data['totalItems']);
         self::assertSame(['New', 'Old'], array_column($data['member'], 'name'));
         self::assertSame(
@@ -30,7 +36,7 @@ final class ListEntriesTest extends GuestbookTestCase
             $this->createEntry("Visitor $i", approved: true, createdAt: "2026-11-01 10:$i");
         }
 
-        $data = self::createClient()->request('GET', '/api/guestbook')->toArray();
+        $data = $this->fetchList();
 
         self::assertSame(21, $data['totalItems']);
         self::assertCount(20, $data['member']);

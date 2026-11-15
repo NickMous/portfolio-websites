@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Guestbook;
 
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Component\HttpFoundation\UriSigner;
 
 final class ModerationTest extends GuestbookTestCase
 {
@@ -13,15 +12,14 @@ final class ModerationTest extends GuestbookTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->browser = self::createClient()->getKernelBrowser();
     }
 
-    private function signedUrl(int $id, string $action, string $expires = '+1 day'): string
+    private function signedUrl(?int $id, string $action, string $expires = '+1 day'): string
     {
-        $signer = self::getContainer()->get('uri_signer');
-        \assert($signer instanceof UriSigner);
-
-        return $signer->sign("http://localhost/guestbook/$id/$action", new \DateTimeImmutable($expires));
+        return self::getContainer()->get('uri_signer')
+            ->sign("http://localhost/guestbook/$id/$action", new \DateTimeImmutable($expires));
     }
 
     public function testOpeningTheApproveLinkOnlyAsksForConfirmation(): void
@@ -32,7 +30,7 @@ final class ModerationTest extends GuestbookTestCase
         $this->browser->request('GET', $this->signedUrl($entry->getId(), 'approve'));
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('body', 'Nice site!');
+        self::assertStringContainsString('Nice site!', (string) $this->browser->getResponse()->getContent());
         self::assertFalse($this->allEntries()[0]->isApproved());
     }
 

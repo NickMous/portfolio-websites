@@ -12,6 +12,13 @@ abstract class GuestbookTestCase extends ApiTestCase
 {
     protected static ?bool $alwaysBootKernel = false;
 
+    protected function setUp(): void
+    {
+        // The limiter's pool lives on disk, so it would remember earlier tests.
+        self::getContainer()->get('cache.guestbook_limiter')->clear();
+        self::ensureKernelShutdown();
+    }
+
     protected function entityManager(): EntityManagerInterface
     {
         return self::getContainer()->get(EntityManagerInterface::class);

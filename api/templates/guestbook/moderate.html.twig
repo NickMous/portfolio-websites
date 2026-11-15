@@ -1,0 +1,10 @@
+{% extends 'guestbook/layout.html.twig' %}
+
+{% block body %}
+    <p><strong>{{ entry.name }}</strong> wrote on {{ entry.createdAt|date('j M Y, H:i') }}:</p>
+    <blockquote>{{ entry.message|nl2br }}</blockquote>
+    {# Posts back to the same signed URL, query string included. #}
+    <form method="post">
+        <button type="submit">{{ action }}</button>
+    </form>
+{% endblock %}
