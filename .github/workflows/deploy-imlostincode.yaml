@@ -28,8 +28,14 @@ on:
 
 # Queue rather than cancel: a half-pushed multi-arch manifest is worse than a
 # rebuild that waits. Several docs releases in a row just deploy in order.
+# A release for another site also starts this workflow (its jobs then skip).
+# That run gets a group of its own: GitHub keeps one pending run per group
+# and cancels the older one, so a skipped run could otherwise cancel a real
+# deploy that is waiting its turn.
 concurrency:
-  group: deploy-imlostincode
+  group: >-
+    ${{ (github.event_name != 'release' || startsWith(github.event.release.tag_name, 'imlostincode-v'))
+    && 'deploy-imlostincode' || format('deploy-imlostincode-skip-{0}', github.run_id) }}
   cancel-in-progress: false
 
 permissions:
