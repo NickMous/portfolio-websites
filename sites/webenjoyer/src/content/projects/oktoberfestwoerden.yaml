@@ -25,8 +25,8 @@ intro:
   en: Everything you need to know before Oktoberfest Woerden, on one page.
   nl: Alles wat je moet weten vóór Oktoberfest Woerden, op één pagina.
 whatItIs:
-  en: Oktoberfest Woerden is a yearly party with live acts and DJs. Visitors come for the date, the headliners and the programme; local businesses come for the sponsor packages.
-  nl: Oktoberfest Woerden is een jaarlijks feest met live acts en dj's. Bezoekers komen voor de datum, de headliners en het programma; lokale bedrijven komen voor de sponsorpakketten.
+  en: Oktoberfest Woerden is a yearly party with live acts and DJs. Visitors come for the date, the headliners and the programme. Local businesses come for the party too, and get something extra with a sponsor package.
+  nl: Oktoberfest Woerden is een jaarlijks feest met live acts en dj's. Bezoekers komen voor de datum, de headliners en het programma. Lokale bedrijven komen ook voor het feest, en krijgen er met een sponsorpakket iets extra's bij.
 whatIBuilt:
   - en: Rebuilt the whole site in Astro
     nl: De hele site opnieuw gebouwd in Astro
