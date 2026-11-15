@@ -72,6 +72,10 @@ export default {
     cycling: 'Fietsen',
     volleyball: 'Volleybal',
   },
+  easterEgg: {
+    label: 'Nyan-droids',
+    close: 'Sluiten',
+  },
   footer: {
     secret: 'Er zit ergens op deze pagina een geheim.',
   },

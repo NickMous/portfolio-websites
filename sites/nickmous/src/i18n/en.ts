@@ -70,6 +70,10 @@ export default {
     cycling: 'Cycling',
     volleyball: 'Volleyball',
   },
+  easterEgg: {
+    label: 'Nyan droids',
+    close: 'Close',
+  },
   footer: {
     secret: "There's a secret somewhere on this page.",
   },
