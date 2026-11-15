@@ -10,6 +10,10 @@ dist/
 # Env
 .env
 .env.*
+# Symfony commits its defaults (no secrets); api/.gitignore still ignores
+# .env.local and .env.*.local.
+!api/.env
+!api/.env.test
 !.env.example
 
 # OS / editor
