@@ -59,7 +59,8 @@ its `imlostincode.json` and the rebuild-on-release workflow:
 ## Deploying
 
 Each site deploys when a GitHub release with its tag prefix is published
-(`sanderdh-v1.0.0`, `webenjoyer-v1.0.0`, `imlostincode-v1.0.0`). That builds one
+(`sanderdh-v1.0.0`, `webenjoyer-v1.0.0`, `imlostincode-v1.0.0`,
+`nickmous-v1.0.0`). That builds one
 image per locale, and Flux image automation rolls `k8s/<site>/production`.
 imlostincode also redeploys when a docs repo publishes a release.
 
