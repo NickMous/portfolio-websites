@@ -27,7 +27,8 @@ const { site, title, description, ogImage, code = false, nav = [] } = Astro.prop
 const locale = getLocale();
 const ui = sharedT('ui');
 const pageUrl = siteUrl(site, locale, Astro.url.pathname);
-const ogImageUrl = ogImage ? new URL(ogImage, pageUrl).href : undefined;
+// Every page has a preview: the page's own, or the site's /og.png.
+const ogImageUrl = new URL(ogImage ?? '/og.png', pageUrl).href;
 ---
 
 <!doctype html>
@@ -50,8 +51,10 @@ const ogImageUrl = ogImage ? new URL(ogImage, pageUrl).href : undefined;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={pageUrl} />
     <meta property="og:locale" content={locale === 'nl' ? 'nl_NL' : 'en_US'} />
-    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
-    <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <Fonts code={code} />
     <Analytics site={site} />
