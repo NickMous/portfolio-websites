@@ -1,0 +1,170 @@
+# Production deploy for imlostincode.com (en) and imlostincode.nl (nl).
+#
+# Triggered by:
+# - publishing a GitHub release whose tag starts with `imlostincode-v`
+# - a `docs-updated` repository_dispatch from a docs repo (a new release or a
+#   docs change there), see docs/imlostincode-docs-repo.md
+# - running it by hand
+#
+# Unlike the other sites this does not use the kit's reusable workflow: the
+# docs loader reads the GitHub API during the Docker build and needs a token,
+# and the kit has no way to pass a BuildKit secret. The steps mirror the kit
+# (per-arch buildstage images, then one multi-arch manifest per tag), so Flux
+# image automation treats the result exactly like the other sites.
+
+name: Deploy imlostincode
+
+on:
+  release:
+    types: [published]
+  repository_dispatch:
+    types: [docs-updated]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release being deployed (e.g. imlostincode-v1.0.0)'
+        required: true
+        default: 'imlostincode-v0.0.0-manual'
+
+# Queue rather than cancel: a half-pushed multi-arch manifest is worse than a
+# rebuild that waits. Several docs releases in a row just deploy in order.
+concurrency:
+  group: deploy-imlostincode
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE: ghcr.io/nickmous/portfolio-websites
+
+jobs:
+  tag:
+    if: >-
+      github.event_name != 'release' ||
+      startsWith(github.event.release.tag_name, 'imlostincode-v')
+    runs-on: ubuntu-latest
+    outputs:
+      en: ${{ steps.v.outputs.en }}
+      nl: ${{ steps.v.outputs.nl }}
+    steps:
+      # Same scheme as the other sites: <site>-<locale>-<YYYYMMDD>-<HHMM>-<what>.
+      # The ImagePolicies sort on the timestamp. A docs rebuild names the repo
+      # and ref that triggered it.
+      - id: v
+        env:
+          MANUAL: ${{ github.event.inputs.version }}
+          DOCS_REPO: ${{ github.event.client_payload.repo }}
+          DOCS_REF: ${{ github.event.client_payload.ref }}
+          REF: ${{ github.ref_name }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = repository_dispatch ]; then
+            what="docs-${DOCS_REPO:-unknown}-${DOCS_REF:-unknown}"
+          else
+            what="${MANUAL:-$REF}"
+          fi
+          slug=$(printf '%s' "$what" | sed 's/[^A-Za-z0-9._-]/-/g' | cut -c1-80)
+          stamp=$(date -u +%Y%m%d-%H%M)
+          echo "en=imlostincode-en-$stamp-$slug" >> "$GITHUB_OUTPUT"
+          echo "nl=imlostincode-nl-$stamp-$slug" >> "$GITHUB_OUTPUT"
+
+  build:
+    name: Build ${{ matrix.locale }} ${{ matrix.arch }}
+    needs: tag
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        locale: [en, nl]
+        arch: [amd64, arm64]
+        include:
+          - arch: amd64
+            platform: linux/amd64
+            runner: ubuntu-latest
+          - arch: arm64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      # The version goes last in the scaffolding tag, so the ImagePolicies
+      # (anchored on ^imlostincode-<locale>-) never pick a single-arch image.
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: docker/site.Dockerfile
+          platforms: ${{ matrix.platform }}
+          push: true
+          tags: ${{ env.IMAGE }}:buildstage-${{ matrix.arch }}-${{ needs.tag.outputs[matrix.locale] }}
+          build-args: |
+            SITE=imlostincode
+            LOCALE=${{ matrix.locale }}
+            CACHE_BUST=${{ github.run_id }}-${{ github.run_attempt }}
+          # Mounted only for the build step; never stored in a layer or cache.
+          secrets: |
+            github_token=${{ github.token }}
+          cache-from: type=registry,ref=${{ env.IMAGE }}:buildcache-imlostincode-${{ matrix.locale }}-${{ matrix.arch }}
+          cache-to: type=registry,ref=${{ env.IMAGE }}:buildcache-imlostincode-${{ matrix.locale }}-${{ matrix.arch }},mode=max,ignore-error=true
+
+  publish:
+    name: Publish ${{ matrix.locale }}
+    needs: [tag, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        include:
+          - locale: en
+            url: https://imlostincode.com
+          - locale: nl
+            url: https://imlostincode.nl
+    environment:
+      name: imlostincode-${{ matrix.locale }}
+      url: ${{ matrix.url }}
+    steps:
+      - uses: docker/setup-buildx-action@v4
+
+      - uses: docker/login-action@v4
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ github.token }}
+
+      - name: Create multi-arch manifests
+        env:
+          VERSION: ${{ needs.tag.outputs[matrix.locale] }}
+          LATEST: imlostincode-${{ matrix.locale }}-latest
+        run: |
+          for tag in "$VERSION" "$LATEST"; do
+            docker buildx imagetools create -t "$IMAGE:$tag" \
+              "$IMAGE:buildstage-amd64-$VERSION" \
+              "$IMAGE:buildstage-arm64-$VERSION"
+          done
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
+
+      - name: Summary
+        env:
+          VERSION: ${{ needs.tag.outputs[matrix.locale] }}
+          URL: ${{ matrix.url }}
+        run: |
+          {
+            echo "### imlostincode image built"
+            echo ""
+            echo "**Image:** \`$IMAGE:$VERSION\`"
+            echo "**URL:** $URL"
+            echo ""
+            echo "Flux image automation picks up the new tag and updates the cluster."
+          } >> "$GITHUB_STEP_SUMMARY"

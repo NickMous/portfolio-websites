@@ -1,0 +1,41 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: imlostincode-production
+# Trailing dash is required: kustomize concatenates literally.
+namePrefix: imlostincode-nl-
+resources:
+  - github.com/NickMous/astro-k8s-deployment-kit//base?ref=v1.2.0
+  - ingress.yaml
+  - certificate.yaml
+  - middlewares.yaml
+components:
+  - github.com/NickMous/astro-k8s-deployment-kit//components/pdb?ref=v1.2.0
+# Traefik's CRDs are unknown to kustomize's built-in name references. Without
+# this, namePrefix renames the Service while the IngressRoute keeps pointing
+# at `app`, and the route 404s with everything looking correct.
+configurations:
+  - kustomizeconfig.yaml
+images:
+  - name: app-image
+    # One GHCR package for the whole monorepo; sites and locales are told
+    # apart by tag prefix (imlostincode-nl-<YYYYMMDD>-<HHMM>-<release>).
+    newName: ghcr.io/nickmous/portfolio-websites
+    # Flux's ImageUpdateAutomation rewrites this line (it looks for the
+    # marker) and commits back to main. The value below is only the bootstrap
+    # starting point until the first release is published.
+    newTag: imlostincode-nl-00000000-0000-bootstrap # {"$imagepolicy": "flux-system:imlostincode-nl:tag"}
+# The pdb component sets minAvailable: 1; with a single replica that pins the
+# only pod and blocks node drains. Two replicas make the budget meaningful.
+replicas:
+  - name: app
+    count: 2
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: imlostincode
+    includeSelectors: false
+  # Both locales run in one namespace from the same base, which selects pods
+  # only by name/component. Without this pair in the selectors the nl
+  # Service would also send traffic to the other locale's pods.
+  - pairs:
+      app.kubernetes.io/instance: production-nl
+    includeSelectors: true
