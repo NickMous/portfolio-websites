@@ -1,0 +1,13 @@
+# Production for imlostincode: one namespace, two locale overlays.
+#
+# Each site is built once per locale, so .com (en) and .nl (nl) run as two
+# separate apps in the same namespace, each with its own image, namePrefix,
+# IngressRoute and certificate. Flux applies this directory as one
+# Kustomization, and its ImageUpdateAutomation rewrites the image tags in
+# en/ and nl/ (see the $imagepolicy markers).
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - en
+  - nl

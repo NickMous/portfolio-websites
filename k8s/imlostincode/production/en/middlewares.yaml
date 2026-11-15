@@ -1,0 +1,19 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-to-https
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+---
+# The apex is canonical; www redirects so it never serves a duplicate site.
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: redirect-www-to-apex
+spec:
+  redirectRegex:
+    regex: "^https://www\\.imlostincode\\.com/(.*)"
+    replacement: 'https://imlostincode.com/${1}'
+    permanent: true

@@ -25,6 +25,7 @@ Requires Node 24+ (see `.nvmrc`).
 npm install
 npm run dev:sanderdh     # dev server for one site
 npm run dev:playground   # preview every ui-kit component
+#   (imlostincode: GITHUB_TOKEN=$(gh auth token) npm run dev:imlostincode)
 LOCALE=nl npm run dev:sanderdh  # same, in Dutch
 npm run build            # astro check + build every site, both locales
 npm run build:sanderdh   # build one site
@@ -39,3 +40,18 @@ Each site is built once per locale: `LOCALE=en` (served on `.com`) and
 same on both domains. Strings live in `src/i18n/{en,nl}.ts` per site, with
 shared strings in `packages/ui-kit/src/i18n`. A typo in a key is a type
 error, and a key missing in Dutch fails the build.
+
+### imlostincode docs
+
+imlostincode reads its docs from GitHub at build time (public repos with the
+`imlostincode-docs` topic). Set `GITHUB_TOKEN` for the API rate limit, e.g.
+`GITHUB_TOKEN=$(gh auth token) npm run dev:imlostincode`. How to add a repo,
+its `imlostincode.json` and the rebuild-on-release workflow:
+[docs/imlostincode-docs-repo.md](docs/imlostincode-docs-repo.md).
+
+## Deploying
+
+Each site deploys when a GitHub release with its tag prefix is published
+(`sanderdh-v1.0.0`, `webenjoyer-v1.0.0`, `imlostincode-v1.0.0`). That builds one
+image per locale, and Flux image automation rolls `k8s/<site>/production`.
+imlostincode also redeploys when a docs repo publishes a release.
