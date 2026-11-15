@@ -39,8 +39,13 @@ const l = look[color];
     <a href={docsUrls.repo(name)} class="inline-flex min-h-11 min-w-11 items-center underline">
       {cards('docs')}
     </a>
-    <a href={url} class="inline-flex min-h-11 min-w-11 items-center underline">
-      GitHub ↗
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener"
+      class="inline-flex min-h-11 min-w-11 items-center underline"
+    >
+      GitHub ↗<span class="sr-only"> {t('docs')('newTab')}</span>
     </a>
   </div>
 </article>

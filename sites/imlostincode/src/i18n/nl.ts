@@ -49,6 +49,7 @@ export default {
     previous: '← Vorige',
     next: 'Volgende →',
     editOnGitHub: 'Bewerk deze pagina op GitHub ↗',
+    newTab: '(opent in een nieuw tabblad)',
     viewOnGitHub: 'Bekijk op GitHub ↗',
     noOverview: '[THIS VERSION HAS NO README]',
     redirecting: 'Doorsturen naar',

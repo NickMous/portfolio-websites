@@ -22,15 +22,23 @@
     line-height: 0.95;
     scroll-margin-top: 24px;
   }
+  /* Room above a heading that follows text, on top of the 20px gap. */
+  & * + h2 {
+    margin-top: 36px;
+  }
+  & * + h3 {
+    margin-top: 24px;
+  }
+  & * + :is(h4, h5, h6) {
+    margin-top: 12px;
+  }
   & h2 {
     font-size: 64px;
   }
   & h3 {
-    margin-top: 12px;
     font-size: 36px;
   }
   & h4 {
-    margin-top: 8px;
     font-size: 26px;
   }
   & h5,
@@ -163,4 +171,11 @@
     text-transform: uppercase;
     color: var(--color-callout-red-text);
   }
+}
+
+/* The open list of the version picker: body text, about the size of the select. */
+.version-picker option {
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-weight: 700;
 }
