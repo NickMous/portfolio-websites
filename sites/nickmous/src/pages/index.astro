@@ -3,7 +3,10 @@ import { siteUrl } from '@portfolio/ui-kit';
 import HeroHeadline from '@portfolio/ui-kit/components/HeroHeadline.astro';
 import Stub from '@portfolio/ui-kit/components/Stub.astro';
 import SectionHead from '../components/SectionHead.astro';
-import { apiBase, fetchNowPlaying } from '../nowPlaying/api';
+import { apiBase } from '../apiBase';
+import { fetchEntries } from '../guestbook/api';
+import Guestbook, { type GuestbookStrings } from '../guestbook/Guestbook';
+import { fetchNowPlaying } from '../nowPlaying/api';
 import NowPlaying, { type NowPlayingStrings } from '../nowPlaying/NowPlaying';
 import { sideProjects } from '../data/sideProjects';
 import { locale, t } from '../i18n';
@@ -42,7 +45,30 @@ const nowPlayingStrings: NowPlayingStrings = {
   nothing: np('nothing'),
 };
 
-// The guestbook (#41) follows.
+// The guestbook exists only on nickmous. Approved notes are fetched at build
+// time too, and refreshed by the island.
+const entries = await fetchEntries();
+const gb = t('guestbook');
+const guestbookStrings: GuestbookStrings = {
+  name: gb('name'),
+  message: gb('message'),
+  submit: gb('submit'),
+  sending: gb('sending'),
+  sent: gb('sent'),
+  tooMany: gb('tooMany'),
+  failed: gb('failed'),
+  errors: {
+    nameMissing: gb('nameMissing'),
+    nameTooLong: gb('nameTooLong'),
+    nameInvalid: gb('nameInvalid'),
+    messageMissing: gb('messageMissing'),
+    messageTooLong: gb('messageTooLong'),
+    messageInvalid: gb('messageInvalid'),
+  },
+  entriesLabel: gb('entriesLabel'),
+  empty: gb('empty'),
+  honeypot: gb('honeypot'),
+};
 ---
 
 <SiteLayout>
@@ -127,5 +153,14 @@ const nowPlayingStrings: NowPlayingStrings = {
     <p class="mt-8 max-w-[640px] text-[19px] leading-[1.55] max-sm:text-[17px]">
       {sections('notCodingText')}
     </p>
+  </section>
+
+  <section id="guestbook" class="relative bg-green py-[72px] pb-[88px] text-white max-sm:py-14">
+    <div class="container-page">
+      <Guestbook client:visible initial={entries} apiBase={apiBase} strings={guestbookStrings}>
+        <h2 class="type-h2">{gb('title')}</h2>
+        <p class="text-[17px] leading-normal">{gb('intro')}</p>
+      </Guestbook>
+    </div>
   </section>
 </SiteLayout>
