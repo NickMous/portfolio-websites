@@ -33,6 +33,7 @@
         "symfony/yaml": "8.1.*"
     },
     "require-dev": {
+        "api-platform/test": "^5.0",
         "dama/doctrine-test-bundle": "^8.8",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.3",
