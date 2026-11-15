@@ -7,9 +7,19 @@ interface Props {
   tagColor?: 'yellow' | 'blue' | 'green' | 'red';
   as?: 'h2' | 'h3';
   class?: string;
+  /** Extra attributes for the link, e.g. data-umami-event. */
+  [attr: `data-${string}`]: string;
 }
 
-const { name, href, tag, tagColor = 'yellow', as: Heading = 'h3', class: className } = Astro.props;
+const {
+  name,
+  href,
+  tag,
+  tagColor = 'yellow',
+  as: Heading = 'h3',
+  class: className,
+  ...attrs
+} = Astro.props;
 
 const tagBg = {
   yellow: 'bg-yellow',
@@ -21,6 +31,7 @@ const tagBg = {
 
 <a
   href={href}
+  {...attrs}
   class:list={['group flex flex-col gap-3 frame bg-white p-6 no-underline', className]}
 >
   <div class="flex items-center justify-between gap-3">

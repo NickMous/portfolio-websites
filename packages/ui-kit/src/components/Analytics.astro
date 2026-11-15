@@ -10,9 +10,10 @@ const { site } = Astro.props;
 
 <meta name="umami-site" content={site} />
 <script>
-  import { loadUmami, umamiConfig } from '../analytics';
+  import { loadUmami, trackOutboundLinks, umamiConfig } from '../analytics';
   import type { SiteKey } from '../sites';
 
   const site = document.querySelector<HTMLMetaElement>('meta[name="umami-site"]')?.content;
   if (site) loadUmami(document, location.hostname, umamiConfig(site as SiteKey));
+  trackOutboundLinks(document, location.hostname);
 </script>

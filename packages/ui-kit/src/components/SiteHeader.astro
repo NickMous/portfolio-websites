@@ -68,6 +68,8 @@ const path = Astro.url.pathname;
             hreflang={l}
             lang={l}
             aria-label={ui('switchLanguage')}
+            data-umami-event="language-switch"
+            data-umami-event-to={l}
             class={`relative border-2 border-ink px-3 py-1.5 after:absolute after:-inset-y-[6px] after:inset-x-0 hover:bg-yellow-tint max-sm:py-2.5 ${edge}`}
           >
             {label}

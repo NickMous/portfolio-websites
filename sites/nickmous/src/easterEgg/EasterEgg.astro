@@ -8,9 +8,11 @@ const egg = t('easterEgg');
 <div id="easter-egg" hidden data-label={egg('label')} data-close={egg('close')}></div>
 
 <script>
+  import { track } from '@portfolio/ui-kit/analytics';
   import { listenForKonami } from './konami';
 
-  listenForKonami(async () => {
+  listenForKonami(async (input) => {
+    track('konami', { input });
     const el = document.getElementById('easter-egg');
     // Loaded only when someone finds the secret.
     const { showDroids } = await import('./droids');

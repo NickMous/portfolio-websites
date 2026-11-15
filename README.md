@@ -63,6 +63,12 @@ Every page loads Umami (analytics.nickmous.nl) through the shared
 The ids live in `packages/ui-kit/src/analytics.ts`. The scripts only load on
 the site's own domains, so dev servers and local builds are never counted.
 
+Events: a link or button gets `data-umami-event` (and `data-umami-event-*`
+for data); anything only the code knows goes through `track()` from
+`@portfolio/ui-kit/analytics`, which does nothing when the tracker is blocked.
+Links to other sites are tracked as `outbound-link` automatically. Never put
+personal data in an event (the guestbook sends only the result).
+
 ## Deploying
 
 Each site deploys when a GitHub release with its tag prefix is published

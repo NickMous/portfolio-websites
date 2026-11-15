@@ -87,6 +87,8 @@ const facts = (p: (typeof nowShowing)[number]) =>
         <RepoCard
           name={repo.name}
           href={repo.href}
+          data-umami-event="project-link"
+          data-umami-event-project={repo.name}
           tag={repoTags(repo.kind)}
           tagColor={repo.kind === 'package' ? 'yellow' : 'blue'}
         >

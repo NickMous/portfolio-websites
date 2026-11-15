@@ -39,6 +39,8 @@ const buildPick = names[Math.floor(Math.random() * names.length)];
 )}
 
 <script>
+  import { track } from '@portfolio/ui-kit/analytics';
+
   const root = document.querySelector<HTMLElement>('[data-get-lost]');
   const button = root?.querySelector<HTMLAnchorElement>('[data-get-lost-button]');
   const result = root?.querySelector<HTMLAnchorElement>('[data-get-lost-result]');
@@ -49,6 +51,7 @@ const buildPick = names[Math.floor(Math.random() * names.length)];
     let last = -1;
     button.addEventListener('click', (event) => {
       event.preventDefault();
+      track('get-me-lost');
       let pick = Math.floor(Math.random() * names.length);
       // Never the same fix twice in a row, so every click changes something.
       if (pick === last && names.length > 1) pick = (pick + 1) % names.length;

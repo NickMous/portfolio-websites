@@ -21,16 +21,20 @@ function isTyping(target: EventTarget | null): boolean {
   );
 }
 
+export type KonamiInput = 'keys' | 'touch';
+
 /** Calls `found` every time the code is entered; returns a function that stops listening. */
-export function listenForKonami(found: () => void): () => void {
+export function listenForKonami(found: (input: KonamiInput) => void): () => void {
   let recent: string[] = [];
 
   const add = (token: string) => {
     recent = [...recent, token].slice(-KEYS.length);
     const matches = (code: string[]) => code.every((t, i) => recent[i] === t);
-    if (recent.length === KEYS.length && (matches(KEYS) || matches(TOUCH))) {
+    if (recent.length < KEYS.length) return;
+    const input = matches(KEYS) ? 'keys' : matches(TOUCH) ? 'touch' : undefined;
+    if (input) {
       recent = [];
-      found();
+      found(input);
     }
   };
 

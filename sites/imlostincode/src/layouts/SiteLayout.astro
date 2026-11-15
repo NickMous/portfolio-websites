@@ -41,7 +41,10 @@ const links = [
   <slot />
   <SiteFooter site="imlostincode" slot="footer">
     <span slot="note">
-      {footer('stuck')} <a href={`mailto:${contactEmail}`}>{footer('tellMe')}</a>
+      {footer('stuck')}{' '}
+      <a href={`mailto:${contactEmail}`} data-umami-event="contact-email">
+        {footer('tellMe')}
+      </a>
     </span>
   </SiteFooter>
 </BaseLayout>

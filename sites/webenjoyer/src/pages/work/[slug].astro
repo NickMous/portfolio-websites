@@ -91,7 +91,19 @@ const shotPlaceholder =
           >
             <dt class="type-label">{fact ? fact.label : s('visit')}</dt>
             <dd class="font-display text-[32px] leading-tight font-black [overflow-wrap:anywhere] max-sm:text-[26px]">
-              {fact ? fact.value : p.url ? <a href={p.url}>{displayHost(p.url)} ↗</a> : '[URL]'}
+              {fact ? (
+                fact.value
+              ) : p.url ? (
+                <a
+                  href={p.url}
+                  data-umami-event="project-link"
+                  data-umami-event-project={project.id}
+                >
+                  {displayHost(p.url)} ↗
+                </a>
+              ) : (
+                '[URL]'
+              )}
             </dd>
           </div>
         ))}
