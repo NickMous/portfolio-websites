@@ -34,11 +34,14 @@ const s = t('docs');
   />
   {examples.map((e) => (
     <section id={docsUrls.exampleAnchor(e.slug)} class="flex scroll-mt-6 flex-col gap-3">
-      <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
         <h2 class="font-display text-[30px] leading-tight font-black [overflow-wrap:anywhere]">
           {e.slug}
         </h2>
-        <a href={`${fix.url}/blob/${e.ref}/${e.path}`} class="text-[14px] font-medium underline">
+        <a
+          href={`${fix.url}/blob/${e.ref}/${e.path}`}
+          class="inline-flex min-h-11 items-center text-[14px] font-medium underline"
+        >
           {s('viewOnGitHub')}
         </a>
       </div>

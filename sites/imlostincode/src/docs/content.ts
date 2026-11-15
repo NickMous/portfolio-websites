@@ -128,12 +128,31 @@ function rehypeRepoUrls(ctx: RenderContext) {
   };
 }
 
-/** The page title is the h1, so markdown headings move down one level (h6 stays). */
-function rehypeDemoteHeadings() {
+/**
+ * The page title is the h1, so the document's top heading level becomes h2,
+ * and no heading sits more than one level below the one before it.
+ */
+function rehypeHeadingLevels() {
+  return (tree: HastRoot) => {
+    const headings: Element[] = [];
+    visit(tree, 'element', (node: Element) => {
+      if (/^h[1-6]$/.test(node.tagName)) headings.push(node);
+    });
+    const top = Math.min(...headings.map((h) => Number(h.tagName[1])));
+    let previous = 1;
+    for (const heading of headings) {
+      const level = Math.min(Number(heading.tagName[1]) - top + 2, previous + 1, 6);
+      heading.tagName = `h${level}`;
+      previous = level;
+    }
+  };
+}
+
+/** Wide tables scroll sideways; focusable so that works from the keyboard too. */
+function rehypeFocusableTables() {
   return (tree: HastRoot) => {
     visit(tree, 'element', (node: Element) => {
-      const level = /^h([1-5])$/.exec(node.tagName)?.[1];
-      if (level) node.tagName = `h${Number(level) + 1}`;
+      if (node.tagName === 'table') node.properties.tabIndex = 0;
     });
   };
 }
@@ -190,7 +209,8 @@ export async function renderMarkdown(markdown: string, ctx: RenderContext): Prom
     .use(rehypeRaw)
     .use(rehypeRepoUrls, ctx)
     .use(rehypeSlug)
-    .use(rehypeDemoteHeadings)
+    .use(rehypeHeadingLevels)
+    .use(rehypeFocusableTables)
     .use(rehypeCodeFrame)
     .use(rehypeShiki, {
       theme: 'github-light',
