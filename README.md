@@ -82,3 +82,9 @@ Endpoints so far:
 - `GET /api/guestbook`: approved entries, newest first, 20 per page
 - `GET /api/steam`: game count, hours in the last two weeks and the six most
   recently played games; Steam is asked at most every 20 minutes
+- `GET /api/switch`: Switch 2 games entered by hand, most recently played first
+
+The backoffice is at `/admin` (user `admin`; locally the password is `admin`).
+It edits the Switch games and approves or deletes guestbook entries. In
+production the password hash comes from `ADMIN_PASSWORD_HASH`; make one with
+`php bin/console security:hash-password`.

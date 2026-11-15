@@ -5,6 +5,13 @@ framework:
     # Note that the session will be started ONLY if you read or write from it.
     session: true
 
+    # TLS ends at Cloudflare and the ingress; requests reach PHP as http from
+    # a cluster address. Trust the forwarded scheme/port from private ranges
+    # so the app sees https (CSRF origin check on login, generated links).
+    # Not the host: Symfony keeps checking the Host header itself.
+    trusted_proxies: 'private_ranges'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto', 'x-forwarded-port']
+
     #esi: true
     #fragments: true
 
