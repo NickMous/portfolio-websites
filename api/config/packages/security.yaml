@@ -1,37 +1,45 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # One account: Sander. The hash comes from the environment (app-secret
+        # in production); make one with `php bin/console security:hash-password`.
+        admin:
+            memory:
+                users:
+                    admin: { password: '%env(ADMIN_PASSWORD_HASH)%', roles: ['ROLE_ADMIN'] }
 
     firewalls:
         dev:
-            # Ensure dev tools and static assets are always allowed
             pattern: ^/(_profiler(/|$)|(_wdt|assets|build)/)
             security: false
+        # The backoffice is the only part with a login (and a session).
+        admin:
+            pattern: ^/(admin|login|logout)
+            provider: admin
+            form_login:
+                login_path: login
+                check_path: login
+                enable_csrf: true
+                default_target_path: admin
+            logout:
+                path: logout
+                target: login
+            login_throttling:
+                max_attempts: 5
+                interval: '15 minutes'
+        # The public API and the signed guestbook links need no login.
         main:
-            lazy: true
-            provider: users_in_memory
+            security: false
 
-            # Activate different ways to authenticate:
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Note: Only the *first* matching rule is applied
     access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:
         password_hashers:
-            # Password hashers are resource-intensive by design to ensure security.
-            # In tests, it's safe to reduce their cost to improve performance.
             Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt

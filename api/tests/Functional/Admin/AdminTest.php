@@ -10,7 +10,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\Security\Core\User\InMemoryUser;
 
 final class AdminTest extends WebTestCase
 {
@@ -28,7 +27,10 @@ final class AdminTest extends WebTestCase
 
     private function logIn(): void
     {
-        $this->client->loginUser(new InMemoryUser('admin', null, ['ROLE_ADMIN']), 'admin');
+        // The provider's own user: a different object (no hash) counts as a
+        // changed user and is logged out again on the next request.
+        $users = self::getContainer()->get('security.user.provider.concrete.admin');
+        $this->client->loginUser($users->loadUserByIdentifier('admin'), 'admin');
     }
 
     /** @return iterable<string, array{string}> */
@@ -50,11 +52,11 @@ final class AdminTest extends WebTestCase
     public function testLoggingInWithTheRightPasswordOpensTheAdmin(): void
     {
         $this->client->request('GET', '/login');
+        $this->client->followRedirects();
         $this->client->submitForm('Sign in', ['_username' => 'admin', '_password' => 'test-password']);
-        $this->client->followRedirect();
 
         self::assertResponseIsSuccessful();
-        self::assertSame('/admin', $this->client->getRequest()->getPathInfo());
+        self::assertStringStartsWith('/admin', $this->client->getRequest()->getPathInfo());
     }
 
     public function testAWrongPasswordIsRefused(): void
@@ -93,8 +95,10 @@ final class AdminTest extends WebTestCase
         $em->flush();
 
         $this->logIn();
-        $this->client->request('GET', '/admin/guestbook-entry');
-        $this->client->submitForm('Approve');
+        $page = $this->client->request('GET', '/admin/guestbook-entry');
+        // EasyAdmin renders the action as a link that submits a POST form by id.
+        $formId = $page->filter('a.action-approve')->attr('data-ea-action-form-id');
+        $this->client->submit($page->filter("form#$formId")->form());
 
         $em->clear();
         self::assertTrue($em->find(GuestbookEntry::class, $entry->getId())?->isApproved());
