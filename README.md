@@ -67,7 +67,8 @@ The Symfony app in `api/` needs PHP 8.5 (intl, pdo_pgsql) and Composer.
 ```sh
 cd api
 composer install
-docker compose up -d                 # Postgres on a random port, see `docker compose ps`
+docker compose up -d                 # Postgres; put its port (`docker compose port database 5432`)
+                                     # in DATABASE_URL in .env.local
 php bin/console doctrine:database:create --env=test
 php bin/console doctrine:migrations:migrate --env=test -n
 php bin/phpunit                      # unit + functional
