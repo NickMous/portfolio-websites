@@ -74,3 +74,9 @@ php bin/console doctrine:migrations:migrate --env=test -n
 php bin/phpunit                      # unit + functional
 vendor/bin/phpstan analyse
 ```
+
+Endpoints so far:
+
+- `POST /api/guestbook` (`name`, `message`): stored unapproved, and the
+  moderator gets an email with signed approve/delete links (valid 30 days)
+- `GET /api/guestbook`: approved entries, newest first, 20 per page
