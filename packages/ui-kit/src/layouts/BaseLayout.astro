@@ -1,5 +1,6 @@
 ---
 import AlternateLinks from '../components/AlternateLinks.astro';
+import Analytics from '../components/Analytics.astro';
 import Fonts from '../components/Fonts.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SiteHeader, { type NavLink } from '../components/SiteHeader.astro';
@@ -49,6 +50,7 @@ const ogImageUrl = ogImage ? new URL(ogImage, pageUrl).href : undefined;
     <meta name="twitter:card" content={ogImageUrl ? 'summary_large_image' : 'summary'} />
 
     <Fonts code={code} />
+    <Analytics site={site} />
     <slot name="head" />
   </head>
   <body>

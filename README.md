@@ -56,6 +56,13 @@ imlostincode reads its docs from GitHub at build time (public repos with the
 its `imlostincode.json` and the rebuild-on-release workflow:
 [docs/imlostincode-docs-repo.md](docs/imlostincode-docs-repo.md).
 
+### Analytics
+
+Every page loads Umami (analytics.nickmous.nl) through the shared
+`BaseLayout`: one Umami website per site, covering its .com and .nl domains.
+The ids live in `packages/ui-kit/src/analytics.ts`. The scripts only load on
+the site's own domains, so dev servers and local builds are never counted.
+
 ## Deploying
 
 Each site deploys when a GitHub release with its tag prefix is published
