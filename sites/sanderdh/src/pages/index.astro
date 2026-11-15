@@ -12,12 +12,7 @@ const doors = t('doors');
 
 <BaseLayout site="sanderdh" title={hub('title')} description={hub('description')}>
   <section class="container-page pt-6 pb-16">
-    <HeroHeadline
-      lines={[
-        { text: hub('greeting') },
-        { text: 'Sander.', block: 'green' },
-      ]}
-    />
+    <HeroHeadline lines={[{ text: hub('greeting') }, { text: 'Sander.', block: 'green' }]} />
     <p class="mt-10 max-w-[560px] type-intro">{hub('description')}</p>
   </section>
 
