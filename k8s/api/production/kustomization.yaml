@@ -46,7 +46,7 @@ images:
     # Flux's ImageUpdateAutomation rewrites this line (it looks for the
     # marker). The value below is only the bootstrap starting point until the
     # first api release is published.
-    newTag: api-00000000-0000-bootstrap # {"$imagepolicy": "flux-system:nickmous-api:tag"}
+    newTag: api-20261115-1622-api-v1.0.0 # {"$imagepolicy": "flux-system:nickmous-api:tag"}
   - name: app-nginx-image
     newName: ghcr.io/nickmous/symfony-k8s-deployment-kit
     newTag: nginx-latest
