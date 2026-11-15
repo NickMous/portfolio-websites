@@ -12,14 +12,20 @@ export interface LostProject {
 export const stillLost: LostProject[] = [
   {
     name: 'pico-leds-webserver',
-    dates: '[YEAR] – [YEAR]',
+    dates: '2024 – 2024',
     status: 'stillLost',
-    oneLiner: { en: '[ONE-LINER]', nl: '[ONE-LINER]' },
+    oneLiner: {
+      en: 'A Raspberry Pi Pico W that serves a web page for controlling an LED strip.',
+      nl: 'Een Raspberry Pi Pico W die een webpagina serveert om een ledstrip te bedienen.',
+    },
   },
   {
     name: 'CycleQuest',
-    dates: '[YEAR] – ?',
+    dates: '2024 – ?',
     status: 'beingFoundAgain',
-    oneLiner: { en: '[ONE-LINER]', nl: '[ONE-LINER]' },
+    oneLiner: {
+      en: 'A cycling puzzle trail for teams, with checkpoints and questions along the route. Version two, in Laravel.',
+      nl: 'Een fietspuzzeltocht voor teams, met checkpoints en vragen onderweg. Versie twee, in Laravel.',
+    },
   },
 ];
