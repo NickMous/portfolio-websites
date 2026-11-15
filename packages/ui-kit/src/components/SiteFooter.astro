@@ -43,7 +43,10 @@ const hasCta = Astro.slots.has('cta');
           <slot name="links">
             {otherSites(site).map((other) => (
               <li>
-                <a href={siteUrl(other, locale)} class="inline-block py-[10px] underline">
+                <a
+                  href={siteUrl(other, locale)}
+                  class="inline-flex min-h-11 items-center underline"
+                >
                   {sites[other].name} ↗
                 </a>
               </li>

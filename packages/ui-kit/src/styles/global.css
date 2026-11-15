@@ -19,8 +19,14 @@
     overflow-x: clip;
   }
 
+  /*
+   * Ink outline with a white ring in the gap: ink alone is only 2.8:1 on
+   * blue, white alone fails on white. Together one of them always reaches 3:1.
+   * The ring is a solid zero-blur box-shadow, not a drop shadow.
+   */
   :focus-visible {
     outline: 3px solid var(--color-ink);
     outline-offset: 3px;
+    box-shadow: 0 0 0 3px var(--color-white);
   }
 }

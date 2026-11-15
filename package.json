@@ -17,16 +17,20 @@
     "test:watch": "vitest",
     "dev:sanderdh": "npm run dev -w @portfolio/sanderdh",
     "build:sanderdh": "npm run build -w @portfolio/sanderdh",
-    "check": "npm run check --workspaces --if-present",
+    "check": "npm run check --workspaces --if-present && tsc -p tsconfig.scripts.json",
     "dev:playground": "npm run dev -w @portfolio/playground",
     "dev:webenjoyer": "npm run dev -w @portfolio/webenjoyer",
     "build:webenjoyer": "npm run build -w @portfolio/webenjoyer",
     "dev:imlostincode": "npm run dev -w @portfolio/imlostincode",
     "build:imlostincode": "npm run build -w @portfolio/imlostincode",
     "dev:nickmous": "npm run dev -w @portfolio/nickmous",
-    "build:nickmous": "npm run build -w @portfolio/nickmous"
+    "build:nickmous": "npm run build -w @portfolio/nickmous",
+    "a11y": "node scripts/a11y-audit.ts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "playwright": "^1.64.1",
+    "playwright-core": "^1.64.1",
     "prettier": "^3.10.1",
     "prettier-plugin-astro": "^1.1.2",
     "typescript": "^6.0.3",

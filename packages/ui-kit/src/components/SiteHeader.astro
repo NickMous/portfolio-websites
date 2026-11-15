@@ -23,7 +23,7 @@ const path = Astro.url.pathname;
 <header class="relative container-page flex flex-wrap items-center justify-between gap-4 py-6 max-sm:py-4">
   <a
     href="/"
-    class="font-display text-[34px] leading-none font-black tracking-[0.5px] max-sm:text-[28px]"
+    class="inline-flex min-h-11 items-center font-display text-[34px] leading-none font-black tracking-[0.5px] max-sm:text-[28px]"
   >
     {sites[site].name}
   </a>
@@ -40,7 +40,7 @@ const path = Astro.url.pathname;
             <li class="max-sm:border-b-2 max-sm:border-dashed max-sm:border-ink max-sm:last:border-b-0">
               <a
                 href={link.href}
-                class="block py-[10px] font-medium hover:underline max-sm:py-4 max-sm:font-display max-sm:text-[32px] max-sm:leading-none max-sm:font-black max-sm:uppercase"
+                class="flex min-h-11 min-w-11 items-center py-[10px] font-medium hover:underline max-sm:py-4 max-sm:font-display max-sm:text-[32px] max-sm:leading-none max-sm:font-black max-sm:uppercase"
               >
                 {link.label}
               </a>
@@ -67,7 +67,7 @@ const path = Astro.url.pathname;
             href={alternateUrl(site, locale, path)}
             hreflang={l}
             lang={l}
-            aria-label={ui('switchLanguage')}
+            aria-label={`${label}, ${ui('switchLanguage')}`}
             data-umami-event="language-switch"
             data-umami-event-to={l}
             class={`relative border-2 border-ink px-3 py-1.5 after:absolute after:-inset-y-[6px] after:inset-x-0 hover:bg-yellow-tint max-sm:py-2.5 ${edge}`}
@@ -122,7 +122,11 @@ const path = Astro.url.pathname;
     };
 
     button.addEventListener('click', () => {
-      setOpen(button.getAttribute('aria-expanded') !== 'true');
+      const open = button.getAttribute('aria-expanded') !== 'true';
+      setOpen(open);
+      // The menu comes before the button in the page, so Tab would skip it:
+      // move focus to its first link instead.
+      if (open) nav.querySelector('a')?.focus();
     });
 
     document.addEventListener('keydown', (event) => {

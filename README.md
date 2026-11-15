@@ -31,6 +31,7 @@ npm run build            # astro check + build every site, both locales
 npm run build:sanderdh   # build one site
 npm test                 # Vitest across all workspaces
 npm run format           # Prettier
+npm run a11y             # accessibility audit of the built sites (after npm run build)
 npm run favicons -w @portfolio/ui-kit  # regenerate every site's favicons
 ```
 

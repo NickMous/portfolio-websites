@@ -60,7 +60,7 @@ const shotPlaceholder =
     <div class="container-page pt-14 max-sm:pt-8">
       <a
         href="/#work"
-        class="inline-block py-[10px] text-[15px] font-bold no-underline hover:underline"
+        class="inline-flex min-h-11 items-center text-[15px] font-bold no-underline hover:underline"
       >
         {s('allPosters')}
       </a>
@@ -102,6 +102,7 @@ const shotPlaceholder =
                   href={p.url}
                   data-umami-event="project-link"
                   data-umami-event-project={project.id}
+                  class="inline-flex min-h-11 items-center"
                 >
                   {displayHost(p.url)} ↗
                 </a>

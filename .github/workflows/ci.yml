@@ -45,6 +45,13 @@ jobs:
       - name: Build all sites
         run: npm run build
 
+      # axe (WCAG 2.2 AA), 44px touch targets and keyboard focus on every
+      # built page, see scripts/a11y-audit.ts.
+      - name: Accessibility audit
+        run: |
+          npx playwright install --with-deps --only-shell chromium
+          npm run a11y
+
       # Flux applies these; catching a broken overlay here beats a red
       # Kustomization in the cluster.
       - name: Render Kubernetes overlays
