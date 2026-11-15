@@ -1,0 +1,35 @@
+title: Lanivo
+kind: client
+status: live
+featured: true
+order: 4
+year: 2025
+url: https://lanivo.nl
+stack: [Astro, Tailwind CSS, Alpine.js]
+posterColor: green
+screenshots:
+  - ../../assets/work/lanivo-home.webp
+  - ../../assets/work/lanivo-detail.webp
+phoneScreenshot: ../../assets/work/lanivo-phone.webp
+tagline:
+  en: Business site · Astro
+  nl: Bedrijfssite · Astro
+oneLiner:
+  en: A one-page site for an interim facility management firm, with a contact form that lands straight in the inbox.
+  nl: Een onepager voor een bureau in interim facility management, met een contactformulier dat direct in de inbox landt.
+type:
+  en: Business site
+  nl: Bedrijfssite
+intro:
+  en: Tell organisations what Lanivo does, and make getting in touch one short form away.
+  nl: Organisaties vertellen wat Lanivo doet, en contact opnemen één kort formulier ver maken.
+whatItIs:
+  en: Lanivo is an interim facility management firm, founded in 2018 by Michel de Groot. Organisations visit the site to see what Lanivo can take off their hands, who Michel is, and how to reach him.
+  nl: Lanivo is een bureau in interim facility management, in 2018 opgericht door Michel de Groot. Organisaties bezoeken de site om te zien wat Lanivo uit handen kan nemen, wie Michel is en hoe ze hem bereiken.
+whatIBuilt:
+  - en: One page with the services, the story behind Lanivo and contact details, with a menu that jumps to each part
+    nl: Eén pagina met de diensten, het verhaal achter Lanivo en de contactgegevens, met een menu dat naar elk deel springt
+  - en: A contact form that emails each message to Lanivo, with the visitor as the reply-to address
+    nl: Een contactformulier dat elk bericht naar Lanivo mailt, met de bezoeker als antwoordadres
+  - en: SEO basics, a sitemap and cookieless analytics
+    nl: SEO-basis, een sitemap en analytics zonder cookies
