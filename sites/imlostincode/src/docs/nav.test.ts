@@ -78,13 +78,17 @@ describe('exampleGroups', () => {
     expect(groups.map((g) => g.folder)).toEqual(['a', 'a/c', 'a-b']);
   });
 
-  it('lists a folder that only holds folders, so the tree has no gaps', () => {
-    const groups = exampleGroups([file('k8s/prod/patches/a.yaml')]);
+  it('folds folders without files of their own into the next folder that has some', () => {
+    const groups = exampleGroups([
+      file('k8s/prod/patches/a.yaml'),
+      file('k8s/prod/patches/extra/b.yaml'),
+      file('k8s/dev/c.yaml'),
+    ]);
 
-    expect(groups.map((g) => [g.name, g.depth, g.files.length])).toEqual([
-      ['k8s', 0, 0],
-      ['prod', 1, 0],
-      ['patches', 2, 1],
+    expect(groups.map((g) => [g.folder, g.name, g.depth])).toEqual([
+      ['k8s/dev', 'k8s/dev', 0],
+      ['k8s/prod/patches', 'k8s/prod/patches', 0],
+      ['k8s/prod/patches/extra', 'extra', 1],
     ]);
   });
 });

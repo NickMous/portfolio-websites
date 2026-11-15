@@ -41,24 +41,24 @@ export function prevNext<P extends PageRef>(
 export interface ExampleGroup<P> {
   /** Folder path inside examples/, "" for files at its root. */
   folder: string;
-  /** Last part of the folder path, shown in the tree. */
+  /** Path from the group it sits in, shown in the tree. */
   name: string;
-  /** Nesting depth: 0 for top-level folders. */
+  /** Nesting depth: 0 for groups not inside another group. */
   depth: number;
   files: (P & { name: string })[];
 }
 
 /**
  * Example files as a folder tree, in display order: loose files first, then
- * folders by path. Folders that only hold folders get a group too.
+ * folders by path. A folder without files of its own gets no group; its name
+ * goes into the next folder down that has files ("k8s/prod/patches").
  */
 export function exampleGroups<P extends PageRef>(examples: P[]): ExampleGroup<P>[] {
   const groups = new Map<string, ExampleGroup<P>>();
   const group = (folder: string) => {
     let g = groups.get(folder);
     if (!g) {
-      const parts = folder.split('/');
-      g = { folder, name: folder ? parts.at(-1)! : '', depth: parts.length - 1, files: [] };
+      g = { folder, name: folder, depth: 0, files: [] };
       groups.set(folder, g);
     }
     return g;
@@ -66,11 +66,20 @@ export function exampleGroups<P extends PageRef>(examples: P[]): ExampleGroup<P>
   for (const p of examples) {
     const cut = p.slug.lastIndexOf('/');
     const folder = cut === -1 ? '' : p.slug.slice(0, cut);
-    const parts = folder ? folder.split('/') : [];
-    parts.forEach((_, i) => group(parts.slice(0, i + 1).join('/')));
     group(folder).files.push({ ...p, name: p.slug.slice(cut + 1) });
   }
-  for (const g of groups.values()) g.files.sort((a, b) => a.name.localeCompare(b.name));
+  for (const g of groups.values()) {
+    g.files.sort((a, b) => a.name.localeCompare(b.name));
+    // Name and depth relative to the closest folder above that has a group.
+    const parts = g.folder ? g.folder.split('/') : [];
+    const parents = parts
+      .slice(0, -1)
+      .map((_, i) => parts.slice(0, i + 1).join('/'))
+      .filter((p) => groups.has(p));
+    const parent = parents.at(-1);
+    g.depth = parents.length;
+    if (parent) g.name = g.folder.slice(parent.length + 1);
+  }
   // Segment by segment, so "a/c" sorts right after "a" and before "a-b".
   const byPath = (a: ExampleGroup<P>, b: ExampleGroup<P>) => {
     const x = a.folder ? a.folder.split('/') : [];
