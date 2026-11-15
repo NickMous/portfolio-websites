@@ -1,0 +1,12 @@
+# Traefik CRDs are unknown to kustomize's built-in name references, so
+# without this namePrefix renames the Service and Middlewares but leaves the
+# IngressRoute pointing at the old names.
+nameReference:
+  - kind: Service
+    fieldSpecs:
+      - path: spec/routes/services/name
+        kind: IngressRoute
+  - kind: Middleware
+    fieldSpecs:
+      - path: spec/routes/middlewares/name
+        kind: IngressRoute
