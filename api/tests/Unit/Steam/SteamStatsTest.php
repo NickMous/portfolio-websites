@@ -35,7 +35,7 @@ final class SteamStatsTest extends TestCase
         $this->steam = new SteamStats($http, new ArrayAdapter(), $this->clock, 'SECRET-KEY', '76561190000000000');
     }
 
-    /** @param array<string, mixed> $game */
+    /** @return array<string, mixed> */
     private function game(int $appId, string $name, int $minutes, int $minutesTwoWeeks = 0, string $lastPlayed = ''): array
     {
         return [

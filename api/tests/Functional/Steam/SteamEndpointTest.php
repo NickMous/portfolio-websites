@@ -36,7 +36,9 @@ final class SteamEndpointTest extends WebTestCase
         self::assertResponseHeaderSame('Content-Type', 'application/json');
         self::assertResponseHeaderSame('Cache-Control', 'max-age=300, public');
         $body = (string) $client->getResponse()->getContent();
-        self::assertSame(3, json_decode($body, true, flags: \JSON_THROW_ON_ERROR)['gameCount'] ?? null);
+        /** @var array{gameCount: int} $stats */
+        $stats = json_decode($body, true, flags: \JSON_THROW_ON_ERROR);
+        self::assertSame(3, $stats['gameCount']);
         self::assertStringNotContainsString('SECRET-KEY', $body);
     }
 

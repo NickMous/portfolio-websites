@@ -1,0 +1,10 @@
+framework:
+    http_client:
+        scoped_clients:
+            steam.client:
+                base_uri: 'https://api.steampowered.com'
+                timeout: 5
+    cache:
+        pools:
+            cache.steam:
+                adapter: cache.app
