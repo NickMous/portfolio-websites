@@ -1,3 +1,3 @@
-/** Contact details shared by all sites. Placeholder until Sander fills it in (#2). */
-export const contactEmail = '[YOUR EMAIL]';
+/** Contact details shared by all sites. */
+export const contactEmail = 'sander@webenjoyer.com';
 export const githubUrl = 'https://github.com/NickMous';
