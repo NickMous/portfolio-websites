@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import { selectVersions, type GitHubRelease } from './versions';
+import { changelogEntries, selectVersions, type GitHubRelease } from './versions';
 
 const release = (tag_name: string, data: Partial<GitHubRelease> = {}): GitHubRelease => ({
   tag_name,
+  name: null,
+  body: null,
+  published_at: '2026-01-01T00:00:00Z',
   draft: false,
   prerelease: false,
   ...data,
@@ -68,5 +71,40 @@ describe('selectVersions', () => {
     const { versions } = selectVersions([], 'master');
 
     expect(versions[0]).toMatchObject({ id: 'main', ref: 'master' });
+  });
+});
+
+describe('changelogEntries', () => {
+  it('lists published releases newest first, each with the docs version it belongs to', () => {
+    const entries = changelogEntries([
+      release('v1.9.0', {
+        name: 'netstation 1.9.0',
+        body: 'Old',
+        published_at: '2026-02-01T10:00:00Z',
+      }),
+      release('v1.10.1', { body: 'Fix', published_at: '2026-03-02T10:00:00Z' }),
+      release('v1.10.0', { body: 'New', published_at: '2026-03-01T10:00:00Z' }),
+    ]);
+
+    expect(entries).toEqual([
+      { tag: 'v1.10.1', name: 'v1.10.1', date: '2026-03-02', version: '1.10', notes: 'Fix' },
+      { tag: 'v1.10.0', name: 'v1.10.0', date: '2026-03-01', version: '1.10', notes: 'New' },
+      { tag: 'v1.9.0', name: 'netstation 1.9.0', date: '2026-02-01', version: '1.9', notes: 'Old' },
+    ]);
+  });
+
+  it('skips the releases that never become a docs version', () => {
+    const entries = changelogEntries([
+      release('v1.0.0'),
+      release('v1.1.0', { draft: true }),
+      release('v1.2.0', { prerelease: true }),
+      release('nightly'),
+    ]);
+
+    expect(entries.map((e) => e.tag)).toEqual(['v1.0.0']);
+  });
+
+  it('gives a release without notes empty notes', () => {
+    expect(changelogEntries([release('v1.0.0')])[0]?.notes).toBe('');
   });
 });

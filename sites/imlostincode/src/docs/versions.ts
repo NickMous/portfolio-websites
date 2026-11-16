@@ -1,6 +1,9 @@
 /** The fields we use from GitHub's release listing. */
 export interface GitHubRelease {
   tag_name: string;
+  name: string | null;
+  body: string | null;
+  published_at: string | null;
   draft: boolean;
   prerelease: boolean;
 }
@@ -53,4 +56,37 @@ export function selectVersions(releases: GitHubRelease[], mainBranch = 'main'): 
     versions: [{ id: 'main', ref: mainBranch, unreleased: true }, ...released],
     defaultVersion: released[0]?.id ?? 'main',
   };
+}
+
+export interface ChangelogEntry {
+  tag: string;
+  /** The release title, or the tag when it has none. */
+  name: string;
+  /** Publish date, YYYY-MM-DD. */
+  date: string;
+  /** The docs version (major.minor) this release belongs to. */
+  version: string;
+  /** Release notes as written on GitHub (markdown). */
+  notes: string;
+}
+
+/** The releases that are docs versions, newest first, for the changelog. */
+export function changelogEntries(releases: GitHubRelease[]): ChangelogEntry[] {
+  return releases
+    .flatMap((release) => {
+      const match = SEMVER.exec(release.tag_name);
+      if (release.draft || release.prerelease || !match) return [];
+      const parts = [Number(match[1]), Number(match[2]), Number(match[3])];
+      return [{ release, parts }];
+    })
+    .sort(
+      (a, b) => b.parts[0]! - a.parts[0]! || b.parts[1]! - a.parts[1]! || b.parts[2]! - a.parts[2]!,
+    )
+    .map(({ release, parts }) => ({
+      tag: release.tag_name,
+      name: release.name?.trim() || release.tag_name,
+      date: (release.published_at ?? '').slice(0, 10),
+      version: `${parts[0]}.${parts[1]}`,
+      notes: release.body?.trim() ?? '',
+    }));
 }
