@@ -4,7 +4,8 @@
  *   npm run a11y                      # every site, both locales
  *   npm run a11y -- nickmous          # one site
  *
- * For each page, at phone and desktop width:
+ * For each page (a few example file pages per docs version, which share one
+ * template), at phone and desktop width, several pages at a time:
  * - axe-core: WCAG 2.2 A/AA plus best practices
  * - touch targets under 44×44 px (links inside running text are exempt)
  * - keyboard: Tab through the page; every stop needs a visible focus
@@ -17,12 +18,17 @@ import { createReadStream, existsSync, readFileSync, readdirSync, statSync } fro
 import { createServer, type Server } from 'node:http';
 import { extname, join } from 'node:path';
 import { chromium, type Page } from 'playwright';
+import { pool, samplePages } from './a11y-pages.ts';
 
 const SITES = ['sanderdh', 'webenjoyer', 'imlostincode', 'nickmous'];
 const LOCALES = ['en', 'nl'];
 const WIDTHS = [390, 1280];
 const MIN_TARGET = 44;
 const MIN_FOCUS_CONTRAST = 3;
+// Pages audited at once, each in its own browser context.
+const CONCURRENCY = 6;
+// Example file pages audited per repo and version; they all share one template.
+const EXAMPLES_PER_VERSION = 3;
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8',
@@ -190,17 +196,17 @@ async function main() {
       if (!existsSync(dir)) throw new Error(`${dir} missing: run npm run build first`);
       const { server, port } = await serve(dir);
       try {
-        for (const path of pages(dir)) {
-          for (const width of WIDTHS) {
-            const context = await browser.newContext({ viewport: { width, height: 900 } });
+        const views = samplePages(pages(dir).sort(), EXAMPLES_PER_VERSION).flatMap((path) =>
+          WIDTHS.map((width) => ({ path, width })),
+        );
+        await pool(views, CONCURRENCY, async ({ path, width }) => {
+          const context = await browser.newContext({ viewport: { width, height: 900 } });
+          try {
             const page = await context.newPage();
             // The API is not part of this audit; fail fast instead of waiting.
             await page.route(/api\.nickmous\.com/, (route) => route.abort());
             await page.goto(`http://localhost:${port}${path}`, { waitUntil: 'load' });
-            if (await page.locator('meta[http-equiv="refresh"]').count()) {
-              await context.close();
-              continue;
-            }
+            if (await page.locator('meta[http-equiv="refresh"]').count()) return;
             pageCount++;
             const axe = await new AxeBuilder({ page })
               .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'])
@@ -220,9 +226,10 @@ async function main() {
               if (!results.has(key)) results.set(key, new Set());
               results.get(key)!.add(`${locale}${path}@${width}`);
             }
+          } finally {
             await context.close();
           }
-        }
+        });
       } finally {
         server.close();
       }
