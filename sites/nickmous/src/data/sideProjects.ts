@@ -22,13 +22,23 @@ export const sideProjects: SideProject[] = [
     },
   },
   {
-    title: '[Project]',
+    title: 'netstation',
+    keepCase: true,
+    href: 'https://github.com/NickMous/netstation',
     color: 'blue',
-    oneLiner: { en: '[One line about it]', nl: '[One line about it]' },
+    oneLiner: {
+      en: 'Thin clients that boot over the network and start fresh every time.',
+      nl: 'Thin clients die via het netwerk opstarten en elke keer schoon beginnen.',
+    },
   },
   {
-    title: '[Project]',
+    title: 'Environment-Switcher',
+    keepCase: true,
+    href: 'https://github.com/NickMous/Environment-Switcher',
     color: 'red',
-    oneLiner: { en: '[One line about it]', nl: '[One line about it]' },
+    oneLiner: {
+      en: "A browser extension that opens the page you're on in another environment, like local or live, with one click.",
+      nl: 'Een browserextensie die de pagina waar je bent met één klik in een andere omgeving opent, zoals lokaal of live.',
+    },
   },
 ];

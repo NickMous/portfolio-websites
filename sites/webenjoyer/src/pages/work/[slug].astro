@@ -102,7 +102,7 @@ const shotPlaceholder =
                   href={p.url}
                   data-umami-event="project-link"
                   data-umami-event-project={project.id}
-                  class="inline-flex min-h-11 items-center"
+                  class="inline-flex min-h-11 items-center lg:whitespace-nowrap"
                 >
                   {displayHost(p.url)} ↗
                 </a>
@@ -124,6 +124,8 @@ const shotPlaceholder =
           alt={p.title}
           widths={[640, 1200, 2272]}
           sizes="(max-width: 1264px) 100vw, 1136px"
+          loading="eager"
+          fetchpriority="high"
           class="h-[560px] w-full border-3 border-ink object-cover object-top max-sm:h-[240px]"
         />
       ) : (

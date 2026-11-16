@@ -5,5 +5,5 @@ order: 1
 group: false
 posterColor: green
 oneLiner:
-  en: '[ONE-LINER]'
-  nl: '[ONE-LINER]'
+  en: A package manager project, with a Spring Boot backend and a Next.js front end.
+  nl: Een package manager-project, met een Spring Boot-backend en een Next.js-frontend.

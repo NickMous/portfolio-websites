@@ -4,27 +4,35 @@ kind: client
 status: live
 featured: true
 order: 2
+year: 2026
 url: https://clubvanooitwoerden.nl
+stack: [Astro, Tailwind CSS, Directus]
 posterColor: white
+screenshots:
+  - ../../assets/work/clubvanooitwoerden-home.webp
+  - ../../assets/work/clubvanooitwoerden-detail.webp
+phoneScreenshot: ../../assets/work/clubvanooitwoerden-phone.webp
 tagline:
-  en: Local stories, every week
-  nl: Lokale verhalen, elke week
+  en: Stories about Woerden, every month
+  nl: Verhalen over Woerden, elke maand
 oneLiner:
-  en: '[ONE-LINER]'
-  nl: '[ONE-LINER]'
+  en: A site for Stichting Club van Ooit in Woerden, with every presentation and collector card in one place.
+  nl: Een site voor Stichting Club van Ooit in Woerden, met alle presentaties en verzamelkaarten op één plek.
 type:
-  en: '[TYPE]'
-  nl: '[TYPE]'
+  en: Foundation site with CMS
+  nl: Stichtingssite met CMS
 intro:
-  en: '[One sentence: what the site is for, in your own words]'
-  nl: '[One sentence: what the site is for, in your own words]'
+  en: The place to see what the next presentation is about, and to look back at the ones before.
+  nl: De plek om te zien waar de volgende presentatie over gaat, en om terug te kijken naar de vorige.
 whatItIs:
-  en: '[2–3 sentences: what it is, who visits the site, what they come for]'
-  nl: '[2–3 sentences: what it is, who visits the site, what they come for]'
+  en: Stichting Club van Ooit has been around since 1996 and hosts free afternoon presentations about the history of Woerden, from September to April. Visitors come to see what's next, where and when, and to find the collector card that belongs to each presentation.
+  nl: Stichting Club van Ooit bestaat sinds 1996 en organiseert gratis middagpresentaties over de geschiedenis van Woerden, van september tot april. Bezoekers komen kijken wat er als volgende op het programma staat, waar en wanneer, en zoeken de verzamelkaart die bij elke presentatie hoort.
 whatIBuilt:
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
+  - en: The foundation edits everything itself in Directus, with a live preview of drafts before they go online
+    nl: De stichting beheert alles zelf in Directus, met een live preview van concepten voordat ze online gaan
+  - en: A digital collector card per presentation, front and back, that only appears from its release date
+    nl: Een digitale verzamelkaart per presentatie, voor- en achterkant, die pas vanaf de uitgiftedatum verschijnt
+  - en: Presentations grouped by season, with the next one front and centre on the homepage
+    nl: Presentaties per seizoen, met de eerstvolgende vooraan op de homepage
+  - en: Structured data, so search engines see every presentation as an event
+    nl: Gestructureerde data, zodat zoekmachines elke presentatie als evenement zien

@@ -4,28 +4,37 @@ kind: client
 status: live
 featured: true
 order: 1
+year: 2025
 url: https://oktoberfestwoerden.nl
-stack: [Astro]
+stack: [Astro, Tailwind CSS]
 posterColor: yellow
+screenshots:
+  - ../../assets/work/oktoberfestwoerden-home.webp
+  - ../../assets/work/oktoberfestwoerden-detail.webp
+phoneScreenshot: ../../assets/work/oktoberfestwoerden-phone.webp
 tagline:
   en: Event site · Astro
   nl: Evenementensite · Astro
 oneLiner:
-  en: '[ONE-LINER]'
-  nl: '[ONE-LINER]'
+  en: The site for Oktoberfest Woerden, in five languages, with a countdown, the line-up and everything sponsors need.
+  nl: De site van Oktoberfest Woerden, in vijf talen, met een countdown, de line-up en alles wat sponsors nodig hebben.
 type:
   en: Event site
   nl: Evenementensite
 intro:
-  en: '[One sentence: what the site is for, in your own words]'
-  nl: '[One sentence: what the site is for, in your own words]'
+  en: Everything you need to know before Oktoberfest Woerden, on one page.
+  nl: Alles wat je moet weten vóór Oktoberfest Woerden, op één pagina.
 whatItIs:
-  en: '[2–3 sentences: the event, who visits the site, what they come for]'
-  nl: '[2–3 sentences: the event, who visits the site, what they come for]'
+  en: Oktoberfest Woerden is a yearly party with live acts and DJs. Visitors come for the date, the headliners and the programme. Local businesses come for the party too, and get something extra with a sponsor package.
+  nl: Oktoberfest Woerden is een jaarlijks feest met live acts en dj's. Bezoekers komen voor de datum, de headliners en het programma. Lokale bedrijven komen ook voor het feest, en krijgen er met een sponsorpakket iets extra's bij.
 whatIBuilt:
   - en: Rebuilt the whole site in Astro
     nl: De hele site opnieuw gebouwd in Astro
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
-  - en: '[Feature or detail]'
-    nl: '[Feature or detail]'
+  - en: Five languages (Dutch, English, German, Polish and Ukrainian) with a language switcher
+    nl: Vijf talen (Nederlands, Engels, Duits, Pools en Oekraïens) met een taalkeuze
+  - en: A countdown to the party, the headliners, the programme and a sponsoring page
+    nl: Een countdown naar het feest, de headliners, het programma en een sponsorpagina
+  - en: Slides for the screens at the event, exported straight from the site
+    nl: Slides voor de schermen op het evenement, direct vanuit de site geëxporteerd
+  - en: Cookieless analytics, so there's no cookie banner
+    nl: Analytics zonder cookies, dus geen cookiebanner

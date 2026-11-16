@@ -62,7 +62,8 @@ const facts = (p: (typeof nowShowing)[number]) =>
               {...(status ? { status } : {})}
               {...(image ? { image, imageAlt: p.data.title } : {})}
               facts={facts(p)}
-              class="flex-[1_1_320px]"
+              // Even counts pair up (2 × 2) instead of leaving one poster stretched alone.
+              class={nowShowing.length % 2 === 0 ? 'flex-[1_1_420px]' : 'flex-[1_1_320px]'}
             />
           );
         })}
