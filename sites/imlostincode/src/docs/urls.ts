@@ -21,6 +21,8 @@ export const docsUrls = {
   /** One example file, at its path inside examples/. */
   example: (repo: string, version: string, path: string) =>
     `/${repo}/examples/${version}/${examplePath(path)}/`,
+  /** Every release of the repo with its notes. */
+  changelog: (repo: string) => `/${repo}/changelog/`,
   /** Anchor of a folder group on the examples index. */
   exampleAnchor: (path: string) =>
     `example-${path

@@ -4,13 +4,21 @@ import { api, listDocsRepos, rawFile } from './github';
 import { OWNER } from './owner';
 import type { RepoConfig } from './repos';
 import { docsUrls, exampleLink } from './urls';
-import { selectVersions, type DocsVersion, type GitHubRelease } from './versions';
+import {
+  changelogEntries,
+  selectVersions,
+  type ChangelogEntry,
+  type DocsVersion,
+  type GitHubRelease,
+} from './versions';
 
 export interface Fix extends RepoConfig {
   name: string;
   url: string;
   versions: DocsVersion[];
   defaultVersion: string;
+  /** Published releases, newest first, with their notes as HTML. */
+  changelog: (Omit<ChangelogEntry, 'notes'> & { html: string })[];
 }
 
 export interface DocsPage {
@@ -132,6 +140,30 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
   return Promise.all(pages);
 }
 
+/** Release notes sit under the release's own h2 on the changelog page. */
+function renderNotes(
+  repo: string,
+  entry: Omit<ChangelogEntry, 'notes'>,
+  defaultVersion: string,
+  notes: string,
+): Promise<string> {
+  const { version, tag } = entry;
+  return renderMarkdown(
+    notes,
+    {
+      repo,
+      ref: tag,
+      filePath: 'CHANGELOG.md',
+      urls: {
+        overview: () => docsUrls.overview(repo, version, defaultVersion),
+        doc: (slug) => docsUrls.doc(repo, version, slug),
+        example: (path) => exampleLink(repo, version, path, new Set()),
+      },
+    },
+    { topLevel: 3 },
+  );
+}
+
 /** Everything both collections need, fetched once per build. */
 let everything: Promise<{ fixes: Fix[]; pages: DocsPage[] }> | undefined;
 
@@ -143,7 +175,20 @@ function loadEverything() {
           `/repos/${OWNER}/${repo.name}/releases?per_page=100`,
         );
         const { versions, defaultVersion } = selectVersions(releases, repo.default_branch);
-        return { name: repo.name, url: repo.html_url, ...config, versions, defaultVersion };
+        const changelog = await Promise.all(
+          changelogEntries(releases).map(async ({ notes, ...entry }) => ({
+            ...entry,
+            html: notes ? await renderNotes(repo.name, entry, defaultVersion, notes) : '',
+          })),
+        );
+        return {
+          name: repo.name,
+          url: repo.html_url,
+          ...config,
+          versions,
+          defaultVersion,
+          changelog,
+        };
       }),
     );
     const pages = (

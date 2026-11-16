@@ -147,6 +147,17 @@ describe('renderMarkdown headings', () => {
   });
 });
 
+describe('renderMarkdown heading start', () => {
+  it('can start lower, for notes under a heading of their own', async () => {
+    const html = await renderMarkdown("## What's Changed\n\n### Fixes", ctx('README.md'), {
+      topLevel: 3,
+    });
+
+    expect(html).toContain('<h3 id="whats-changed">');
+    expect(html).toContain('<h4 id="fixes">');
+  });
+});
+
 describe('renderMarkdown tables', () => {
   it('makes tables focusable, so keyboard users can scroll wide ones', async () => {
     const html = await renderMarkdown('| a | b |\n| - | - |\n| 1 | 2 |', ctx('README.md'));

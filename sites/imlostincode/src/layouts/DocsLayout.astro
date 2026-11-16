@@ -13,9 +13,11 @@ interface Props {
   /** The page being shown; the examples index passes an example with slug "". */
   current: PageRef;
   title: string;
+  /** The changelog page: one per repo, outside the versions (pass the default version as current). */
+  changelog?: boolean;
 }
 
-const { fix, pages, current, title } = Astro.props;
+const { fix, pages, current, title, changelog = false } = Astro.props;
 const s = t('docs');
 const { name, versions, defaultVersion } = fix;
 const version = versions.find((v) => v.id === current.version)!;
@@ -62,6 +64,11 @@ const tabs = [
     section: 'example',
     label: s('examples'),
     url: docsUrls.examples(name, current.version),
+  },
+  fix.changelog.length > 0 && {
+    section: 'changelog',
+    label: s('changelog'),
+    url: docsUrls.changelog(name),
   },
 ].filter((tab) => !!tab);
 
@@ -117,7 +124,7 @@ const header = {
       </div>
       <nav aria-label={s('projectNav')} class="mt-8 flex flex-wrap gap-1 max-sm:mt-6">
         {tabs.map((tab) => {
-          const active = tab.section === current.section;
+          const active = changelog ? tab.section === 'changelog' : tab.section === current.section;
           return (
             <a
               href={tab.url}
@@ -132,7 +139,7 @@ const header = {
           );
         })}
         <a
-          href={`${fix.url}/tree/${version.ref}`}
+          href={changelog ? `${fix.url}/releases` : `${fix.url}/tree/${version.ref}`}
           target="_blank"
           rel="noopener"
           class="ml-auto px-5 py-3 text-[16px] font-bold no-underline hover:underline max-sm:ml-0 max-sm:px-3.5"
@@ -143,7 +150,7 @@ const header = {
     </div>
   </section>
 
-  {version.unreleased && (
+  {version.unreleased && !changelog && (
     <div class="border-b-3 border-ink bg-yellow">
       <div class="container-page flex flex-wrap items-center gap-x-4 gap-y-2 py-3.5 text-[16px] max-sm:text-[15px]">
         <span class="bg-ink px-[9px] py-1 text-[13px] font-bold text-yellow uppercase">

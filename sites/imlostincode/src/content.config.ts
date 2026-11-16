@@ -16,6 +16,15 @@ const fixes = defineCollection({
     oneLiner: z.object({ en: z.string(), nl: z.string() }),
     versions: z.array(version),
     defaultVersion: z.string(),
+    changelog: z.array(
+      z.object({
+        tag: z.string(),
+        name: z.string(),
+        date: z.string(),
+        version: z.string(),
+        html: z.string(),
+      }),
+    ),
   }),
 });
 
