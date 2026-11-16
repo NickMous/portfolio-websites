@@ -37,15 +37,11 @@ const fixes = (await getCollection('fixes')).sort((a, b) => a.id.localeCompare(b
       <div class="text-white">
         <SectionHead title={sections('fixes')}>{sections('fixesIntro')}</SectionHead>
       </div>
-      {fixes.length > 0 ? (
-        <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-7 max-sm:grid-cols-1 max-sm:gap-5">
-          {fixes.map((fix) => (
-            <FixCard {fix} />
-          ))}
-        </div>
-      ) : (
-        <p class="text-[17px] font-bold text-white">{sections('noFixes')}</p>
-      )}
+      <div class="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-7 max-sm:grid-cols-1 max-sm:gap-5">
+        {fixes.map((fix) => (
+          <FixCard {fix} />
+        ))}
+      </div>
     </div>
   </section>
 

@@ -22,11 +22,11 @@ export default {
     workNote: 'Op zoek naar het werk? Dat staat op',
   },
   sections: {
-    sideProjects: 'Zijprojecten',
-    sideProjectsIntro: 'Dingen die ik voor mezelf bouw. Klantwerk staat op',
-    notCoding: 'Als ik niet aan het coden ben',
+    sideProjects: 'Extra projecten',
+    sideProjectsIntro: 'Dingen die ik voor mezelf bouw. Klantopdrachten staan op',
+    notCoding: 'Als ik niet aan het coderen ben',
     notCodingText:
-      '[Two or three sentences about you, starting with the hobbies above. Not the job.]',
+      'Aan het genieten van allerlei soorten muziek tijdens het coderen of als ik aan het duiken ben in nieuwe stof, of aan het spelen in het orkest of een andere muziekgroep.',
   },
   nowPlaying: {
     title: 'Nu aan het spelen',
@@ -67,7 +67,7 @@ export default {
     honeypot: 'Laat dit leeg',
   },
   hobbies: {
-    orchestra: 'Orkest · [instrument]',
+    orchestra: 'Orkest · Euphonium',
     electronic: 'Elektronische muziek op repeat',
     cycling: 'Fietsen',
     volleyball: 'Volleybal',

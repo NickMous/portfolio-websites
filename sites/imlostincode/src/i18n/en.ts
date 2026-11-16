@@ -23,7 +23,6 @@ export default {
   sections: {
     fixes: 'The fixes',
     fixesIntro: 'Each one has its own docs, straight from the repo, for every version.',
-    noFixes: '[NO FIXES PUBLISHED YET]',
     stillLost: 'Still lost',
     stillLostIntro:
       'The project graveyard. Things I started and stopped. Some of them get found again.',
@@ -49,7 +48,7 @@ export default {
     editOnGitHub: 'Edit this page on GitHub ↗',
     viewOnGitHub: 'View on GitHub ↗',
     newTab: '(opens in a new tab)',
-    noOverview: '[THIS VERSION HAS NO README]',
+    noOverview: 'No README in this version. It got lost too.',
     redirecting: 'Redirecting to',
   },
   footer: {
