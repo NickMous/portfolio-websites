@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 // vitest.config.ts (e.g. using Astro's getViteConfig) when it needs one.
 export default defineConfig({
   test: {
-    projects: ['packages/*/', 'sites/*/'],
+    projects: ['packages/*/', 'sites/*/', 'scripts/'],
     passWithNoTests: true,
   },
 });
