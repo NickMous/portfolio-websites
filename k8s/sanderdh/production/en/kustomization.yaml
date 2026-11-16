@@ -23,7 +23,7 @@ images:
     # Flux's ImageUpdateAutomation rewrites this line (it looks for the
     # marker) and commits back to main. The value below is only the bootstrap
     # starting point until the first release is published.
-    newTag: sanderdh-en-20261116-0751-sanderdh-v1.3.0 # {"$imagepolicy": "flux-system:sanderdh-en:tag"}
+    newTag: sanderdh-en-20261116-1106-sanderdh-v1.4.0 # {"$imagepolicy": "flux-system:sanderdh-en:tag"}
 # The pdb component sets minAvailable: 1; with a single replica that pins the
 # only pod and blocks node drains. Two replicas make the budget meaningful.
 replicas:
