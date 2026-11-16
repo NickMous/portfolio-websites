@@ -52,4 +52,11 @@ export default {
     school: 'School',
     group: 'Groep',
   },
+  notFound: {
+    title: 'Pagina niet gevonden · WebEnjoyer',
+    line1: 'Niet',
+    line2: 'te zien.',
+    text: 'Deze pagina staat niet op het programma. Misschien ooit wel.',
+    back: 'Kijk wat er draait →',
+  },
 } satisfies typeof en;

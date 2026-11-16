@@ -58,4 +58,11 @@ export default {
     stuck: 'Got stuck using one of these?',
     tellMe: 'Tell me',
   },
+  notFound: {
+    title: 'Page not found · imlostincode',
+    line1: 'This page',
+    line2: 'got lost too.',
+    text: "It isn't here, and I couldn't find it either.",
+    back: 'Back to the fixes →',
+  },
 };

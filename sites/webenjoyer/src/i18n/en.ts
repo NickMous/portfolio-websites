@@ -50,4 +50,11 @@ export default {
     school: 'School',
     group: 'Group',
   },
+  notFound: {
+    title: 'Page not found · WebEnjoyer',
+    line1: 'Not',
+    line2: 'showing.',
+    text: "This page isn't on the programme. Maybe it was, once.",
+    back: "See what's showing →",
+  },
 };

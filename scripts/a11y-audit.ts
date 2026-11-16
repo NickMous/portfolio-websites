@@ -77,6 +77,8 @@ function pages(dir: string, base = '/'): string[] {
     ) {
       // Redirect pages navigate away mid-audit; their targets are audited anyway.
       out.push(base);
+    } else if (name === '404.html' && base === '/') {
+      out.push('/404.html');
     }
   }
   return out;

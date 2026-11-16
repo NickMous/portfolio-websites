@@ -1,0 +1,15 @@
+---
+import NotFound from '@portfolio/ui-kit/components/NotFound.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { t } from '../i18n';
+
+const nf = t('notFound');
+---
+
+<SiteLayout title={nf('title')} description={nf('text')} notFound>
+  <NotFound
+    lines={[{ text: nf('line1') }, { text: nf('line2'), color: 'blue' }]}
+    text={nf('text')}
+    link={{ href: '/#fixes', label: nf('back') }}
+  />
+</SiteLayout>

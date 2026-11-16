@@ -77,4 +77,11 @@ export default {
   footer: {
     secret: "There's a secret somewhere on this page.",
   },
+  notFound: {
+    title: 'Page not found · nickmous',
+    line1: 'Game',
+    line2: 'over.',
+    text: "This page doesn't exist. Press start to go back.",
+    back: 'Press start →',
+  },
 };
