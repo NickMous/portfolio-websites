@@ -13,4 +13,11 @@ export default {
     imlostincode: 'The fixes',
     imlostincodeLine: 'Tools I made for my own problems. Yours now.',
   },
+  notFound: {
+    title: 'Page not found · Sander den Hollander',
+    line1: 'This page',
+    line2: "doesn't exist.",
+    text: "Maybe the link is old, or there's a typo in it.",
+    back: 'Back to the start →',
+  },
 };

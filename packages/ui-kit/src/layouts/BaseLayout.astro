@@ -21,9 +21,14 @@ interface Props {
   code?: boolean;
   /** Main navigation for the default SiteHeader. */
   nav?: NavLink[];
+  /**
+   * The 404 page: served at whatever URL was missing, so it is kept out of
+   * search results, has no canonical URL, and the EN/NL switch goes home.
+   */
+  notFound?: boolean;
 }
 
-const { site, title, description, ogImage, code = false, nav = [] } = Astro.props;
+const { site, title, description, ogImage, code = false, nav = [], notFound = false } = Astro.props;
 const locale = getLocale();
 const ui = sharedT('ui');
 const pageUrl = siteUrl(site, locale, Astro.url.pathname);
@@ -43,8 +48,14 @@ const ogImageUrl = new URL(ogImage ?? '/og.png', pageUrl).href;
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="canonical" href={pageUrl} />
-    <AlternateLinks site={site} />
+    {notFound ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="canonical" href={pageUrl} />
+        <AlternateLinks site={site} />
+      </>
+    )}
 
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
@@ -67,7 +78,11 @@ const ogImageUrl = new URL(ogImage ?? '/og.png', pageUrl).href;
     >
       {ui('skipToContent')}
     </a>
-    {Astro.slots.has('header') ? <slot name="header" /> : <SiteHeader site={site} nav={nav} />}
+    {Astro.slots.has('header') ? (
+      <slot name="header" />
+    ) : (
+      <SiteHeader site={site} nav={nav} {...(notFound ? { path: '/' } : {})} />
+    )}
     <main id="main">
       <slot />
     </main>

@@ -60,4 +60,11 @@ export default {
     stuck: 'Vastgelopen met een van deze?',
     tellMe: 'Laat het me weten',
   },
+  notFound: {
+    title: 'Pagina niet gevonden · imlostincode',
+    line1: 'Deze pagina',
+    line2: 'is ook verdwaald.',
+    text: 'Hij is er niet, en ik kon hem ook niet vinden.',
+    back: 'Terug naar de fixes →',
+  },
 } satisfies typeof en;

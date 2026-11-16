@@ -12,12 +12,13 @@ interface Props {
   site: SiteKey;
   /** Main navigation. Leave empty for a header with only the wordmark and EN/NL. */
   nav?: NavLink[];
+  /** Path the EN/NL switch keeps on the other domain. Defaults to this page's. */
+  path?: string;
 }
 
-const { site, nav = [] } = Astro.props;
+const { site, nav = [], path = Astro.url.pathname } = Astro.props;
 const locale = getLocale();
 const ui = sharedT('ui');
-const path = Astro.url.pathname;
 ---
 
 <header class="relative container-page flex flex-wrap items-center justify-between gap-4 py-6 max-sm:py-4">

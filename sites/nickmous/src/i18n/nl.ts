@@ -79,4 +79,11 @@ export default {
   footer: {
     secret: 'Er zit ergens op deze pagina een geheim.',
   },
+  notFound: {
+    title: 'Pagina niet gevonden · nickmous',
+    line1: 'Game',
+    line2: 'over.',
+    text: 'Deze pagina bestaat niet. Druk op start om terug te gaan.',
+    back: 'Druk op start →',
+  },
 } satisfies typeof en;

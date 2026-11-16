@@ -1,0 +1,26 @@
+---
+import HeroHeadline, { type HeroLine } from './HeroHeadline.astro';
+
+interface Props {
+  /** The headline, in the site's hero style. */
+  lines: HeroLine[];
+  text: string;
+  /** Where to go instead. */
+  link: { href: string; label: string };
+}
+
+const { lines, text, link } = Astro.props;
+---
+
+<section class="container-page pt-6 pb-24 max-sm:pb-16">
+  <p class="mb-4 type-label">404</p>
+  <HeroHeadline {lines} />
+  <p class="mt-10 max-w-[560px] type-intro">{text}</p>
+  <a
+    href={link.href}
+    data-umami-event="not-found-back"
+    class="mt-8 inline-flex min-h-11 items-center text-[20px] font-bold underline"
+  >
+    {link.label}
+  </a>
+</section>
