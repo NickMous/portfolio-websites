@@ -59,6 +59,18 @@
     font-weight: 500;
     text-decoration: underline;
   }
+  /*
+   * A link on its own (a list of pages, a table cell) needs a 44px target. An
+   * invisible taller hit area gives it one without changing the layout.
+   */
+  & a.lone-link {
+    position: relative;
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -13px 0;
+    }
+  }
   & ul,
   & ol {
     padding-left: 1.5em;

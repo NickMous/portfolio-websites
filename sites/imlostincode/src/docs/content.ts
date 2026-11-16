@@ -148,6 +148,23 @@ function rehypeHeadingLevels(topLevel = 2) {
   };
 }
 
+/**
+ * A link that is all there is in its list item, table cell or paragraph is not
+ * part of a sentence, so it needs a full-size tap target (see docs.css).
+ */
+function rehypeLoneLinks() {
+  return (tree: HastRoot) => {
+    visit(tree, 'element', (node: Element) => {
+      if (!['li', 'td', 'th', 'p'].includes(node.tagName)) return;
+      const content = node.children.filter((c) => !(c.type === 'text' && c.value.trim() === ''));
+      const only = content[0];
+      if (content.length === 1 && only?.type === 'element' && only.tagName === 'a') {
+        only.properties.className = ['lone-link'];
+      }
+    });
+  };
+}
+
 /** Wide tables scroll sideways; focusable so that works from the keyboard too. */
 function rehypeFocusableTables() {
   return (tree: HastRoot) => {
@@ -218,6 +235,7 @@ export async function renderMarkdown(
     .use(rehypeSlug)
     .use(rehypeHeadingLevels, topLevel)
     .use(rehypeFocusableTables)
+    .use(rehypeLoneLinks)
     .use(rehypeCodeFrame)
     .use(rehypeShiki, {
       theme: 'github-light',
