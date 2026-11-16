@@ -24,7 +24,7 @@ export default {
     sideProjectsIntro: 'Stuff I build for myself. Client work lives on',
     notCoding: "When I'm not coding",
     notCodingText:
-      '[Two or three sentences about you, starting with the hobbies above. Not the job.]',
+      'Enjoying all sorts of music while coding or digging into new stuff, or playing in an orchestra or another music group.',
   },
   nowPlaying: {
     title: 'Now playing',
@@ -65,7 +65,7 @@ export default {
     honeypot: 'Leave this empty',
   },
   hobbies: {
-    orchestra: 'Orchestra · [instrument]',
+    orchestra: 'Orchestra · Euphonium',
     electronic: 'Electronic music on repeat',
     cycling: 'Cycling',
     volleyball: 'Volleyball',

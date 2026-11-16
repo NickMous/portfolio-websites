@@ -3,7 +3,7 @@ import { docFile, docTitle, renderCodeFile, renderMarkdown, type RenderContext }
 import { api, listDocsRepos, rawFile } from './github';
 import { OWNER } from './owner';
 import type { RepoConfig } from './repos';
-import { docsUrls } from './urls';
+import { docsUrls, exampleLink } from './urls';
 import { selectVersions, type DocsVersion, type GitHubRelease } from './versions';
 
 export interface Fix extends RepoConfig {
@@ -45,6 +45,12 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
   if (tree.truncated)
     throw new Error(`Git tree of ${repo}@${ref} is too large to list in one call`);
 
+  const blobs = tree.tree.filter((e) => e.type === 'blob');
+  const examples = blobs.filter(
+    (e) => e.path.startsWith('examples/') && (e.size ?? 0) <= MAX_EXAMPLE_BYTES,
+  );
+  const exampleFiles = new Set(examples.map((e) => e.path.slice('examples/'.length)));
+
   const ctx = (filePath: string): RenderContext => ({
     repo,
     ref,
@@ -52,8 +58,7 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
     urls: {
       overview: () => docsUrls.overview(repo, version.id, fix.defaultVersion),
       doc: (slug) => docsUrls.doc(repo, version.id, slug),
-      example: (path) =>
-        docsUrls.examples(repo, version.id) + (path ? `#${docsUrls.exampleAnchor(path)}` : ''),
+      example: (path) => exampleLink(repo, version.id, path, exampleFiles),
     },
   });
   const read = async (path: string) => {
@@ -68,7 +73,6 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
     ...data,
   });
 
-  const blobs = tree.tree.filter((e) => e.type === 'blob');
   const pages: Promise<DocsPage>[] = [];
 
   const readme = blobs.find((e) => /^readme\.md$/i.test(e.path));
@@ -107,9 +111,6 @@ async function loadVersion(fix: Fix, version: DocsVersion): Promise<DocsPage[]> 
     );
   }
 
-  const examples = blobs.filter(
-    (e) => e.path.startsWith('examples/') && (e.size ?? 0) <= MAX_EXAMPLE_BYTES,
-  );
   examples.forEach((entry, i) => {
     const slug = entry.path.slice('examples/'.length);
     pages.push(

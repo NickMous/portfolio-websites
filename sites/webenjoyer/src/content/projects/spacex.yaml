@@ -5,5 +5,5 @@ order: 3
 group: true
 posterColor: blue
 oneLiner:
-  en: '[ONE-LINER]'
-  nl: '[ONE-LINER]'
+  en: 'A project to show off group skills, and working in a group with git tools.'
+  nl: 'Een project om groep-skills te laten zien, en werken met een groep met git tools.'

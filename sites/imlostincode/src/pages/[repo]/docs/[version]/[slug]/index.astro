@@ -74,9 +74,12 @@ const mainBranch = fix.versions[0]!.ref;
       href={`${fix.url}/edit/${mainBranch}/${page.path}`}
       data-umami-event="edit-on-github"
       data-umami-event-repo={fix.name}
+      target="_blank"
+      rel="noopener"
       class="inline-flex min-h-11 items-center text-[15px] font-medium underline"
     >
       {s('editOnGitHub')}
+      <span class="sr-only"> {s('newTab')}</span>
     </a>
   </DocsLayout>
 )}
