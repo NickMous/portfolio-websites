@@ -9,12 +9,19 @@ interface Props {
   title?: string;
   description?: string;
   ogImage?: string;
+  /** The 404 page (see BaseLayout). */
+  notFound?: boolean;
 }
 
 const meta = t('meta');
 const nav = t('nav');
 const footer = t('footer');
-const { title = meta('title'), description = meta('description'), ogImage } = Astro.props;
+const {
+  title = meta('title'),
+  description = meta('description'),
+  ogImage,
+  notFound = false,
+} = Astro.props;
 
 // Section anchors live on the homepage; from other pages they lead back there.
 const home = Astro.url.pathname === '/' ? '' : '/';
@@ -26,7 +33,14 @@ const links = [
 ];
 ---
 
-<BaseLayout site="webenjoyer" {title} {description} {...(ogImage ? { ogImage } : {})} nav={links}>
+<BaseLayout
+  site="webenjoyer"
+  {title}
+  {description}
+  {...(ogImage ? { ogImage } : {})}
+  nav={links}
+  {notFound}
+>
   <slot />
   <SiteFooter site="webenjoyer" id="hi" slot="footer">
     <a slot="cta" href={`mailto:${contactEmail}`} data-umami-event="contact-email">
