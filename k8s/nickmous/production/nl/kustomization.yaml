@@ -23,7 +23,7 @@ images:
     # Flux's ImageUpdateAutomation rewrites this line (it looks for the
     # marker) and commits back to main. The value below is only the bootstrap
     # starting point until the first release is published.
-    newTag: nickmous-nl-20261116-0751-nickmous-v1.3.0 # {"$imagepolicy": "flux-system:nickmous-nl:tag"}
+    newTag: nickmous-nl-20261116-1106-nickmous-v1.4.0 # {"$imagepolicy": "flux-system:nickmous-nl:tag"}
 # The pdb component sets minAvailable: 1; with a single replica that pins the
 # only pod and blocks node drains. Two replicas make the budget meaningful.
 replicas:
