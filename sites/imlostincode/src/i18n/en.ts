@@ -47,6 +47,7 @@ export default {
     next: 'Next →',
     editOnGitHub: 'Edit this page on GitHub ↗',
     viewOnGitHub: 'View on GitHub ↗',
+    newTab: '(opens in a new tab)',
     noOverview: 'No README in this version. It got lost too.',
     redirecting: 'Redirecting to',
   },

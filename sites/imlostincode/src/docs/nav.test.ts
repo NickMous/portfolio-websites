@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { prevNext, versionTarget, type PageRef } from './nav';
+import { exampleGroups, prevNext, versionTarget, type PageRef } from './nav';
 
 const page = (version: string, section: PageRef['section'], slug = '', order = 0): PageRef => ({
   version,
@@ -49,5 +49,46 @@ describe('prevNext', () => {
       prev: page('1.2', 'doc', 'install', 1),
       next: undefined,
     });
+  });
+});
+
+describe('exampleGroups', () => {
+  const file = (slug: string) => ({ version: '1.0', section: 'example' as const, slug, order: 0 });
+
+  it('groups example files by folder: loose files first, then folders by path', () => {
+    const groups = exampleGroups([
+      file('overlay-ssr/kustomization.yaml'),
+      file('README.md'),
+      file('docker/Dockerfile'),
+      file('overlay-ssr/generator/env.yaml'),
+      file('docker/.dockerignore'),
+    ]);
+
+    expect(groups.map((g) => [g.folder, g.name, g.depth, g.files.map((f) => f.name)])).toEqual([
+      ['', '', 0, ['README.md']],
+      ['docker', 'docker', 0, ['.dockerignore', 'Dockerfile']],
+      ['overlay-ssr', 'overlay-ssr', 0, ['kustomization.yaml']],
+      ['overlay-ssr/generator', 'generator', 1, ['env.yaml']],
+    ]);
+  });
+
+  it('keeps subfolders right under their parent', () => {
+    const groups = exampleGroups([file('a-b/x.yaml'), file('a/c/y.yaml'), file('a/z.yaml')]);
+
+    expect(groups.map((g) => g.folder)).toEqual(['a', 'a/c', 'a-b']);
+  });
+
+  it('folds folders without files of their own into the next folder that has some', () => {
+    const groups = exampleGroups([
+      file('k8s/prod/patches/a.yaml'),
+      file('k8s/prod/patches/extra/b.yaml'),
+      file('k8s/dev/c.yaml'),
+    ]);
+
+    expect(groups.map((g) => [g.folder, g.name, g.depth])).toEqual([
+      ['k8s/dev', 'k8s/dev', 0],
+      ['k8s/prod/patches', 'k8s/prod/patches', 0],
+      ['k8s/prod/patches/extra', 'extra', 1],
+    ]);
   });
 });

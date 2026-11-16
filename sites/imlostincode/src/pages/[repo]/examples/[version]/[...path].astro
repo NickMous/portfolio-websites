@@ -1,0 +1,55 @@
+---
+import type { GetStaticPaths } from 'astro';
+import ExampleSidebar from '../../../../components/docs/ExampleSidebar.astro';
+import { exampleGroups } from '../../../../docs/nav';
+import { docsSite } from '../../../../docs/site';
+import { docsUrls, examplePath } from '../../../../docs/urls';
+import { t } from '../../../../i18n';
+import DocsLayout from '../../../../layouts/DocsLayout.astro';
+
+export const getStaticPaths = (async () =>
+  (await docsSite()).flatMap(({ fix, pages }) =>
+    pages
+      .filter((p) => p.section === 'example')
+      .map((example) => ({
+        params: { repo: fix.name, version: example.version, path: examplePath(example.slug) },
+        props: { fix, pages, example },
+      })),
+  )) satisfies GetStaticPaths;
+
+const { fix, pages, example } = Astro.props;
+const s = t('docs');
+const { version } = example;
+const groups = exampleGroups(pages.filter((p) => p.version === version && p.section === 'example'));
+---
+
+<DocsLayout {fix} {pages} current={example} title={`${example.slug} · ${fix.name}`}>
+  <ExampleSidebar
+    slot="sidebar"
+    label={`${s('examples')} · ${version}`}
+    {groups}
+    href={(slug) => docsUrls.example(fix.name, version, slug)}
+    current={example.slug}
+  />
+  <a
+    href={docsUrls.examples(fix.name, version)}
+    class="inline-flex min-h-11 items-center self-start text-[14px] font-medium text-muted underline"
+  >
+    examples / {version}
+  </a>
+  <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
+    <h2 class="font-display text-[30px] leading-tight font-black [overflow-wrap:anywhere]">
+      {example.slug}
+    </h2>
+    <a
+      href={`${fix.url}/blob/${example.ref}/${example.path}`}
+      target="_blank"
+      rel="noopener"
+      class="inline-flex min-h-11 items-center text-[14px] font-medium underline"
+    >
+      {s('viewOnGitHub')}
+      <span class="sr-only"> {s('newTab')}</span>
+    </a>
+  </div>
+  <div class="prose-docs" set:html={example.html} />
+</DocsLayout>
