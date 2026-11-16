@@ -1,0 +1,46 @@
+# Weekly dependency updates. Minor and patch updates arrive grouped in one PR
+# per ecosystem; a major update gets a PR of its own, since it may need code
+# changes. CI (format, types, tests, builds, a11y audit) checks every PR.
+version: 2
+
+updates:
+  # Root lockfile: every site, the ui-kit and the scripts (npm workspaces).
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    groups:
+      npm-minor-and-patch:
+        update-types: [minor, patch]
+
+  - package-ecosystem: composer
+    directory: /api
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      composer-minor-and-patch:
+        update-types: [minor, patch]
+
+  # Includes the deploy workflow from astro-k8s-deployment-kit.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        update-types: [minor, patch]
+
+  # Base images: node for the site builds, php for the API.
+  - package-ecosystem: docker
+    directories: [/docker, /api]
+    schedule:
+      interval: weekly
+      day: monday
+    ignore:
+      # Node stays on the LTS line the repo targets; move it on purpose.
+      - dependency-name: node
+        update-types: [version-update:semver-major]
