@@ -1,0 +1,56 @@
+---
+import type { GetStaticPaths } from 'astro';
+import DocsLayout from '../../../layouts/DocsLayout.astro';
+import { docsSite } from '../../../docs/site';
+import { docsUrls } from '../../../docs/urls';
+import { t } from '../../../i18n';
+
+export const getStaticPaths = (async () =>
+  (await docsSite())
+    .filter(({ fix }) => fix.changelog.length > 0)
+    .map(({ fix, pages }) => ({
+      params: { repo: fix.name },
+      props: { fix, pages },
+    }))) satisfies GetStaticPaths;
+
+const { fix, pages } = Astro.props;
+const s = t('docs');
+const docsVersions = new Set(fix.versions.map((v) => v.id));
+---
+
+<DocsLayout
+  {fix}
+  {pages}
+  current={{ version: fix.defaultVersion, section: 'overview', slug: '', order: 0 }}
+  title={`${s('changelog')} · ${fix.name}`}
+  changelog
+>
+  {fix.changelog.map((entry) => (
+    <section class="flex flex-col gap-3 border-b-3 border-ink pb-8 not-first:pt-3 last:border-b-0">
+      <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+        <h2
+          id={entry.tag}
+          class="font-display text-[36px] leading-none font-black max-sm:text-[30px]"
+        >
+          {entry.name}
+        </h2>
+        <time datetime={entry.date} class="text-[15px] font-bold">
+          {entry.date}
+        </time>
+      </div>
+      {entry.html ? (
+        <div class="prose-docs" set:html={entry.html} />
+      ) : (
+        <p class="text-[17px]">{s('noNotes')}</p>
+      )}
+      {docsVersions.has(entry.version) && (
+        <a
+          href={docsUrls.overview(fix.name, entry.version, fix.defaultVersion)}
+          class="inline-flex min-h-11 items-center self-start font-bold underline"
+        >
+          {s('docsForVersion')}
+        </a>
+      )}
+    </section>
+  ))}
+</DocsLayout>
