@@ -158,6 +158,27 @@ describe('renderMarkdown heading start', () => {
   });
 });
 
+describe('renderMarkdown lone links', () => {
+  it('marks a link that is all of its list item, cell or paragraph, so it gets a full-size target', async () => {
+    const html = await renderMarkdown(
+      [
+        '- [Configuration](https://example.com/a)',
+        '- [Commands](https://example.com/b): every command',
+        '',
+        '| Topic | Page |',
+        '| - | - |',
+        '| Alerts | [Status](https://example.com/c) |',
+        '',
+        'See [the guide](https://example.com/d) first.',
+      ].join('\n'),
+      ctx('README.md'),
+    );
+
+    const lone = [...html.matchAll(/<a [^>]*class="lone-link"[^>]*>([^<]*)</g)].map((m) => m[1]);
+    expect(lone).toEqual(['Configuration', 'Status']);
+  });
+});
+
 describe('renderMarkdown tables', () => {
   it('makes tables focusable, so keyboard users can scroll wide ones', async () => {
     const html = await renderMarkdown('| a | b |\n| - | - |\n| 1 | 2 |', ctx('README.md'));
