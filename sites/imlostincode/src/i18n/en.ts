@@ -48,6 +48,7 @@ export default {
     next: 'Next →',
     editOnGitHub: 'Edit this page on GitHub ↗',
     viewOnGitHub: 'View on GitHub ↗',
+    newTab: '(opens in a new tab)',
     noOverview: '[THIS VERSION HAS NO README]',
     redirecting: 'Redirecting to',
   },

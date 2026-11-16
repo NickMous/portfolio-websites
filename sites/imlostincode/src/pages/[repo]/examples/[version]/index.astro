@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from 'astro';
-import Sidebar from '../../../../components/docs/Sidebar.astro';
+import { exampleGroups } from '../../../../docs/nav';
 import { docsSite } from '../../../../docs/site';
 import { docsUrls } from '../../../../docs/urls';
 import { t } from '../../../../i18n';
@@ -9,9 +9,7 @@ import DocsLayout from '../../../../layouts/DocsLayout.astro';
 export const getStaticPaths = (async () =>
   (await docsSite()).flatMap(({ fix, pages }) =>
     fix.versions.flatMap((v) => {
-      const examples = pages
-        .filter((p) => p.version === v.id && p.section === 'example')
-        .sort((a, b) => a.slug.localeCompare(b.slug));
+      const examples = pages.filter((p) => p.version === v.id && p.section === 'example');
       return examples.length
         ? [{ params: { repo: fix.name, version: v.id }, props: { fix, pages, examples } }]
         : [];
@@ -20,32 +18,47 @@ export const getStaticPaths = (async () =>
 
 const { fix, pages, examples } = Astro.props;
 const s = t('docs');
+const version = examples[0]!.version;
+const groups = exampleGroups(examples);
+/** Folder headings nest like the folders: top level h2, subfolders below. */
+const headingOf = (depth: number) => `h${Math.min(depth + 2, 6)}` as 'h2';
 ---
 
-<DocsLayout {fix} {pages} current={examples[0]!} title={`${s('examples')} · ${fix.name}`}>
-  <Sidebar
-    slot="sidebar"
-    label={`${s('examples')} · ${examples[0]!.version}`}
-    items={examples.map((e) => ({
-      href: `#${docsUrls.exampleAnchor(e.slug)}`,
-      title: e.slug,
-      current: false,
-    }))}
-  />
-  {examples.map((e) => (
-    <section id={docsUrls.exampleAnchor(e.slug)} class="flex scroll-mt-6 flex-col gap-3">
-      <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-1">
-        <h2 class="font-display text-[30px] leading-tight font-black [overflow-wrap:anywhere]">
-          {e.slug}
-        </h2>
-        <a
-          href={`${fix.url}/blob/${e.ref}/${e.path}`}
-          class="inline-flex min-h-11 items-center text-[14px] font-medium underline"
+<DocsLayout
+  {fix}
+  {pages}
+  current={{ version, section: 'example', slug: '', order: 0 }}
+  title={`${s('examples')} · ${fix.name}`}
+>
+  <span class="text-[14px] font-medium text-muted">examples / {version}</span>
+  <div class="flex flex-col gap-8">
+    {groups.map((group) => {
+      const Heading = headingOf(group.depth);
+      return (
+        <section
+          id={group.folder ? docsUrls.exampleAnchor(group.folder) : undefined}
+          class="flex scroll-mt-6 flex-col border-3 border-ink"
+          style={`margin-left: ${group.depth * 24}px`}
         >
-          {s('viewOnGitHub')}
-        </a>
-      </div>
-      <div class="prose-docs" set:html={e.html} />
-    </section>
-  ))}
+          <Heading class="not-last:border-b-3 border-ink bg-grey-tint px-4 py-3 font-mono text-[18px] font-bold [overflow-wrap:anywhere]">
+            {group.folder ? `${group.name}/` : 'examples/'}
+          </Heading>
+          {group.files.length > 0 && (
+            <ul>
+              {group.files.map((file) => (
+                <li class="border-b-2 border-dashed border-ink last:border-b-0">
+                  <a
+                    href={docsUrls.example(fix.name, version, file.slug)}
+                    class="flex min-h-11 items-center px-4 py-3 text-[17px] font-medium no-underline hover:bg-red-tint [overflow-wrap:anywhere]"
+                  >
+                    {file.name}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      );
+    })}
+  </div>
 </DocsLayout>
