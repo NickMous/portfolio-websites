@@ -23,7 +23,7 @@ images:
     # Flux's ImageUpdateAutomation rewrites this line (it looks for the
     # marker) and commits back to main. The value below is only the bootstrap
     # starting point until the first release is published.
-    newTag: imlostincode-nl-20261116-1214-docs-netstation-v0.9.6 # {"$imagepolicy": "flux-system:imlostincode-nl:tag"}
+    newTag: imlostincode-nl-20261117-1104-docs-netstation-v0.9.7 # {"$imagepolicy": "flux-system:imlostincode-nl:tag"}
 # The pdb component sets minAvailable: 1; with a single replica that pins the
 # only pod and blocks node drains. Two replicas make the budget meaningful.
 replicas:
