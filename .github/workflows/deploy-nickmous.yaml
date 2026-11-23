@@ -63,7 +63,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.0
+    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.2
     with:
       version: ${{ needs.tag.outputs.en }}
       prod-url: https://nickmous.com
@@ -80,7 +80,7 @@ jobs:
     permissions:
       contents: read
       packages: write
-    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.0
+    uses: NickMous/astro-k8s-deployment-kit/.github/workflows/deploy-production.yaml@v1.2.2
     with:
       version: ${{ needs.tag.outputs.nl }}
       prod-url: https://nickmous.nl
