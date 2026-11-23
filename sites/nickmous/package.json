@@ -17,13 +17,13 @@
     "@astrojs/preact": "^6.1.6",
     "@portfolio/ui-kit": "*",
     "@tailwindcss/vite": "^4.3.5",
-    "astro": "^7.4.12",
+    "astro": "^7.4.13",
     "preact": "^11.2.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
     "@testing-library/preact": "^3.2.6",
-    "@testing-library/user-event": "^14.6.10",
+    "@testing-library/user-event": "^14.6.13",
     "happy-dom": "^21.0.4",
     "typescript": "^6.0.3"
   }
