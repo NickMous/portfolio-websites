@@ -23,7 +23,7 @@ images:
     # Flux's ImageUpdateAutomation rewrites this line (it looks for the
     # marker) and commits back to main. The value below is only the bootstrap
     # starting point until the first release is published.
-    newTag: imlostincode-en-20261120-0922-docs-symfony-k8s-deployment-kit-v0.2.2 # {"$imagepolicy": "flux-system:imlostincode-en:tag"}
+    newTag: imlostincode-en-20261123-1943-docs-symfony-k8s-deployment-kit-main # {"$imagepolicy": "flux-system:imlostincode-en:tag"}
 # The pdb component sets minAvailable: 1; with a single replica that pins the
 # only pod and blocks node drains. Two replicas make the budget meaningful.
 replicas:
