@@ -6,7 +6,7 @@
 #
 #   docker build -t nickmous-api api/
 
-FROM php:8.5-cli-alpine AS build
+FROM php:8.6-cli-alpine AS build
 
 RUN apk add --no-cache git unzip icu-dev libzip-dev postgresql-dev \
     && docker-php-ext-install intl pdo_pgsql zip
@@ -25,7 +25,7 @@ RUN composer dump-autoload --no-dev --optimize --classmap-authoritative \
     && php bin/console assets:install public \
     && php bin/console cache:clear --no-debug
 
-FROM php:8.5-fpm-alpine AS runtime
+FROM php:8.6-fpm-alpine AS runtime
 
 ARG SENTRY_RELEASE=""
 ENV SENTRY_RELEASE=${SENTRY_RELEASE}
